@@ -22,6 +22,7 @@ public class AppUserController {
     public Optional<AppUser> login() {
         return me();
     }
+
     @GetMapping("/me")
     public Optional<AppUser> me(){
         return appUserService.findByUsernameWithoutPassword(
