@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PatientController {
     private final PatientService patientService;
-
     @PostMapping
-    public Patient create(@RequestBody Patient patient){
-        return patientService.create(patient);
+    public String create(){
+        return "OK";
     }
 
 }
