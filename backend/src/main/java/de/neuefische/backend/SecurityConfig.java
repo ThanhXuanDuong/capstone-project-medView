@@ -26,13 +26,12 @@ public class SecurityConfig {
                 .csrf().disable()
                 .httpBasic().and()
                 .authorizeHttpRequests()
-                .antMatchers(HttpMethod.POST,"/api/app-users")
-                .permitAll()
+                .antMatchers(HttpMethod.POST,"/api/app-users").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .build();
-    };
+    }
 
     @Bean
     public UserDetailsService userDetailsService () {

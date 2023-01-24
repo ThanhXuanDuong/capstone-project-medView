@@ -1,8 +1,6 @@
 package de.neuefische.backend.user;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,16 +24,20 @@ public class AppUserService {
 
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
 
-        appUser.setRole("BASIC");
-
         appUserRepository.save(appUser);
 
         appUser.setPassword("");
 
         return appUser;
-    };
+    }
 
     public Optional<AppUser> findByUsername(String username) {
         return appUserRepository.findByUsername(username);
+    }
+
+    public Optional<AppUser> findByUsernameWithoutPassword(String username) {
+        Optional<AppUser> appUser = appUserRepository.findByUsername(username);
+        appUser.ifPresent(user -> user.setPassword(""));
+        return appUser;
     }
 }

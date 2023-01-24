@@ -1,10 +1,10 @@
 package de.neuefische.backend.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/app-users")
@@ -15,6 +15,17 @@ public class AppUserController {
     @PostMapping
     public AppUser create(@RequestBody AppUser appUser){
         return appUserService.create(appUser);
+    }
+
+    @PostMapping("/login")
+    public Optional<AppUser> login() {
+        return me();
+    }
+    @GetMapping("/me")
+    public Optional<AppUser> me(){
+        return appUserService.findByUsernameWithoutPassword(
+                SecurityContextHolder.getContext().getAuthentication().getName()
+        );
     }
 
 }

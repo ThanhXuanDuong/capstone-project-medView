@@ -13,4 +13,5 @@ public class PatientController {
     public Patient create(@RequestBody Patient patient){
         return patientService.create(patient);
     }
+
 }
