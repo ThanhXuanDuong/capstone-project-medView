@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PatientService {
     private final PatientRepository patientRepository;
-
     public Patient create(Patient patient) {
         return patientRepository.save(patient);
     }
