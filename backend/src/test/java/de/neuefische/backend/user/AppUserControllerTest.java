@@ -20,6 +20,7 @@ class AppUserControllerTest {
     private MockMvc mockMvc;
 
     @Test
+
     void create_WhenLoggedInThenCreateUserSuccessfully() throws Exception {
         String given = """
                 {
