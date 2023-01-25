@@ -1,20 +1,14 @@
 import React from 'react';
 import './App.css';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import DashboardPage from "./pages/DashboardPage";
-import LoginPage from "./pages/LoginPage";
-import DetailPage from "./pages/DetailPage";
+import {BrowserRouter} from "react-router-dom";
+import Root from "./Root";
 
 function App() {
-  return (
-      <BrowserRouter>
-        <Routes>
-          <Route path={"/"} element={<DashboardPage/>}/>
-          <Route path={"/login"} element={<LoginPage/>}/>
-          <Route path={"/patients/:id"} element={<DetailPage/>}/>
-        </Routes>
-      </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <Root/>
+        </BrowserRouter>
+    );
 }
 
 export default App;

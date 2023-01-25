@@ -9,7 +9,7 @@ export default function LoginPage(){
                             <h1>Login</h1>
                         </Grid>
                         <TextField  sx={{ mb: 2 }} id="username" label="Username" variant="outlined" />
-                        <TextField  sx={{ mb: 2 }} id="password" label="Password" variant="outlined" />
+                        <TextField  sx={{ mb: 2 }} id="password" label="Password" variant="outlined" type={"password"}/>
                         <Button variant="contained">Login</Button>
                     </FormControl>
                 </Grid>
