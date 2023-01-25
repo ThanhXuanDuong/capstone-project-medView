@@ -6,7 +6,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class AppUserServiceTest {
@@ -19,14 +20,16 @@ class AppUserServiceTest {
         when(appUserRepository.findByUsername(appUser.getUsername()))
                 .thenReturn(Optional.of(appUser));
 
+        BCryptPasswordEncoder passwordEncoder= mock(BCryptPasswordEncoder.class);
+        when(passwordEncoder.encode(appUser.getPassword())).thenReturn("123");
+
         //when
-        AppUserService appUserService = new AppUserService(appUserRepository,new BCryptPasswordEncoder());
+        AppUserService appUserService = new AppUserService(appUserRepository,passwordEncoder);
 
         // then
         assertThrows(ResponseStatusException.class, () -> appUserService.create(appUser));
 
         verify(appUserRepository).findByUsername(appUser.getUsername());
-
     }
 
     @Test
@@ -37,8 +40,11 @@ class AppUserServiceTest {
         when(appUserRepository.findByUsername(appUser.getUsername()))
                 .thenReturn(Optional.ofNullable(null));
 
+        BCryptPasswordEncoder passwordEncoder= mock(BCryptPasswordEncoder.class);
+        when(passwordEncoder.encode(appUser.getPassword())).thenReturn("123");
+
         //when
-        AppUserService appUserService = new AppUserService(appUserRepository,new BCryptPasswordEncoder());
+        AppUserService appUserService = new AppUserService(appUserRepository,passwordEncoder);
         AppUser actual = appUserService.create(appUser);
 
         // then
