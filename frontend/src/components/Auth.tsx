@@ -8,32 +8,34 @@ export default function Auth({
     children: React.ReactNode
 }) {
 
-    const [user, setUser] = useState({username: "username"});
-    const [isReady, setIsReady] = useState(false);
+    const [user, setUser] = useState<{username: string}|null>(null)
+    const [isReady, setIsReady] = useState<boolean>(false);
 
     useEffect(() => {
-        try {
-            (async () => {
+        (async () => {
+            try {
                 const res = await axios.get("/api/app-users/me");
                 setUser(res.data);
-            })();
-        } catch (e) {
-            alert("You are not logged in");
-        } finally {
-            setIsReady(true);
-        }
+                console.log(res);
+            } catch (e) {
+                console.error("You are not logged in", e);
+            } finally {
+                setIsReady(true);
+            }
+        })();
     }, []);
-
+    console.log(user);
+    console.log(isReady);
 
     const location = useLocation();
     return (
-        <>  !isReady
+        <div>  !isReady
             ? null
             : (user ?
                 <div>{children}</div>
                 :
                 <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname + location.search)}`}/>
             )
-        </>
+        </div>
     )
 }

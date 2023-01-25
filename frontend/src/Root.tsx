@@ -13,7 +13,7 @@ export default function Root() {
                     <DashboardPage/>
                 </Auth>}/>
             <Route path={"/login"} element={<LoginPage/>}/>
-            <Route path={"/patients/:id"} element={
+            <Route path={"/patient"} element={
                 <Auth >
                     <DetailPage/>
                 </Auth>}/>

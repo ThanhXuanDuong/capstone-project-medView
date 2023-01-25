@@ -1,17 +1,26 @@
 import { Button, FormControl, Grid, TextField} from "@mui/material";
-import {ChangeEvent, FormEvent, useState} from "react";
+import {ChangeEvent, FormEvent, useCallback, useMemo, useState} from "react";
 import axios from "axios";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 export default function LoginPage(){
 
     const [credentials,setCredentials] = useState({"username":"","password":""});
 
-    const handleChange =(event:ChangeEvent<HTMLInputElement>) =>{
+    const handleChange =useCallback((event:ChangeEvent<HTMLInputElement>) =>{
         const {name,value} = event.target;
         setCredentials({...credentials, [name]:value})
-    };
+    }, [credentials]
+    );
 
-    const onSubmit = async(event:FormEvent<HTMLFormElement>) =>{
+    const [searchParams] = useSearchParams();
+    const redirect = useMemo(
+        () => searchParams.get("redirect") || "/",
+        [searchParams]
+    );
+    const navigate = useNavigate();
+    console.log(credentials);
+    const onSubmit = useCallback(async(event:FormEvent<HTMLFormElement>) =>{
         event.preventDefault();
         try {
             await axios.post("/api/app-users/login", null, {
@@ -20,10 +29,13 @@ export default function LoginPage(){
                         "Authorization": "Basic " + window.btoa(`${credentials.username}:${credentials.password}`)
                     }
             });
+            navigate(redirect);
         }catch (e) {
            console.log(e);
         }
-    };
+    }, [credentials, navigate, redirect]
+    );
+
     return(
             <div className={"login-container"}>
                 <Grid container sx={{ mt: 15}} justifyContent={"center"} alignItems={"center"}>
