@@ -1,4 +1,4 @@
-import { Button, FormControl, Grid, TextField} from "@mui/material";
+import {Alert, AlertTitle, Button, FormControl, Grid, TextField} from "@mui/material";
 import {ChangeEvent, FormEvent, useCallback, useMemo, useState} from "react";
 import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router-dom";
@@ -20,8 +20,12 @@ export default function LoginPage(){
     );
     const navigate = useNavigate();
 
+    const [error, setError] = useState<string>("");
+
     const onSubmit = useCallback(async(event:FormEvent<HTMLFormElement>) =>{
         event.preventDefault();
+        setError("");
+
         try {
             await axios.post("/api/app-users/login", null, {
                 headers:
@@ -31,14 +35,15 @@ export default function LoginPage(){
             });
             navigate(redirect);
         }catch (e) {
-           console.log(e);
+            setError("Invalid username oder password");
         }
     }, [credentials, navigate, redirect]
     );
 
     return(
             <div className={"login-container"}>
-                <Grid container sx={{ mt: 15}}
+                <Grid container
+                      sx={{ mt: 15}}
                       justifyContent={"center"}
                       alignItems={"center"}>
                     <form onSubmit={onSubmit}>
@@ -68,8 +73,14 @@ export default function LoginPage(){
                                 onChange={handleChange}
                             />
 
-                            <Button
-                                type="submit"
+                            {error &&
+                                <Alert severity="error" sx={{mb: 2}}>
+                                    <AlertTitle>Error</AlertTitle>
+                                    Invalid username or password
+                                </Alert>
+                            }
+
+                            <Button type="submit"
                                 variant="contained"
                             >Login</Button>
 
