@@ -38,7 +38,9 @@ export default function LoginPage(){
 
     return(
             <div className={"login-container"}>
-                <Grid container sx={{ mt: 15}} justifyContent={"center"} alignItems={"center"}>
+                <Grid container sx={{ mt: 15}}
+                      justifyContent={"center"}
+                      alignItems={"center"}>
                     <form onSubmit={onSubmit}>
                         <FormControl >
                             <Grid container justifyContent={"center"}>
