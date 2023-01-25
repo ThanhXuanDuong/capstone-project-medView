@@ -24,7 +24,7 @@ export default function Auth({
             }
         })();
     }, []);
-    console.log(user?.username);
+    console.log(user);
     console.log(isReady);
 
     const location = useLocation();
