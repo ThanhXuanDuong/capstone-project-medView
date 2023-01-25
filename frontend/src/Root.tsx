@@ -9,12 +9,12 @@ export default function Root() {
     return (
         <Routes>
             <Route path={"/"} element={
-                <Auth isAuthenticated={true}>
+                <Auth >
                     <DashboardPage/>
                 </Auth>}/>
             <Route path={"/login"} element={<LoginPage/>}/>
             <Route path={"/patients/:id"} element={
-                <Auth isAuthenticated={true}>
+                <Auth >
                     <DetailPage/>
                 </Auth>}/>
 
