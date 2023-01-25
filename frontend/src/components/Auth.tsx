@@ -16,7 +16,7 @@ export default function Auth({
             try {
                 const res = await axios.get("/api/app-users/me");
                 setUser(res.data);
-                console.log(res);
+                console.log(res.data);
             } catch (e) {
                 console.error("You are not logged in", e);
             } finally {
@@ -24,7 +24,7 @@ export default function Auth({
             }
         })();
     }, []);
-    console.log(user);
+    console.log(user?.username);
     console.log(isReady);
 
     const location = useLocation();

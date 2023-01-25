@@ -19,7 +19,7 @@ export default function LoginPage(){
         [searchParams]
     );
     const navigate = useNavigate();
-    console.log(credentials);
+
     const onSubmit = useCallback(async(event:FormEvent<HTMLFormElement>) =>{
         event.preventDefault();
         try {
