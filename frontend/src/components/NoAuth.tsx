@@ -12,16 +12,13 @@ export default function NoAuth (
     }
 ) {
     const {user, isReady} = useAuth();
+    const action = user
+        ? (redirect && <Navigate to={redirect}/>)
+        : children;
 
     return(
         <>
-            { !isReady
-                ? null
-                : (user
-                        ? (redirect && <Navigate to={redirect}/>)
-                        : children
-                )
-            }
+            { !isReady ? null : (action) }
         </>
 
     )
