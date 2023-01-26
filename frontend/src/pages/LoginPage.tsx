@@ -1,4 +1,4 @@
-import {Alert, AlertTitle, Button, FormControl, Grid, TextField} from "@mui/material";
+import {Alert, AlertTitle, Box, Button, FormControl, TextField, Typography} from "@mui/material";
 import {ChangeEvent, FormEvent, useCallback, useMemo, useState} from "react";
 import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router-dom";
@@ -42,18 +42,18 @@ export default function LoginPage(){
 
     return(
             <div className={"login-container"}>
-                <Grid container
-                      sx={{ mt: 15}}
+                <Box  sx={{ display: 'flex', mt: 15}}
                       justifyContent={"center"}
                       alignItems={"center"}>
                     <form onSubmit={onSubmit}>
                         <FormControl >
-                            <Grid container justifyContent={"center"}>
-                                <h1>Login</h1>
-                            </Grid>
+                            <Typography variant="h3"
+                                        align={"center"}
+                                        sx={{ mb: 2 }}
+                            >Login</Typography>
 
                             <TextField
-                                sx={{ mb: 2 }}
+                                sx={{ width: 350, mb: 2 }}
                                 id="username"
                                 label={"Username"}
                                 name="username"
@@ -63,7 +63,7 @@ export default function LoginPage(){
                             />
 
                             <TextField
-                                sx={{ mb: 2 }}
+                                sx={{ width: 350, mb: 2 }}
                                 id="password"
                                 label={"Password"}
                                 name="password"
@@ -86,7 +86,7 @@ export default function LoginPage(){
 
                         </FormControl>
                     </form>
-                </Grid>
+                </Box>
             </div>
     );
 }
