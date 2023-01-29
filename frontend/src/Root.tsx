@@ -5,6 +5,7 @@ import Auth from "./components/Auth";
 import DetailPage from "./pages/DetailPage";
 import React, {useMemo} from "react";
 import NoAuth from "./components/NoAuth";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export default function Root() {
     const [searchParams] = useSearchParams();
@@ -32,6 +33,8 @@ export default function Root() {
                     <DetailPage/>
                 </Auth>}
             />
+
+            <Route path={"*"} element={<NotFoundPage/>}/>
 
         </Routes>
     );
