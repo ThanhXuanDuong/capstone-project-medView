@@ -11,7 +11,7 @@ export default function PatientGallery({
             <Box sx={{display: 'flex'}}
                  flexDirection={"column"}
                  justifyContent={"space-between"}
-                 alignItems={"center"}
+                 alignItems={"stretch"}
                  gap= "1rem">
             {patients.map(patient => <PatientCard
                 key={patient.id}
