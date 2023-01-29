@@ -1,7 +1,10 @@
 package de.neuefische.backend.patient;
 
+import de.neuefische.backend.exception.PatientNotRegisteredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/patients")
@@ -9,8 +12,17 @@ import org.springframework.web.bind.annotation.*;
 public class PatientController {
     private final PatientService patientService;
     @PostMapping
-    public String create(){
-        return "OK";
+    public Patient add(@RequestBody Patient patient){
+        return patientService.add(patient);
     }
 
+    @GetMapping
+    public List<Patient> getAll(){
+        return patientService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public Patient getById(@PathVariable String id) throws PatientNotRegisteredException {
+        return patientService.getById(id);
+    }
 }

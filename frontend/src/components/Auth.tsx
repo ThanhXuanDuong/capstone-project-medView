@@ -13,18 +13,13 @@ export default function Auth(
     const location = useLocation();
 
     const encodedURI=encodeURIComponent(location.pathname + location.search);
+    const action = user ? <div>{children}</div>
+                        : <Navigate to={`/login?redirect=${encodedURI}`}/>;
+
 
     return (
         <>
-            { !isReady
-                ? null
-                : (user
-                    ? <div>{children}</div>
-                    : (
-                        <Navigate to={`/login?redirect=${encodedURI}`}/>
-                    )
-                )
-            }
+            { !isReady ? null : (action) }
         </>
     )
 }

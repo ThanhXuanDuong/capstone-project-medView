@@ -2,6 +2,7 @@ package de.neuefische.backend.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,5 +40,11 @@ public class AppUserService {
         Optional<AppUser> appUser = appUserRepository.findByUsername(username);
         appUser.ifPresent(user -> user.setPassword(""));
         return appUser;
+    }
+
+    public AppUser getAuthenticatedUser () {
+        return findByUsernameWithoutPassword(
+                SecurityContextHolder.getContext().getAuthentication().getName()
+        ).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
     }
 }
