@@ -2,6 +2,7 @@ import {Card, CardActions, CardContent, CardMedia, IconButton, Typography} from 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Patient from "../types/Patient";
+import {IMAGES_PATH} from "../application";
 
 export default function PatientCard({
     patient
@@ -9,27 +10,26 @@ export default function PatientCard({
     patient: Patient
 }){
     return (
-        <Card sx={{ display: 'flex' }}>
+        <Card sx={{ display: 'flex'}}>
             <CardMedia
                 component="img"
-                width={ "100"}
-                height="100"
-                image="/public/profil-placeholder.png"
+                style={{ height: "120px", width:"120px", padding: "2%" }}
+                image= {IMAGES_PATH + "profile-placeholder.png"}
                 alt="Profile"
             />
 
             <CardContent>
                 <Typography variant="h4" color="text.secondary">
-                    Lastname
+                    {patient.lastname}
                 </Typography>
                 <Typography variant="h5" color="text.secondary">
-                    Firstname
+                    {patient.firstname}
                 </Typography>
             </CardContent>
 
             <CardContent>
                 <Typography variant="h6" color="text.secondary">
-                    Patient-ID
+                    Patient-ID: {patient.id}
                 </Typography>
             </CardContent>
 
