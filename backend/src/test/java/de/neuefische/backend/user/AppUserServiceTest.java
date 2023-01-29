@@ -116,4 +116,5 @@ class AppUserServiceTest {
         assertEquals(Optional.of(new AppUser("","user","")), actual);
         verify(appUserRepository).findByUsername("user");
     }
+
 }
