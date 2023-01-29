@@ -1,5 +1,5 @@
 import {Box, Button, Container, TextField} from "@mui/material";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Patient from "../types/Patient";
 import axios from "axios";
 import PatientGallery from "../components/PatientGallery";
@@ -7,7 +7,6 @@ import SaveForm from "../components/SaveForm";
 
 export default function DashboardPage(){
     const [patients, setPatients] = useState<Patient[]>([]);
-    const [formState, setFormState] = useState<boolean>(false);
 
     useEffect(() => {
         (async () =>{
@@ -16,6 +15,15 @@ export default function DashboardPage(){
         })();
     },[]);
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return(
 
@@ -30,13 +38,12 @@ export default function DashboardPage(){
 
                 <Button variant="contained">Sort</Button>
 
-                <Button variant="contained" onClick={() => setFormState(true)}>Add</Button>
+                <Button variant="contained" onClick={handleClickOpen}>Add</Button>
             </Box>
 
             <PatientGallery patients={patients}/>
 
-            {formState ? <SaveForm/>: null}
-
+            <SaveForm open={open} handleClose={handleClose}/>
         </Container>
 
 
