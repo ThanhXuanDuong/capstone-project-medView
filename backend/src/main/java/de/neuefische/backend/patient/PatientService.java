@@ -31,4 +31,13 @@ public class PatientService {
                 .findById(id)
                 .orElseThrow(PatientNotRegisteredException::new);
     }
+
+    public void deleteById(String id) throws PatientNotRegisteredException {
+        if (patientRepository.existsById(id)){
+            patientRepository.deleteById(id);
+        } else{
+            throw new PatientNotRegisteredException();
+        }
+
+    }
 }
