@@ -14,9 +14,9 @@ export default function GenderRadioButtonsGroup() {
                 aria-labelledby="radio-buttons-group-label"
                 name="radio-buttons-group"
             >
-                <FormControlLabel value="female" control={<Radio />} label="Female" />
-                <FormControlLabel value="male" control={<Radio />} label="Male" />
-                <FormControlLabel value="other" control={<Radio />} label="Other" />
+                <FormControlLabel value="FEMALE" control={<Radio />} label="Female" />
+                <FormControlLabel value="MALE" control={<Radio />} label="Male" />
+                <FormControlLabel value="OTHER" control={<Radio />} label="Other" />
             </RadioGroup>
         </FormControl>
     );

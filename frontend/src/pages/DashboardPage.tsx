@@ -30,6 +30,14 @@ export default function DashboardPage(){
         patient.firstname.toLowerCase().includes(searchName)
         || patient.lastname.toLowerCase().includes(searchName));
 
+    const onSave = (patient:Patient) => {
+        (async () => {
+            const response = await axios.post("/api/patients",patient);
+            setPatients([...patients, response.data]);
+        })();
+        setOpen(false);
+    };
+
     return(
 
         <Container >
@@ -49,7 +57,7 @@ export default function DashboardPage(){
 
             <PatientGallery patients={searchPatients}/>
 
-            <SaveForm open={open} handleClose={handleClose}/>
+            <SaveForm open={open} handleClose={handleClose} onSave={onSave}/>
         </Container>
 
 
