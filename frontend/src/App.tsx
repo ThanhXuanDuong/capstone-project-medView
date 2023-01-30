@@ -5,9 +5,12 @@ import Root from "./Root";
 
 function App() {
     return (
-        <BrowserRouter>
-            <Root/>
-        </BrowserRouter>
+        <>
+            <BrowserRouter>
+                <Root/>
+            </BrowserRouter>
+        </>
+
     );
 }
 

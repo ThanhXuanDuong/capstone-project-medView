@@ -5,6 +5,7 @@ import Auth from "./components/Auth";
 import DetailPage from "./pages/DetailPage";
 import React, {useMemo} from "react";
 import NoAuth from "./components/NoAuth";
+import NavBar from "./components/NavBar";
 import NotFoundPage from "./pages/NotFoundPage";
 
 export default function Root() {
@@ -15,27 +16,30 @@ export default function Root() {
     );
 
     return (
-        <Routes>
-            <Route path={"/"} element={
-                <Auth>
-                    <DashboardPage/>
-                </Auth>
-            }/>
+        <>
+            <NavBar isLoggedIn={true}/>
+                <Routes>
+                    <Route path={"/"} element={
+                        <Auth>
+                            <DashboardPage/>
+                        </Auth>
+                    }/>
 
-            <Route path={"/login"} element={
-                <NoAuth redirect={redirect}>
-                    <LoginPage/>
-                </NoAuth>}
-            />
+                    <Route path={"/login"} element={
+                        <NoAuth redirect={redirect}>
+                            <LoginPage/>
+                        </NoAuth>}
+                    />
 
-            <Route path={"/patients/:id"} element={
-                <Auth>
-                    <DetailPage/>
-                </Auth>}
-            />
+                    <Route path={"/patients/:id"} element={
+                        <Auth>
+                            <DetailPage/>
+                        </Auth>}
+                    />
 
-            <Route path={"*"} element={<NotFoundPage/>}/>
+                     <Route path={"*"} element={<NotFoundPage/>}/>
 
-        </Routes>
+                </Routes>
+        </>
     );
 }
