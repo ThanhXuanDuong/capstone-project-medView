@@ -6,10 +6,12 @@ import {IMAGES_PATH} from "../application";
 
 export default function PatientCard({
     patient,
-    onDelete
+    onDelete,
+    onEdit
 }:{
-    patient: Patient
-    onDelete: (id:string|undefined) => void
+    patient: Patient,
+    onDelete: (id: string|undefined) => void,
+    onEdit: (patient: Patient|undefined) => void
 }){
     return (
         <Card sx={{ display: 'flex'}}>
@@ -36,7 +38,8 @@ export default function PatientCard({
             </CardContent>
 
             <CardActions disableSpacing>
-                <IconButton aria-label="edit">
+                <IconButton aria-label="edit"
+                            onClick={() => onEdit(patient)}>
                     <EditIcon />
                 </IconButton>
                 <IconButton aria-label="delete"

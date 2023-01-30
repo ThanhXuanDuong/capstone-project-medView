@@ -21,7 +21,7 @@ export default function SaveForm({
     handleClose: () =>void,
     onSave: (patient:Patient) => void
 }) {
-    const initialState = {
+    const initialPatient ={
         firstname: "",
         lastname: "",
         gender: "",
@@ -30,14 +30,16 @@ export default function SaveForm({
         telephone: "",
         imageIds: []
     };
-    const [patient, setPatient] = useState<Patient>(initialState);
+    const [patient, setPatient] = useState<Patient>(initialPatient);
+
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setPatient({
             ...patient,
             [event.target.name]: event.target.value
         });
     }
-    console.log(patient);
+    console.log(patient)
+    console.log(initialPatient)
 
     return (
         <Dialog sx={{p: 10}} open={open} onClose={handleClose}>

@@ -1,30 +1,17 @@
 import {Box, Button, Container, TextField} from "@mui/material";
-import React, { useEffect, useState} from "react";
+import React, {useState} from "react";
 import Patient from "../types/Patient";
 import axios from "axios";
 import PatientGallery from "../components/PatientGallery";
 import SaveForm from "../components/SaveForm";
+import usePatients from "../hooks/usePatients";
+import useFormActions from "../hooks/useFormActions";
 
 export default function DashboardPage(){
-    const [patients, setPatients] = useState<Patient[]>([]);
+
+    const {patients,setPatients} = usePatients();
+    const {open,setOpen, handleClickOpen, handleClose} = useFormActions();
     const [searchName, setSearchName] = useState<string>("");
-
-    useEffect(() => {
-        (async () =>{
-            const response = await axios.get("api/patients");
-            setPatients(response.data);
-        })();
-    },[]);
-
-    const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     const searchPatients = patients.filter(patient =>
         patient.firstname.toLowerCase().includes(searchName)
@@ -44,10 +31,19 @@ export default function DashboardPage(){
             setPatients(patients.filter(patient => patient.id !==id));
         })();
     }
-    return(
 
+    const onEdit = (patient:Patient|undefined) =>{
+        setOpen(true);
+    };
+
+    return(
         <Container >
-            <Box sx={{display:'flex',mt: 10, mb: 5, gap:2, flexDirection:'row-reverse'}}>
+            <Box sx={{display:'flex',
+                    mt: 10,
+                    mb: 5,
+                    gap:2,
+                    flexDirection:'row-reverse'
+            }}>
                 <TextField
                     hiddenLabel
                     id="Search"
@@ -58,12 +54,19 @@ export default function DashboardPage(){
 
                 <Button variant="contained">Sort</Button>
 
-                <Button variant="contained" onClick={handleClickOpen}>Add</Button>
+                <Button variant="contained"
+                        onClick={handleClickOpen}
+                >Add</Button>
+
             </Box>
 
-            <PatientGallery patients={searchPatients} onDelete={onDelete}/>
+            <PatientGallery patients={searchPatients}
+                            onDelete={onDelete}
+                            onEdit={onEdit}/>
 
-            <SaveForm open={open} handleClose={handleClose} onSave={onSave}/>
+            <SaveForm open={open}
+                      handleClose={handleClose}
+                      onSave={onSave}/>
         </Container>
 
 
