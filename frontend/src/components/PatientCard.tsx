@@ -5,9 +5,11 @@ import Patient from "../types/Patient";
 import {IMAGES_PATH} from "../application";
 
 export default function PatientCard({
-    patient
+    patient,
+    onDelete
 }:{
     patient: Patient
+    onDelete: (id:string|undefined) => void
 }){
     return (
         <Card sx={{ display: 'flex'}}>
@@ -37,7 +39,8 @@ export default function PatientCard({
                 <IconButton aria-label="edit">
                     <EditIcon />
                 </IconButton>
-                <IconButton aria-label="delete">
+                <IconButton aria-label="delete"
+                            onClick={() => onDelete(patient.id)}>
                     <DeleteIcon />
                 </IconButton>
             </CardActions>

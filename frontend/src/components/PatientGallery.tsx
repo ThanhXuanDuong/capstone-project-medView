@@ -3,9 +3,11 @@ import PatientCard from "./PatientCard";
 import {Box} from "@mui/material";
 
 export default function PatientGallery({
-    patients
+    patients,
+    onDelete
 }:{
-    patients: Patient[]
+    patients: Patient[],
+    onDelete: (id:string|undefined) => void
 }) {
     return (
             <Box sx={{display: 'flex'}}
@@ -16,6 +18,7 @@ export default function PatientGallery({
             {patients.map(patient => <PatientCard
                 key={patient.id}
                 patient ={patient}
+                onDelete={onDelete}
             />)}
             </Box>
     )

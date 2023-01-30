@@ -9,17 +9,38 @@ import {Avatar, Box, FormControl} from "@mui/material";
 import {IMAGES_PATH} from "../application";
 import GenderRadioButtonsGroup from "./GenderRadioGroup";
 import UploadFile from "./UploadFile";
+import Patient from "../types/Patient";
+import {ChangeEvent, useState} from "react";
 
 export default function SaveForm({
     open,
-    handleClose
+    handleClose,
+    onSave
 }:{
     open: boolean,
-    handleClose: () =>void
+    handleClose: () =>void,
+    onSave: (patient:Patient) => void
 }) {
+    const initialState = {
+        firstname: "",
+        lastname: "",
+        gender: "",
+        address: "",
+        birthday: "",
+        telephone: "",
+        imageIds: []
+    };
+    const [patient, setPatient] = useState<Patient>(initialState);
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setPatient({
+            ...patient,
+            [event.target.name]: event.target.value
+        });
+    }
+    console.log(patient);
 
     return (
-        <Dialog sx={{p: 5}} open={open} onClose={handleClose}>
+        <Dialog sx={{p: 10}} open={open} onClose={handleClose}>
             <DialogTitle>Save Form</DialogTitle>
 
             <DialogContent >
@@ -36,59 +57,71 @@ export default function SaveForm({
                         </Box>
 
                         <TextField
-                            sx={{ width: 350, mb: 2 }}
+                            sx={{ width: 500, mb: 2 }}
                             id="lastname"
                             label={"Last Name"}
                             name="lastname"
+                            value={patient.lastname}
                             variant="outlined"
                             size="small"
+                            onChange={handleChange}
                         />
 
                         <TextField
-                            sx={{ width: 350, mb: 2 }}
+                            sx={{ width: 500, mb: 2 }}
                             id="firstname"
                             label={"First Name"}
                             name="firstname"
+                            value={patient.firstname}
                             variant="outlined"
                             size="small"
+                            onChange={handleChange}
                         />
 
                         <TextField
-                            sx={{ width: 350, mb: 2 }}
-                            id="patient-id"
+                            sx={{ width: 500, mb: 2 }}
+                            id="id"
                             label={"Patient-ID"}
-                            name="patient-id"
+                            name="id"
+                            value={patient.id}
                             variant="outlined"
                             size="small"
+                            onChange={handleChange}
                         />
 
-                        <GenderRadioButtonsGroup/>
+                        <GenderRadioButtonsGroup onChange={handleChange}/>
 
                         <TextField
-                            sx={{ width: 350, mb: 2 }}
+                            sx={{ width: 500, mb: 2 }}
                             id="address"
                             label={"Address"}
                             name="address"
+                            value={patient.address}
                             variant="outlined"
                             size="small"
+                            onChange={handleChange}
                         />
 
                         <TextField
-                            sx={{ width: 350, mb: 2 }}
+                            sx={{ width: 500, mb: 2 }}
                             id="birthday"
                             label={"Birthday"}
                             name="birthday"
+                            value={patient.birthday}
                             variant="outlined"
                             size="small"
+                            onChange={handleChange}
                         />
 
                         <TextField
-                            sx={{ width: 350, mb: 2 }}
+                            sx={{ width: 500, mb: 2 }}
                             id="telephone"
                             label={"Telephone"}
                             name="telephone"
+                            value={patient.telephone}
                             variant="outlined"
                             size="small"
+                            onChange={handleChange}
                         />
 
                     </FormControl>
@@ -97,7 +130,7 @@ export default function SaveForm({
 
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleClose}>Save</Button>
+                <Button onClick={() => onSave(patient)}>Save</Button>
             </DialogActions>
         </Dialog>
 

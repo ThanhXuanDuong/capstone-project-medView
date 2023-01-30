@@ -6,7 +6,6 @@ export default function NavBar ({
  }:{
     isLoggedIn: boolean
 }
-
     ){
     return (
         <>

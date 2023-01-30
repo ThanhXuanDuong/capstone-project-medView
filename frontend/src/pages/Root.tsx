@@ -1,12 +1,12 @@
 import {Route, Routes, useSearchParams} from "react-router-dom";
-import DashboardPage from "./pages/DashboardPage";
-import LoginPage from "./pages/LoginPage";
-import Auth from "./components/Auth";
-import DetailPage from "./pages/DetailPage";
+import DashboardPage from "./DashboardPage";
+import LoginPage from "./LoginPage";
+import Auth from "../components/Auth";
+import DetailPage from "./DetailPage";
 import React, {useMemo} from "react";
-import NoAuth from "./components/NoAuth";
-import NavBar from "./components/NavBar";
-import NotFoundPage from "./pages/NotFoundPage";
+import NoAuth from "../components/NoAuth";
+import NavBar from "../components/NavBar";
+import NotFoundPage from "./NotFoundPage";
 
 export default function Root() {
     const [searchParams] = useSearchParams();
