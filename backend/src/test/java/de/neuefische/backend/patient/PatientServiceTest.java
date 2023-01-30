@@ -143,4 +143,46 @@ class PatientServiceTest {
         Assertions.assertThrows(PatientNotRegisteredException.class,
                 () -> patientService.getById("1"));
     }
+
+    @Test
+    void deleteById_throwException_whenPatientNotRegistered(){
+        //given
+        PatientRepository patientRepository = mock(PatientRepository.class);
+        when(patientRepository.existsById("not existing id")).thenReturn(false);
+
+        TimeStampGenerator timeStampGenerator = mock(TimeStampGenerator.class);
+        AppUserService appUserService = mock (AppUserService.class);
+
+        //when
+        PatientService patientService = new PatientService(
+                patientRepository,
+                timeStampGenerator,
+                appUserService
+        );
+
+        // then
+        Assertions.assertThrows(PatientNotRegisteredException.class,
+                () -> patientService.deleteById("not existing id"));
+    }
+
+    @Test
+    void deleteById_deletePatient_whenPatientRegistered() throws PatientNotRegisteredException{
+        //given
+        PatientRepository patientRepository = mock(PatientRepository.class);
+        when(patientRepository.existsById("1")).thenReturn(true);
+
+        TimeStampGenerator timeStampGenerator = mock(TimeStampGenerator.class);
+        AppUserService appUserService = mock (AppUserService.class);
+
+        //when
+        PatientService patientService = new PatientService(
+                patientRepository,
+                timeStampGenerator,
+                appUserService
+        );
+        patientService.deleteById("1");
+        // then
+       verify(patientRepository).deleteById("1");
+    }
+
 }
