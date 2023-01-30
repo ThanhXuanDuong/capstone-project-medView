@@ -3,7 +3,6 @@ package de.neuefische.backend.patient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
@@ -24,7 +23,7 @@ public class Patient {
     private List<String> imageIds;
 
     private LocalDateTime timeStamp;
-    @CreatedBy
+
     private String createdBy;
 
     public Patient(String id,
