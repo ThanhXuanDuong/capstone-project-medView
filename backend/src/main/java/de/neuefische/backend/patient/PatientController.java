@@ -25,4 +25,9 @@ public class PatientController {
     public Patient getById(@PathVariable String id) throws PatientNotRegisteredException {
         return patientService.getById(id);
     }
+
+    @DeleteMapping("/{id}")
+    public  void deleteById(@PathVariable String id) throws PatientNotRegisteredException {
+        patientService.deleteById(id);
+    }
 }
