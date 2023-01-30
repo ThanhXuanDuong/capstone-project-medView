@@ -8,6 +8,5 @@ export default function DetailPage(){
             </div>
             <Logout/>
         </>
-
     );
 }

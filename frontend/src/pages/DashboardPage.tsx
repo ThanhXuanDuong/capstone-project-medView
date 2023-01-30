@@ -1,5 +1,5 @@
 import {Box, Button, Container, TextField} from "@mui/material";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState} from "react";
 import Patient from "../types/Patient";
 import axios from "axios";
 import PatientGallery from "../components/PatientGallery";
@@ -7,6 +7,7 @@ import SaveForm from "../components/SaveForm";
 
 export default function DashboardPage(){
     const [patients, setPatients] = useState<Patient[]>([]);
+    const [searchName, setSearchName] = useState<string>("");
 
     useEffect(() => {
         (async () =>{
@@ -25,6 +26,10 @@ export default function DashboardPage(){
         setOpen(false);
     };
 
+    const searchPatients = patients.filter(patient =>
+        patient.firstname.toLowerCase().includes(searchName)
+        || patient.lastname.toLowerCase().includes(searchName));
+
     return(
 
         <Container >
@@ -34,6 +39,7 @@ export default function DashboardPage(){
                     id="Search"
                     placeholder="Search..."
                     size="small"
+                    onChange={(e)=> setSearchName(e.target.value)}
                 />
 
                 <Button variant="contained">Sort</Button>
@@ -41,7 +47,7 @@ export default function DashboardPage(){
                 <Button variant="contained" onClick={handleClickOpen}>Add</Button>
             </Box>
 
-            <PatientGallery patients={patients}/>
+            <PatientGallery patients={searchPatients}/>
 
             <SaveForm open={open} handleClose={handleClose}/>
         </Container>

@@ -1,7 +1,11 @@
 type Patient={
-    id:string,
+    id?:string,
     firstname:string,
-    lastname:string
+    lastname:string,
+    gender: string,
+    address: string,
+    birthday: string,
+    telephone: string
 };
 
 export default Patient;
