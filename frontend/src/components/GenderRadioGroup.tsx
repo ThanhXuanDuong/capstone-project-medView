@@ -1,18 +1,25 @@
 import * as React from 'react';
+import {ChangeEvent} from 'react';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
-export default function GenderRadioButtonsGroup() {
+export default function GenderRadioButtonsGroup({
+    onChange
+}:{
+    onChange: (event: ChangeEvent<HTMLInputElement>)=>void
+}) {
     return (
         <FormControl>
-            <FormLabel id="radio-buttons-group-label">Gender</FormLabel>
+            <FormLabel id="gender">Gender</FormLabel>
             <RadioGroup
                 row
-                aria-labelledby="radio-buttons-group-label"
-                name="radio-buttons-group"
+                defaultValue="female"
+                aria-labelledby="gender"
+                name="gender"
+                onChange={onChange}
             >
                 <FormControlLabel value="FEMALE" control={<Radio />} label="Female" />
                 <FormControlLabel value="MALE" control={<Radio />} label="Male" />

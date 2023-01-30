@@ -22,7 +22,6 @@ export default function SaveForm({
     onSave: (patient:Patient) => void
 }) {
     const initialState = {
-        id: "",
         firstname: "",
         lastname: "",
         gender: "",
@@ -90,7 +89,7 @@ export default function SaveForm({
                             onChange={handleChange}
                         />
 
-                        <GenderRadioButtonsGroup/>
+                        <GenderRadioButtonsGroup onChange={handleChange}/>
 
                         <TextField
                             sx={{ width: 500, mb: 2 }}
