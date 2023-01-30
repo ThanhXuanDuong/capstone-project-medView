@@ -38,6 +38,12 @@ export default function DashboardPage(){
         setOpen(false);
     };
 
+    const onDelete = (id:string|undefined) => {
+        (async () => {
+            await axios.delete("/api/patients/" +id);
+            setPatients(patients.filter(patient => patient.id !==id));
+        })();
+    }
     return(
 
         <Container >
@@ -55,7 +61,7 @@ export default function DashboardPage(){
                 <Button variant="contained" onClick={handleClickOpen}>Add</Button>
             </Box>
 
-            <PatientGallery patients={searchPatients}/>
+            <PatientGallery patients={searchPatients} onDelete={onDelete}/>
 
             <SaveForm open={open} handleClose={handleClose} onSave={onSave}/>
         </Container>
