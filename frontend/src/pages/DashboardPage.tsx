@@ -38,9 +38,11 @@ export default function DashboardPage(){
     const onUpdate = (patient:Patient) => {
         (async () => {
             const response = await axios.put("/api/patients/"+patient.id,patient);
-
-            setPatients(patients.filter(patient => patient.id !==response.data.id));
-            setPatients((patients) =>[...patients, response.data]);
+            const updatedPatient =response.data;
+            setPatients(patients.map(patient =>
+                patient.id === updatedPatient.id
+                    ? updatedPatient
+                    : patient));
 
         })();
         setOpen(false);
