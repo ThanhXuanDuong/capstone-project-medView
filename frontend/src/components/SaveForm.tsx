@@ -10,34 +10,31 @@ import {IMAGES_PATH} from "../application";
 import GenderRadioButtonsGroup from "./GenderRadioGroup";
 import UploadFile from "./UploadFile";
 import Patient from "../types/Patient";
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent} from "react";
 
 export default function SaveForm({
+    patient,
+    setPatient,
+    setEditing,
     open,
     handleClose,
     onSave
 }:{
+    patient: Patient,
+    setPatient: (patient:Patient) => void,
+    setEditing: (edit: boolean) =>void
     open: boolean,
     handleClose: () =>void,
     onSave: (patient:Patient) => void
 }) {
-    const initialState = {
-        firstname: "",
-        lastname: "",
-        gender: "",
-        address: "",
-        birthday: "",
-        telephone: "",
-        imageIds: []
-    };
-    const [patient, setPatient] = useState<Patient>(initialState);
+
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setPatient({
             ...patient,
             [event.target.name]: event.target.value
         });
-    }
-    console.log(patient);
+        setEditing(false)
+    };
 
     return (
         <Dialog sx={{p: 10}} open={open} onClose={handleClose}>
@@ -89,7 +86,8 @@ export default function SaveForm({
                             onChange={handleChange}
                         />
 
-                        <GenderRadioButtonsGroup onChange={handleChange}/>
+                        <GenderRadioButtonsGroup patient= {patient}
+                                                 onChange={handleChange}/>
 
                         <TextField
                             sx={{ width: 500, mb: 2 }}

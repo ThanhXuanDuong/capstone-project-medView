@@ -1,30 +1,27 @@
 import {Box, Button, Container, TextField} from "@mui/material";
-import React, { useEffect, useState} from "react";
+import React, {useState} from "react";
 import Patient from "../types/Patient";
 import axios from "axios";
 import PatientGallery from "../components/PatientGallery";
 import SaveForm from "../components/SaveForm";
+import usePatients from "../hooks/usePatients";
+import useFormActions from "../hooks/useFormActions";
 
 export default function DashboardPage(){
-    const [patients, setPatients] = useState<Patient[]>([]);
+    const initial ={
+        firstname: "",
+        lastname: "",
+        gender: "",
+        address: "",
+        birthday: "",
+        telephone: "",
+        imageIds: []
+    };
+    const [patient, setPatient] = useState<Patient>(initial);
+    const {patients,setPatients} = usePatients();
+    const {open,setOpen, handleClickOpen, handleClose} = useFormActions();
     const [searchName, setSearchName] = useState<string>("");
-
-    useEffect(() => {
-        (async () =>{
-            const response = await axios.get("api/patients");
-            setPatients(response.data);
-        })();
-    },[]);
-
-    const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const [editing, setEditing] = useState<boolean>(false);
 
     const searchPatients = patients.filter(patient =>
         patient.firstname.toLowerCase().includes(searchName)
@@ -38,16 +35,44 @@ export default function DashboardPage(){
         setOpen(false);
     };
 
+    const onUpdate = (patient:Patient) => {
+        (async () => {
+            const response = await axios.put("/api/patients/"+patient.id,patient);
+            const updatedPatient =response.data;
+            setPatients(patients.map(patient =>
+                patient.id === updatedPatient.id
+                    ? updatedPatient
+                    : patient));
+
+        })();
+        setOpen(false);
+    };
+
     const onDelete = (id:string|undefined) => {
         (async () => {
             await axios.delete("/api/patients/" +id);
             setPatients(patients.filter(patient => patient.id !==id));
         })();
     }
-    return(
 
+    const handleEditClick = async(editingPatient:Patient|undefined) =>{
+        if (editingPatient) {
+            setPatient(editingPatient);
+            setOpen(true);
+        }else{
+            console.log("No patient");
+        }
+
+    };
+
+    return(
         <Container >
-            <Box sx={{display:'flex',mt: 10, mb: 5, gap:2, flexDirection:'row-reverse'}}>
+            <Box sx={{display:'flex',
+                    mt: 10,
+                    mb: 5,
+                    gap:2,
+                    flexDirection:'row-reverse'
+            }}>
                 <TextField
                     hiddenLabel
                     id="Search"
@@ -58,14 +83,22 @@ export default function DashboardPage(){
 
                 <Button variant="contained">Sort</Button>
 
-                <Button variant="contained" onClick={handleClickOpen}>Add</Button>
+                <Button variant="contained"
+                        onClick={handleClickOpen}
+                >Add</Button>
+
             </Box>
 
-            <PatientGallery patients={searchPatients} onDelete={onDelete}/>
+            <PatientGallery patients={searchPatients}
+                            onDelete={onDelete}
+                            onEdit={handleEditClick}/>
 
-            <SaveForm open={open} handleClose={handleClose} onSave={onSave}/>
+            <SaveForm patient={patient}
+                      setPatient={setPatient}
+                      setEditing={setEditing}
+                      open={open}
+                      handleClose={handleClose}
+                      onSave={editing? onSave: onUpdate}/>
         </Container>
-
-
     );
 }
