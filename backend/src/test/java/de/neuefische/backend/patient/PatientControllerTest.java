@@ -43,7 +43,7 @@ class PatientControllerTest {
        @WithMockUser(username = "user",password = "pw")
        void add_returnPatient_whenAddPatient() throws Exception {
            //given
-           String given = """
+           String requestBody = """
                    {
                        "lastname":"Mustermann",
                        "firstname":"Max",
@@ -72,7 +72,7 @@ class PatientControllerTest {
            //when and then
            mvc.perform(post("/api/patients")
                    .contentType(MediaType.APPLICATION_JSON)
-                   .content(given))
+                   .content(requestBody))
                .andExpectAll(
                    status().isOk(),
                    content().json(expected));
@@ -133,6 +133,64 @@ class PatientControllerTest {
                         status().isOk(),
                         content().json(expected)
                 );
+    }
+
+    @Test
+    void updateById_return401_whenNotLoggedIn () throws Exception {
+        mvc.perform(put("/api/patients/1"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pw")
+    void updateById_returnUpdatedPatient_whenLoggedIn () throws Exception {
+        appUserRepository.save(new AppUser("1","user","pw"));
+
+        patientRepository.save(new Patient(
+                "1",
+                "Miller",
+                "Helen",
+                Gender.FEMALE,
+                "2000-10-20",
+                "",
+                "",
+                List.of(),
+                LocalDateTime.now(),
+                "user"
+        ));
+
+        String requestBody = """
+                   {
+                       "lastname":"Miller",
+                       "firstname":"Helen",
+                       "gender":"FEMALE",
+                       "birthday":"2000-10-20",
+                       "address":"",
+                       "telephone":"",
+                       "imageIds":["1","2","3"]
+                   }
+                   """;
+
+        String expected = """
+                   {
+                        "id": "1",
+                       "lastname":"Miller",
+                       "firstname":"Helen",
+                       "gender":"FEMALE",
+                       "birthday":"2000-10-20",
+                       "address":"",
+                       "telephone":"",
+                       "imageIds":["1","2","3"],
+                       "createdBy": "user"
+                   }
+                   """;
+
+        mvc.perform(put("/api/patients/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpectAll(
+                    status().isOk(),
+                    content().json(expected));
     }
 
     @Test

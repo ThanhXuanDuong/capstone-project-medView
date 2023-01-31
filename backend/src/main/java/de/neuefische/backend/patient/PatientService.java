@@ -32,6 +32,14 @@ public class PatientService {
                 .orElseThrow(PatientNotRegisteredException::new);
     }
 
+    public Patient updateById(String id, Patient patient) throws PatientNotRegisteredException {
+        patient.setId(id);
+        if (!patientRepository.existsById(id)){
+            throw new PatientNotRegisteredException();
+        }
+        return this.add(patient);
+    }
+
     public void deleteById(String id) throws PatientNotRegisteredException {
         if (patientRepository.existsById(id)){
             patientRepository.deleteById(id);
@@ -40,4 +48,5 @@ public class PatientService {
         }
 
     }
+
 }

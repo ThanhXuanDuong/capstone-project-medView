@@ -145,6 +145,55 @@ class PatientServiceTest {
     }
 
     @Test
+    void updateById_throwException_whenPatientNotRegistered(){
+        //given
+        PatientRepository patientRepository = mock(PatientRepository.class);
+        when(patientRepository.existsById("not existing id")).thenReturn(false);
+
+        TimeStampGenerator timeStampGenerator = mock(TimeStampGenerator.class);
+        AppUserService appUserService = mock (AppUserService.class);
+
+        //when
+        PatientService patientService = new PatientService(
+                patientRepository,
+                timeStampGenerator,
+                appUserService
+        );
+
+        // then
+        Assertions.assertThrows(PatientNotRegisteredException.class,
+                () -> patientService.updateById("not existing id",new Patient()));
+    }
+
+
+    @Test
+    void updateById_Update_whenPatientRegistered() throws PatientNotRegisteredException {
+        //given
+        AppUser appUser =new AppUser("test-id","test-user","pw");
+        Patient patient = this.createOnePatient("1");
+
+        PatientRepository patientRepository = mock(PatientRepository.class);
+        when(patientRepository.existsById("1")).thenReturn(true);
+        when(patientRepository.save(patient)).thenReturn(patient);
+
+        TimeStampGenerator timeStampGenerator = mock(TimeStampGenerator.class);
+        AppUserService appUserService = mock (AppUserService.class);
+        when(appUserService.getAuthenticatedUser()).thenReturn(appUser);
+
+        //when
+        PatientService patientService = new PatientService(
+                patientRepository,
+                timeStampGenerator,
+                appUserService
+        );
+        Patient actual = patientService.updateById("1",patient);
+        // then
+        Assertions.assertEquals(patient, actual);
+        verify(patientRepository).save(patient);
+    }
+
+
+    @Test
     void deleteById_throwException_whenPatientNotRegistered(){
         //given
         PatientRepository patientRepository = mock(PatientRepository.class);
