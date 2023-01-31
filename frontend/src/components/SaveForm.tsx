@@ -13,10 +13,16 @@ import Patient from "../types/Patient";
 import {ChangeEvent, useState} from "react";
 
 export default function SaveForm({
+    patient,
+    setPatient,
+    setEditing,
     open,
     handleClose,
     onSave
 }:{
+    patient: Patient,
+    setPatient: (patient:Patient) => void,
+    setEditing: (edit: boolean) =>void
     open: boolean,
     handleClose: () =>void,
     onSave: (patient:Patient) => void
@@ -38,6 +44,8 @@ export default function SaveForm({
             ...patient,
             [event.target.name]: event.target.value
         });
+        setEditing(false)
+    };
     };
 
     const handleSaveClick = async() =>{
@@ -95,7 +103,8 @@ export default function SaveForm({
                         onChange={handleChange}
                     />
 
-                    <GenderRadioButtonsGroup onChange={handleChange}/>
+                        <GenderRadioButtonsGroup patient= {patient}
+                                                 onChange={handleChange}/>
 
                     <TextField
                         sx={{ width: 500, mb: 2 }}
