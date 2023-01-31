@@ -3,14 +3,13 @@ import * as React from "react";
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
-import patient from "../types/Patient";
 import Patient from "../types/Patient";
 
 export default function UploadFile({
     patient,
     setPatient
 }:{
-    patient: patient,
+    patient: Patient,
     setPatient: (patient:Patient) =>void
 }){
 
