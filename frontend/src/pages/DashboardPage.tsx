@@ -8,10 +8,20 @@ import usePatients from "../hooks/usePatients";
 import useFormActions from "../hooks/useFormActions";
 
 export default function DashboardPage(){
-
+    const initial ={
+        firstname: "",
+        lastname: "",
+        gender: "",
+        address: "",
+        birthday: "",
+        telephone: "",
+        imageIds: []
+    };
+    const [patient, setPatient] = useState<Patient>(initial);
     const {patients,setPatients} = usePatients();
     const {open,setOpen, handleClickOpen, handleClose} = useFormActions();
     const [searchName, setSearchName] = useState<string>("");
+    const [editing, setEditing] = useState<boolean>(false);
 
     const searchPatients = patients.filter(patient =>
         patient.firstname.toLowerCase().includes(searchName)
@@ -25,6 +35,17 @@ export default function DashboardPage(){
         setOpen(false);
     };
 
+    const onUpdate = (patient:Patient) => {
+        (async () => {
+            const response = await axios.put("/api/patients/"+patient.id,patient);
+
+            setPatients(patients.filter(patient => patient.id !==response.data.id));
+            setPatients((patients) =>[...patients, response.data]);
+
+        })();
+        setOpen(false);
+    };
+
     const onDelete = (id:string|undefined) => {
         (async () => {
             await axios.delete("/api/patients/" +id);
@@ -32,8 +53,14 @@ export default function DashboardPage(){
         })();
     }
 
-    const onEdit = (patient:Patient|undefined) =>{
-        setOpen(true);
+    const handleEditClick = async(editingPatient:Patient|undefined) =>{
+        if (editingPatient) {
+            setPatient(editingPatient);
+            setOpen(true);
+        }else{
+            console.log("No patient");
+        }
+
     };
 
     return(
@@ -62,13 +89,14 @@ export default function DashboardPage(){
 
             <PatientGallery patients={searchPatients}
                             onDelete={onDelete}
-                            onEdit={onEdit}/>
+                            onEdit={handleEditClick}/>
 
-            <SaveForm open={open}
+            <SaveForm patient={patient}
+                      setPatient={setPatient}
+                      setEditing={setEditing}
+                      open={open}
                       handleClose={handleClose}
-                      onSave={onSave}/>
+                      onSave={editing? onSave: onUpdate}/>
         </Container>
-
-
     );
 }

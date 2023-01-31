@@ -5,10 +5,13 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import Patient from "../types/Patient";
 
 export default function GenderRadioButtonsGroup({
+    patient,
     onChange
 }:{
+    patient: Patient
     onChange: (event: ChangeEvent<HTMLInputElement>)=>void
 }) {
     return (
@@ -16,7 +19,7 @@ export default function GenderRadioButtonsGroup({
             <FormLabel id="gender">Gender</FormLabel>
             <RadioGroup
                 row
-                defaultValue="female"
+                defaultValue={patient.gender? patient.gender: "FEMALE"}
                 aria-labelledby="gender"
                 name="gender"
                 onChange={onChange}
