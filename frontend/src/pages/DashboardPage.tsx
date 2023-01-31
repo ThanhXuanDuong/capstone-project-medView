@@ -31,6 +31,7 @@ export default function DashboardPage(){
         (async () => {
             const response = await axios.post("/api/patients",patient);
             setPatients([...patients, response.data]);
+            setPatient(initial);
         })();
         setOpen(false);
     };
@@ -43,7 +44,7 @@ export default function DashboardPage(){
                 patient.id === updatedPatient.id
                     ? updatedPatient
                     : patient));
-
+            setPatient(initial);
         })();
         setOpen(false);
     };
@@ -59,6 +60,7 @@ export default function DashboardPage(){
         if (editingPatient) {
             setPatient(editingPatient);
             setOpen(true);
+            setEditing(true);
         }else{
             console.log("No patient");
         }
@@ -98,7 +100,7 @@ export default function DashboardPage(){
                       setEditing={setEditing}
                       open={open}
                       handleClose={handleClose}
-                      onSave={editing? onSave: onUpdate}/>
+                      onSave={editing? onUpdate: onSave}/>
         </Container>
     );
 }

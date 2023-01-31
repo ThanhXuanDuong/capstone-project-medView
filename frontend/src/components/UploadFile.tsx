@@ -3,13 +3,15 @@ import * as React from "react";
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
+import patient from "../types/Patient";
+import Patient from "../types/Patient";
 
 export default function UploadFile({
-    imageIds,
-    setImageIds
+    patient,
+    setPatient
 }:{
-    imageIds: string[],
-    setImageIds: (ids:string[]) =>void
+    patient: patient,
+    setPatient: (patient:Patient) =>void
 }){
 
     const [file, setFile] = useState<File|null>(null);
@@ -27,9 +29,9 @@ export default function UploadFile({
             formData.append("file", file);
 
             const res = await axios.post("/api/files", formData);
-            setImageIds([...imageIds, res.data]);
+            setPatient({...patient,imageIds: [...patient.imageIds,res.data]});
 
-            alert(JSON.stringify(res.data, null, 2));
+            alert(JSON.stringify(patient, null, 2));
         }else{
             console.log("No file")
         }

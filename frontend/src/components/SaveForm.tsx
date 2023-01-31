@@ -10,7 +10,7 @@ import {IMAGES_PATH} from "../application";
 import GenderRadioButtonsGroup from "./GenderRadioGroup";
 import UploadFile from "./UploadFile";
 import Patient from "../types/Patient";
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent} from "react";
 
 export default function SaveForm({
     patient,
@@ -27,31 +27,18 @@ export default function SaveForm({
     handleClose: () =>void,
     onSave: (patient:Patient) => void
 }) {
-    const initialState = {
-        firstname: "",
-        lastname: "",
-        gender: "",
-        address: "",
-        birthday: "",
-        telephone: "",
-        imageIds: []
-    };
-    const [patient, setPatient] = useState<Patient>(initialState);
-    const [imageIds, setImageIds] = useState<string[]>([]);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setPatient({
             ...patient,
             [event.target.name]: event.target.value
         });
-        setEditing(false)
-    };
     };
 
-    const handleSaveClick = async() =>{
-        await setPatient({...patient, imageIds: imageIds});
-        await onSave(patient);
-    };
+    const onCancel= () =>{
+        handleClose();
+        setEditing(false);
+    }
 
     return (
         <Dialog sx={{p: 10}} open={open} onClose={handleClose}>
@@ -67,7 +54,7 @@ export default function SaveForm({
                             sx={{ width: 120, height: 120, mb: 2 }}
                             variant="square"
                         />
-                        <UploadFile imageIds={imageIds} setImageIds={setImageIds}/>
+                        <UploadFile patient={patient} setPatient={setPatient}/>
                     </Box>
 
                     <TextField
@@ -103,8 +90,8 @@ export default function SaveForm({
                         onChange={handleChange}
                     />
 
-                        <GenderRadioButtonsGroup patient= {patient}
-                                                 onChange={handleChange}/>
+                    <GenderRadioButtonsGroup patient= {patient}
+                                             onChange={handleChange}/>
 
                     <TextField
                         sx={{ width: 500, mb: 2 }}
@@ -144,8 +131,8 @@ export default function SaveForm({
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleSaveClick}>Save</Button>
+                <Button onClick={onCancel}>Cancel</Button>
+                <Button onClick={() => onSave(patient)}>Save</Button>
             </DialogActions>
         </Dialog>
 
