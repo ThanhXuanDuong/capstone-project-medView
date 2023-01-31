@@ -65,7 +65,5 @@ export default function DashboardPage(){
 
             <SaveForm open={open} handleClose={handleClose} onSave={onSave}/>
         </Container>
-
-
     );
 }

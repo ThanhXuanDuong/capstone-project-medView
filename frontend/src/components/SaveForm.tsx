@@ -31,13 +31,19 @@ export default function SaveForm({
         imageIds: []
     };
     const [patient, setPatient] = useState<Patient>(initialState);
+    const [imageIds, setImageIds] = useState<string[]>([]);
+
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setPatient({
             ...patient,
             [event.target.name]: event.target.value
         });
-    }
-    console.log(patient);
+    };
+
+    const handleSaveClick = async() =>{
+        await setPatient({...patient, imageIds: imageIds});
+        await onSave(patient);
+    };
 
     return (
         <Dialog sx={{p: 10}} open={open} onClose={handleClose}>
@@ -53,7 +59,7 @@ export default function SaveForm({
                             sx={{ width: 120, height: 120, mb: 2 }}
                             variant="square"
                         />
-                        <UploadFile/>
+                        <UploadFile imageIds={imageIds} setImageIds={setImageIds}/>
                     </Box>
 
                     <TextField
@@ -130,7 +136,7 @@ export default function SaveForm({
 
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={() => onSave(patient)}>Save</Button>
+                <Button onClick={handleSaveClick}>Save</Button>
             </DialogActions>
         </Dialog>
 

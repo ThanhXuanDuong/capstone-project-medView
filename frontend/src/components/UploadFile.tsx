@@ -4,7 +4,13 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
 
-export default function UploadFile(){
+export default function UploadFile({
+    imageIds,
+    setImageIds
+}:{
+    imageIds: string[],
+    setImageIds: (ids:string[]) =>void
+}){
 
     const [file, setFile] = useState<File|null>(null);
 
@@ -21,6 +27,7 @@ export default function UploadFile(){
             formData.append("file", file);
 
             const res = await axios.post("/api/files", formData);
+            setImageIds([...imageIds, res.data]);
 
             alert(JSON.stringify(res.data, null, 2));
         }else{
