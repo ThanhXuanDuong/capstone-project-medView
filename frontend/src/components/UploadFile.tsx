@@ -1,9 +1,10 @@
-import {Box, Button, IconButton} from "@mui/material";
+import {Alert, Box, Button, Collapse, IconButton} from "@mui/material";
 import * as React from "react";
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
 import Patient from "../types/Patient";
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function UploadFile({
     patient,
@@ -14,6 +15,7 @@ export default function UploadFile({
 }){
 
     const [file, setFile] = useState<File|null>(null);
+    const [open, setOpen] = React.useState(false);
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) =>{
         if (event.target.files && event.target.files.length >0) {
@@ -29,10 +31,8 @@ export default function UploadFile({
 
             const res = await axios.post("/api/files", formData);
             setPatient({...patient,imageIds: [...patient.imageIds,res.data]});
-
-            alert(JSON.stringify(patient, null, 2));
         }else{
-            console.log("No file")
+            setOpen(true);
         }
     }
 
@@ -40,7 +40,8 @@ export default function UploadFile({
         <Box
             sx={{
                 display: 'flex',
-                width: 200,
+                flexDirection: 'column',
+                width: 250,
                 height: 120,
                 backgroundColor: 'white',
                 border: '1px solid lightgrey',
@@ -56,6 +57,25 @@ export default function UploadFile({
 
                 <Button type={"submit"}>Upload</Button>
             </form>
+
+            <Collapse in={open}>
+                <Alert severity="error"
+                       action={
+                           <IconButton
+                               aria-label="close"
+                               color="inherit"
+                               size="small"
+                               onClick={() => {
+                                   setOpen(false);
+                               }}
+                           >
+                               <CloseIcon fontSize="inherit" />
+                           </IconButton>
+                       }
+                >
+                    No file was chosen!
+                </Alert>
+            </Collapse>
 
         </Box>
 
