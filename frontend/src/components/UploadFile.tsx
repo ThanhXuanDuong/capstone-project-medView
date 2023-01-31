@@ -1,26 +1,54 @@
-import {Box} from "@mui/material";
+import {Box, Button, IconButton} from "@mui/material";
 import * as React from "react";
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
+import {ChangeEvent, FormEvent, useState} from "react";
+import axios from "axios";
 
 export default function UploadFile(){
+
+    const [file, setFile] = useState<File|null>(null);
+
+    const onChange = (event: ChangeEvent<HTMLInputElement>) =>{
+        if (event.target.files && event.target.files.length >0) {
+            setFile(event.target.files[0]);
+        }
+    };
+
+    const onUpload = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if (file) {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const res = await axios.post("/api/files", formData);
+
+            alert(JSON.stringify(res.data, null, 2));
+        }else{
+            console.log("No file")
+        }
+    }
+
     return (
         <Box
             sx={{
                 display: 'flex',
-                width: 120,
+                width: 200,
                 height: 120,
                 backgroundColor: 'white',
                 border: '1px solid lightgrey',
-                '&:hover': {
-                    backgroundColor: 'lightgrey',
-                    opacity: [0.9, 0.8, 0.7],
-                },
                 justifyContent: 'center',
                 alignItems: 'center'
             }}
-
         >
-            <DriveFolderUploadIcon sx={{ fontSize: 60}}/>
+            <form onSubmit={onUpload}>
+                <IconButton color="primary" aria-label="upload picture" component="label">
+                    <input  hidden accept="image/*" type="file" onChange={onChange}/>
+                    <DriveFolderUploadIcon/>
+                </IconButton>
+
+                <Button type={"submit"}>Upload</Button>
+            </form>
+
         </Box>
 
     )
