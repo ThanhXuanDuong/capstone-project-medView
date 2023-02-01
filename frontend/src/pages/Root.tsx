@@ -1,10 +1,10 @@
 import {Route, Routes, useSearchParams} from "react-router-dom";
 import DashboardPage from "./DashboardPage";
 import LoginPage from "./LoginPage";
-import Auth from "../components/Auth";
+import Auth from "../components/login/Auth";
 import DetailPage from "./DetailPage";
 import React, {useMemo} from "react";
-import NoAuth from "../components/NoAuth";
+import NoAuth from "../components/login/NoAuth";
 import NavBar from "../components/NavBar";
 import NotFoundPage from "./NotFoundPage";
 

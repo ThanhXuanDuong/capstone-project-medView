@@ -7,8 +7,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import {Avatar, Box, FormControl} from "@mui/material";
 import {IMAGES_PATH} from "../application";
-import GenderRadioButtonsGroup from "./GenderRadioGroup";
-import UploadFile from "./UploadFile";
+import GenderRadioButtonsGroup from "./patient/GenderRadioGroup";
+import UploadFile from "./image/UploadFile";
 import Patient from "../types/Patient";
 import {ChangeEvent} from "react";
 

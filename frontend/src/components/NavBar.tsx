@@ -1,5 +1,5 @@
 import {AppBar, Box, IconButton, Toolbar, Typography} from "@mui/material";
-import Logout from "./Logout";
+import Logout from "./login/Logout";
 
 export default function NavBar ({
     isLoggedIn

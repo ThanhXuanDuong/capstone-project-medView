@@ -1,7 +1,7 @@
 import usePatient from "../hooks/usePatient";
-import ImageCard from "../components/ImageCard";
+import ImageCard from "../components/image/ImageCard";
 import {Box, Grid, Typography} from "@mui/material";
-import ImageViewer from "../components/ImageViewer";
+import ImageViewer from "../components/image/ImageViewer";
 import {useState} from "react";
 
 export default function DetailPage(){

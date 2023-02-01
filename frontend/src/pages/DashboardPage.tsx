@@ -2,7 +2,7 @@ import {Box, Button, Container, TextField} from "@mui/material";
 import React, {useState} from "react";
 import Patient from "../types/Patient";
 import axios from "axios";
-import PatientGallery from "../components/PatientGallery";
+import PatientGallery from "../components/patient/PatientGallery";
 import SaveForm from "../components/SaveForm";
 import usePatients from "../hooks/usePatients";
 import useFormActions from "../hooks/useFormActions";
