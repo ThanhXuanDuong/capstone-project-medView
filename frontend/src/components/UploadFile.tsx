@@ -60,23 +60,22 @@ export default function UploadFile({
 
             <Collapse in={open}>
                 <Alert severity="error"
-                       action={
-                           <IconButton
-                               aria-label="close"
-                               color="inherit"
-                               size="small"
-                               onClick={() => {
-                                   setOpen(false);
-                               }}
-                           >
-                               <CloseIcon fontSize="inherit" />
-                           </IconButton>
-                       }
+                    action={
+                        <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            size="small"
+                            onClick={() => {
+                                setOpen(false);
+                            }}
+                        >
+                            <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                    }
                 >
                     No file was chosen!
                 </Alert>
             </Collapse>
-
         </Box>
 
     )

@@ -32,4 +32,5 @@ public class FileController {
                 .contentType(MediaType.valueOf(gridFsResource.getContentType()))
                 .body(new InputStreamResource(gridFsResource.getInputStream()));
     }
+
 }
