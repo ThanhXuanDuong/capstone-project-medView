@@ -40,43 +40,43 @@ class PatientControllerTest {
 
 
     @Test
-       @WithMockUser(username = "user",password = "pw")
-       void add_returnPatient_whenAddPatient() throws Exception {
-           //given
-           String requestBody = """
-                   {
-                       "lastname":"Mustermann",
-                       "firstname":"Max",
-                       "gender":"MALE",
-                       "birthday":"2000-10-20",
-                       "address":"",
-                       "telephone":"",
-                       "imageIds":[]
-                   }
-                   """;
+    @WithMockUser(username = "user", password = "pw")
+    void add_returnPatient_whenAddPatient() throws Exception {
+        //given
+        String requestBody = """
+                {
+                    "lastname":"Mustermann",
+                    "firstname":"Max",
+                    "gender":"MALE",
+                    "birthday":"2000-10-20",
+                    "address":"",
+                    "telephone":"",
+                    "imageIds":[]
+                }
+                """;
 
-           String expected = """
-                   {
-                       "lastname":"Mustermann",
-                       "firstname":"Max",
-                       "gender":"MALE",
-                       "birthday":"2000-10-20",
-                       "address":"",
-                       "telephone":"",
-                       "imageIds":[],
-                       "createdBy": "user"
-                   }
-                   """;
-           appUserRepository.save(new AppUser("1","user","pw"));
+        String expected = """
+                {
+                    "lastname":"Mustermann",
+                    "firstname":"Max",
+                    "gender":"MALE",
+                    "birthday":"2000-10-20",
+                    "address":"",
+                    "telephone":"",
+                    "imageIds":[],
+                    "createdBy": "user"
+                }
+                """;
+        appUserRepository.save(new AppUser("1", "user", "pw"));
 
-           //when and then
-           mvc.perform(post("/api/patients")
-                   .contentType(MediaType.APPLICATION_JSON)
-                   .content(requestBody))
-               .andExpectAll(
-                   status().isOk(),
-                   content().json(expected));
-       }
+        //when and then
+        mvc.perform(post("/api/patients")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpectAll(
+                        status().isOk(),
+                        content().json(expected));
+    }
 
     @Test
     void getAll_return401_whenNotLoggedIn () throws Exception {

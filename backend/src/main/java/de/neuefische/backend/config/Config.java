@@ -1,4 +1,4 @@
-package de.neuefische.backend;
+package de.neuefische.backend.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
