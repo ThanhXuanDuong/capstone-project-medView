@@ -27,6 +27,9 @@ class NoteControllerTest {
     @Autowired
     private AppUserRepository appUserRepository;
 
+    @Autowired
+    private NoteRepository noteRepository;
+
     @Test
     void add_return401_whenNotLoggedIn () throws Exception {
         mvc.perform(post("/api/notes"))
@@ -66,5 +69,43 @@ class NoteControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
+    @Test
+    @WithMockUser(username = "user", password = "pw")
+    void getAllByImageId_returnEmptyList_whenLoggedInAndNoNoteExits () throws Exception {
+        appUserRepository.save(new AppUser("1", "user", "pw"));
 
+        mvc.perform(get("/api/notes/image/imageId"))
+                .andExpectAll(
+                        status().isOk(),
+                        content().json("[]", true)
+                );
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pw")
+    void getAllByImageId_returnAllNotesOfAnImage_whenLoggedIn () throws Exception {
+        appUserRepository.save(new AppUser("1", "user", "pw"));
+
+        noteRepository.save(new Note("id1", "imageId", "note1"));
+        noteRepository.save(new Note("id2", "imageId", "note2"));
+
+        String expected = """
+                [
+                    {
+                    "id": "id1",
+                    "imageId":"imageId",
+                    "text":"note1"
+                    },
+                    {
+                    "id": "id2",
+                    "imageId":"imageId",
+                    "text":"note2"
+                    }
+                ]
+                """;
+        mvc.perform(get("/api/notes/image/imageId"))
+                .andExpectAll(
+                        status().isOk(),
+                        content().json(expected));
+    }
 }
