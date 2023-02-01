@@ -46,7 +46,4 @@ class NoteServiceTest {
         Assertions.assertEquals(List.of(note1), actual);
         verify(noteRepository).findAllByImageId("imageId 1");
     }
-
-
-
 }

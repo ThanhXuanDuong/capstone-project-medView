@@ -29,11 +29,10 @@ public class NoteService {
 
     public Map<String,List<Note>> getAllByPatientId(String id) throws PatientNotRegisteredException {
         Optional<Patient> patient = patientRepository.findById(id);
+        Map<String,List<Note>> notes= new HashMap<>();
 
         if (patient.isPresent()){
             List<String> imageIds = patient.get().getImageIds();
-            Map<String,List<Note>> notes= new HashMap<>();
-
             for (String imageId : imageIds){
                 notes.put(imageId,this.getAllByImageId(imageId));
             }
@@ -58,5 +57,4 @@ public class NoteService {
             throw new NotFoundException();
         }
     }
-
 }
