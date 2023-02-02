@@ -1,4 +1,4 @@
-package de.neuefische.backend;
+package de.neuefische.backend.config;
 
 import de.neuefische.backend.user.AppUser;
 import de.neuefische.backend.user.AppUserService;
