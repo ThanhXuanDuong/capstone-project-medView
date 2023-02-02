@@ -64,14 +64,10 @@ export default function DetailPage(){
     };
 
     const onDelete =(id: string|undefined) =>{
-        try{
-            (async () => {
-                await axios.delete("/api/notes/" +id);
-                setNotes(notes.filter(note => note.id !==id));
-            })();
-        }catch{
-            console.log("Error")
-        }
+        (async () => {
+            await axios.delete("/api/notes/" +id);
+            setNotes(notes.filter(note => note.id !==id));
+        })();
     };
 
     return(
