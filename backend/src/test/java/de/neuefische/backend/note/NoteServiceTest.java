@@ -173,4 +173,18 @@ class NoteServiceTest {
         //then
         verify(noteRepository).deleteById("testId");
     }
+
+    @Test
+    void deleteAllByPatientId_throwException_whenPatientNotRegistered() {
+        //given
+        NoteRepository noteRepository = mock(NoteRepository.class);
+        PatientRepository patientRepository = mock(PatientRepository.class);
+
+        //when
+        NoteService noteService = new NoteService(noteRepository,patientRepository);
+
+        //then
+        Assertions.assertThrows(PatientNotRegisteredException.class,
+                () -> noteService.deleteAllByPatientId("not existing id"));
+    }
 }

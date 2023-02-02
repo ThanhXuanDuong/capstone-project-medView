@@ -51,7 +51,7 @@ export default function DashboardPage(){
 
     const onDelete = (id:string|undefined) => {
         (async () => {
-            await axios.delete("/api/patients/" +id);
+            await axios.delete(`/api/patients/${id}`);
             setPatients(patients.filter(patient => patient.id !==id));
         })();
     }

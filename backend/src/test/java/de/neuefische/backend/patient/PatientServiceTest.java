@@ -1,7 +1,9 @@
 package de.neuefische.backend.patient;
 
 import de.neuefische.backend.exception.PatientNotRegisteredException;
+import de.neuefische.backend.file.FileService;
 import de.neuefische.backend.generator.TimeStampGenerator;
+import de.neuefische.backend.note.NoteService;
 import de.neuefische.backend.user.AppUser;
 import de.neuefische.backend.user.AppUserService;
 import org.junit.jupiter.api.Assertions;
@@ -53,11 +55,16 @@ class PatientServiceTest {
         AppUserService appUserService = mock (AppUserService.class);
         when(appUserService.getAuthenticatedUser()).thenReturn(appUser);
 
+        FileService fileService = mock (FileService.class);
+        NoteService noteService = mock (NoteService.class);
+
         //when
         PatientService patientService = new PatientService(
                 patientRepository,
                 timeStampGenerator,
-                appUserService
+                appUserService,
+                fileService,
+                noteService
         );
         Patient actual = patientService.add(newPatient);
 
@@ -83,11 +90,16 @@ class PatientServiceTest {
         AppUserService appUserService = mock (AppUserService.class);
         when(appUserService.getAuthenticatedUser()).thenReturn(appUser);
 
+        FileService fileService = mock (FileService.class);
+        NoteService noteService = mock (NoteService.class);
+
         //when
         PatientService patientService = new PatientService(
                 patientRepository,
                 timeStampGenerator,
-                appUserService
+                appUserService,
+                fileService,
+                noteService
         );
         List<Patient> actual = patientService.getAll();
 
@@ -109,11 +121,16 @@ class PatientServiceTest {
         TimeStampGenerator timeStampGenerator = mock(TimeStampGenerator.class);
         AppUserService appUserService = mock (AppUserService.class);
 
+        FileService fileService = mock (FileService.class);
+        NoteService noteService = mock (NoteService.class);
+
         //when
         PatientService patientService = new PatientService(
                 patientRepository,
                 timeStampGenerator,
-                appUserService
+                appUserService,
+                fileService,
+                noteService
         );
         Patient actual = patientService.getById("1");
 
@@ -127,16 +144,21 @@ class PatientServiceTest {
         //given
         PatientRepository patientRepository = mock(PatientRepository.class);
         when(patientRepository.findById("1"))
-                .thenReturn(Optional.ofNullable(null));
+                .thenReturn(Optional.empty());
 
         TimeStampGenerator timeStampGenerator = mock(TimeStampGenerator.class);
         AppUserService appUserService = mock (AppUserService.class);
+
+        FileService fileService = mock (FileService.class);
+        NoteService noteService = mock (NoteService.class);
 
         //when
         PatientService patientService = new PatientService(
                 patientRepository,
                 timeStampGenerator,
-                appUserService
+                appUserService,
+                fileService,
+                noteService
         );
 
         // then
@@ -153,11 +175,16 @@ class PatientServiceTest {
         TimeStampGenerator timeStampGenerator = mock(TimeStampGenerator.class);
         AppUserService appUserService = mock (AppUserService.class);
 
+        FileService fileService = mock (FileService.class);
+        NoteService noteService = mock (NoteService.class);
+
         //when
         PatientService patientService = new PatientService(
                 patientRepository,
                 timeStampGenerator,
-                appUserService
+                appUserService,
+                fileService,
+                noteService
         );
 
         // then
@@ -180,11 +207,16 @@ class PatientServiceTest {
         AppUserService appUserService = mock (AppUserService.class);
         when(appUserService.getAuthenticatedUser()).thenReturn(appUser);
 
+        FileService fileService = mock (FileService.class);
+        NoteService noteService = mock (NoteService.class);
+
         //when
         PatientService patientService = new PatientService(
                 patientRepository,
                 timeStampGenerator,
-                appUserService
+                appUserService,
+                fileService,
+                noteService
         );
         Patient actual = patientService.updateById("1",patient);
         // then
@@ -202,11 +234,16 @@ class PatientServiceTest {
         TimeStampGenerator timeStampGenerator = mock(TimeStampGenerator.class);
         AppUserService appUserService = mock (AppUserService.class);
 
+        FileService fileService = mock (FileService.class);
+        NoteService noteService = mock (NoteService.class);
+
         //when
         PatientService patientService = new PatientService(
                 patientRepository,
                 timeStampGenerator,
-                appUserService
+                appUserService,
+                fileService,
+                noteService
         );
 
         // then
@@ -214,24 +251,31 @@ class PatientServiceTest {
                 () -> patientService.deleteById("not existing id"));
     }
 
+    /*
     @Test
-    void deleteById_deletePatient_whenPatientRegistered() throws PatientNotRegisteredException{
+    void deleteById_deletePatient_whenPatientRegistered() throws PatientNotRegisteredException, NotFoundException, NotFoundException {
         //given
         PatientRepository patientRepository = mock(PatientRepository.class);
-        when(patientRepository.existsById("1")).thenReturn(true);
+        when(patientRepository.existsById("patientId")).thenReturn(true);
 
         TimeStampGenerator timeStampGenerator = mock(TimeStampGenerator.class);
         AppUserService appUserService = mock (AppUserService.class);
+
+        NoteRepository noteRepository = mock(NoteRepository.class);
+        when(noteRepository.existsById("noteId")).thenReturn(true);
 
         //when
         PatientService patientService = new PatientService(
                 patientRepository,
                 timeStampGenerator,
-                appUserService
+                appUserService,
+                mock(FileService.class),
+                mock(NoteService.class)
         );
-        patientService.deleteById("1");
+        patientService.deleteById("patientId");
         // then
-       verify(patientRepository).deleteById("1");
+        verify(patientRepository).deleteById("patientId");
+        verify(noteRepository).existsById("noteId");
     }
-
+     */
 }

@@ -57,4 +57,21 @@ public class NoteService {
             throw new NotFoundException();
         }
     }
+
+    public void deleteAllByPatientId(String patientId)
+            throws PatientNotRegisteredException, NotFoundException {
+
+        Map<String,List<Note>> fileIdAndNotesMap = getAllByPatientId(patientId);
+        for (String fileId: fileIdAndNotesMap.keySet()) {
+            deleteAllByFileId(fileId);
+        }
+    }
+
+    public void deleteAllByFileId(String fileId) throws NotFoundException {
+        if (noteRepository.existsById(fileId)){
+            noteRepository.deleteAllByImageId(fileId);
+        }else{
+            throw new NotFoundException();
+        }
+    }
 }
