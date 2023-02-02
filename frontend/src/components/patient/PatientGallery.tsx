@@ -1,4 +1,4 @@
-import Patient from "../types/Patient";
+import Patient from "../../types/Patient";
 import PatientCard from "./PatientCard";
 import {Box} from "@mui/material";
 

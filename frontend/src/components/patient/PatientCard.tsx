@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Patient from "../types/Patient";
-import {IMAGES_PATH} from "../application";
+import Patient from "../../types/Patient";
+import {IMAGES_PATH} from "../../application";
 import {useNavigate} from "react-router-dom";
 
 export default function PatientCard({

@@ -9,13 +9,17 @@ export default function ImageCard({
     index: number,
     onView: (id:string) => void
 }){
+    const handleClick = () => {
+        onView(id);
+    }
+
     return (
         <Card sx={{ display: 'flex',
             justifyContent:'space-evenly',
             alignItems:'center'}}
         >
 
-            <CardActionArea onClick={() => onView(id)}>
+            <CardActionArea onClick={handleClick}>
                 <Box sx={{ display: 'flex'}}
                      justifyContent={"space-evenly"}
                      alignItems={"center"}

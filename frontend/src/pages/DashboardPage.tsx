@@ -2,8 +2,8 @@ import {Box, Button, Container, TextField} from "@mui/material";
 import React, {useState} from "react";
 import Patient from "../types/Patient";
 import axios from "axios";
-import PatientGallery from "../components/PatientGallery";
-import SaveForm from "../components/SaveForm";
+import PatientGallery from "../components/patient/PatientGallery";
+import PatientForm from "../components/PatientForm";
 import usePatients from "../hooks/usePatients";
 import useFormActions from "../hooks/useFormActions";
 
@@ -27,7 +27,7 @@ export default function DashboardPage(){
         patient.firstname.toLowerCase().includes(searchName)
         || patient.lastname.toLowerCase().includes(searchName));
 
-    const onSave = (patient:Patient) => {
+    const onAdd = (patient:Patient) => {
         (async () => {
             const response = await axios.post("/api/patients",patient);
             setPatients([...patients, response.data]);
@@ -95,12 +95,12 @@ export default function DashboardPage(){
                             onDelete={onDelete}
                             onEdit={handleEditClick}/>
 
-            <SaveForm patient={patient}
-                      setPatient={setPatient}
-                      setEditing={setEditing}
-                      open={open}
-                      handleClose={handleClose}
-                      onSave={editing? onUpdate: onSave}/>
+            <PatientForm patient={patient}
+                         setPatient={setPatient}
+                         setEditing={setEditing}
+                         open={open}
+                         handleClose={handleClose}
+                         onSave={editing? onUpdate: onAdd}/>
         </Container>
     );
 }

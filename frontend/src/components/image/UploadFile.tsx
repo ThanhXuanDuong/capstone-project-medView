@@ -3,7 +3,7 @@ import * as React from "react";
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
-import Patient from "../types/Patient";
+import Patient from "../../types/Patient";
 import CloseIcon from '@mui/icons-material/Close';
 
 export default function UploadFile({

@@ -7,12 +7,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import {Avatar, Box, FormControl} from "@mui/material";
 import {IMAGES_PATH} from "../application";
-import GenderRadioButtonsGroup from "./GenderRadioGroup";
-import UploadFile from "./UploadFile";
+import GenderRadioButtonsGroup from "./patient/GenderRadioGroup";
+import UploadFile from "./image/UploadFile";
 import Patient from "../types/Patient";
 import {ChangeEvent} from "react";
 
-export default function SaveForm({
+export default function PatientForm({
     patient,
     setPatient,
     setEditing,
@@ -22,9 +22,9 @@ export default function SaveForm({
 }:{
     patient: Patient,
     setPatient: (patient:Patient) => void,
-    setEditing: (edit: boolean) =>void
+    setEditing: (edit: boolean) => void
     open: boolean,
-    handleClose: () =>void,
+    handleClose: () => void,
     onSave: (patient:Patient) => void
 }) {
 
