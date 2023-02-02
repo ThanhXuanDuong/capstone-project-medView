@@ -12,9 +12,9 @@ export default function DetailPage(){
 
     const patient = usePatient();
     const [viewImageId, setViewImageId] = useState <string> (patient.imageIds[0]);
-    const onView = (id:string) => setViewImageId(id);
-
     const [notes, setNotes] = useState<Note[]>([]);
+
+    const onView = (id:string) => setViewImageId(id);
 
     useEffect(() => {
         (async () =>{
@@ -46,7 +46,10 @@ export default function DetailPage(){
                         </Typography>
                     </Box>
 
-                    <Box sx={{display: 'flex',height: "20rem", p:2, overflow: 'auto'}}
+                    <Box sx={{display: 'flex',
+                            height: "20rem",
+                            p:2,
+                            overflow: 'auto'}}
                          flexDirection={"column"}
                          justifyContent={"flex-start"}
                          alignItems={"stretch"}
@@ -61,14 +64,19 @@ export default function DetailPage(){
                             />)}
                     </Box>
 
-                    <Box sx={{display: 'flex',height: 'calc(100vh - 24rem)', p:2, overflow: 'auto'}}
+                    <Box sx={{display: 'flex',
+                            height: 'calc(100vh - 24rem)',
+                            p:2,
+                            overflow: 'auto'}}
                          flexDirection={"column"}
                          justifyContent={"flex-start"}
                          alignItems={"stretch"}
                          boxShadow={1}
                          gap= "1rem"
                     >
-                        <Box sx={{display: 'flex', justifyContent:"space-between",alignItems:"center"}}>
+                        <Box sx={{display: 'flex',
+                                justifyContent:"space-between",
+                                alignItems:"center"}}>
                             <Typography variant="h5" color="text.secondary">
                                 Note
                             </Typography>
