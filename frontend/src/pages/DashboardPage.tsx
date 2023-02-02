@@ -27,7 +27,7 @@ export default function DashboardPage(){
         patient.firstname.toLowerCase().includes(searchName)
         || patient.lastname.toLowerCase().includes(searchName));
 
-    const onSave = (patient:Patient) => {
+    const onAdd = (patient:Patient) => {
         (async () => {
             const response = await axios.post("/api/patients",patient);
             setPatients([...patients, response.data]);
@@ -100,7 +100,7 @@ export default function DashboardPage(){
                          setEditing={setEditing}
                          open={open}
                          handleClose={handleClose}
-                         onSave={editing? onUpdate: onSave}/>
+                         onSave={editing? onUpdate: onAdd}/>
         </Container>
     );
 }

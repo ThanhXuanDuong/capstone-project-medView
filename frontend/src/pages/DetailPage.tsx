@@ -15,8 +15,9 @@ export default function DetailPage(){
     const patient = usePatient();
     const [viewImageId, setViewImageId] = useState <string> (patient.imageIds[0]);
     const [notes, setNotes] = useState<Note[]>([]);
-    const {open,setOpen, handleClickOpen, handleClose} = useFormActions();
     const [note, setNote] = useState<Note>({imageId:"", text:""});
+    const {open,setOpen, handleClickOpen, handleClose} = useFormActions();
+    const [editing, setEditing] = useState<boolean>(false);
 
     const onView = (id:string) => {
         setViewImageId(id);
@@ -34,18 +35,43 @@ export default function DetailPage(){
         (async () => {
             const response = await axios.post("/api/notes", createdNote);
             setNotes([...notes, response.data]);
-            //setNote({id: "", imageId: "", text: ""});
+            setNote({imageId: "", text: ""});
         })();
         setOpen(false);
     }
 
-    const onEdit =() =>{};
+    const handleEditClick = async(editingNote:Note|undefined) =>{
+        if (editingNote) {
+            setNote(editingNote);
+            setOpen(true);
+            setEditing(true);
+        }else{
+            console.log("No note");
+        }
+
+    };
+    const onEdit =(note:Note) =>{
+       (async () => {
+           const response = await axios.put(`/api/notes/${note.id}`,note);
+           const editedNote = response.data;
+           setNotes(notes.map(note =>
+               note.id === editedNote.id
+                   ? editedNote
+                   : note));
+           setNote({imageId: "", text: ""});
+       })();
+       setOpen(false);
+    };
 
     const onDelete =(id: string|undefined) =>{
-        (async () => {
-            await axios.delete("/api/notes/" +id);
-            setNotes(notes.filter(note => note.id !==id));
-        })();
+        try{
+            (async () => {
+                await axios.delete("/api/notes/" +id);
+                setNotes(notes.filter(note => note.id !==id));
+            })();
+        }catch{
+            console.log("Error")
+        }
     };
 
     return(
@@ -111,14 +137,15 @@ export default function DetailPage(){
                             <NoteCard  key={note.id}
                                         note={note}
                                         onDelete={onDelete}
-                                        onEdit={onEdit}
+                                        onEdit={handleEditClick}
                             />)}
 
                         <NoteForm note={note}
                                   setNote={setNote}
+                                  setEditing={setEditing}
                                   open={open}
                                   handleClose={handleClose}
-                                  onSave={onAdd}/>
+                                  onSave={editing? onEdit: onAdd}/>
                     </Box>
                 </Grid>
             </Grid>

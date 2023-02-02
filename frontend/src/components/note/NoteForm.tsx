@@ -7,18 +7,22 @@ import Note from "../../types/Note";
 export default function NoteForm({
     note,
     setNote,
+    setEditing,
     open,
     handleClose,
     onSave
 }:{
     note: Note,
     setNote: (note:Note) => void,
+    setEditing: (edit: boolean) => void
     open: boolean,
-    handleClose: () =>void,
+    handleClose: () => void,
     onSave: (note:Note) => void
 }){
-    console.log(note);
-
+    const onCancel= () =>{
+        handleClose();
+        setEditing(false);
+    }
     return (
         <Box>
             <Dialog open={open} onClose={handleClose}>
@@ -37,7 +41,7 @@ export default function NoteForm({
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={onCancel}>Cancel</Button>
                     <Button onClick={() => onSave(note)}>Save</Button>
                 </DialogActions>
             </Dialog>

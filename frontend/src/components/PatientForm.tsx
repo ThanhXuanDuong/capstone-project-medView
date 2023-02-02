@@ -22,9 +22,9 @@ export default function PatientForm({
 }:{
     patient: Patient,
     setPatient: (patient:Patient) => void,
-    setEditing: (edit: boolean) =>void
+    setEditing: (edit: boolean) => void
     open: boolean,
-    handleClose: () =>void,
+    handleClose: () => void,
     onSave: (patient:Patient) => void
 }) {
 
