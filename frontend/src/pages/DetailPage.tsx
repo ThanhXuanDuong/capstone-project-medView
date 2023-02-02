@@ -7,14 +7,21 @@ import NoteCard from "../components/note/NoteCard";
 import Note from "../types/Note";
 import axios from "axios";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import useFormActions from "../hooks/useFormActions";
+import NoteForm from "../components/note/NoteForm";
 
 export default function DetailPage(){
 
     const patient = usePatient();
     const [viewImageId, setViewImageId] = useState <string> (patient.imageIds[0]);
     const [notes, setNotes] = useState<Note[]>([]);
+    const {open,setOpen, handleClickOpen, handleClose} = useFormActions();
+    const [note, setNote] = useState<Note>({imageId:"", text:""});
 
-    const onView = (id:string) => setViewImageId(id);
+    const onView = (id:string) => {
+        setViewImageId(id);
+        setNote({...note, imageId: id});
+    }
 
     useEffect(() => {
         (async () =>{
@@ -23,9 +30,23 @@ export default function DetailPage(){
         })();
     },[viewImageId]);
 
-    const onDelete =() =>{};
+    const onAdd= (createdNote:Note) => {
+        (async () => {
+            const response = await axios.post("/api/notes", createdNote);
+            setNotes([...notes, response.data]);
+            //setNote({id: "", imageId: "", text: ""});
+        })();
+        setOpen(false);
+    }
 
     const onEdit =() =>{};
+
+    const onDelete =(id: string|undefined) =>{
+        (async () => {
+            await axios.delete("/api/notes/" +id);
+            setNotes(notes.filter(note => note.id !==id));
+        })();
+    };
 
     return(
         <>
@@ -81,7 +102,7 @@ export default function DetailPage(){
                                 Note
                             </Typography>
 
-                            <IconButton aria-label="add">
+                            <IconButton aria-label="add" onClick={handleClickOpen}>
                                 <AddBoxIcon />
                             </IconButton>
                         </Box>
@@ -92,6 +113,12 @@ export default function DetailPage(){
                                         onDelete={onDelete}
                                         onEdit={onEdit}
                             />)}
+
+                        <NoteForm note={note}
+                                  setNote={setNote}
+                                  open={open}
+                                  handleClose={handleClose}
+                                  onSave={onAdd}/>
                     </Box>
                 </Grid>
             </Grid>

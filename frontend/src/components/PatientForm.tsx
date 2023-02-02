@@ -12,7 +12,7 @@ import UploadFile from "./image/UploadFile";
 import Patient from "../types/Patient";
 import {ChangeEvent} from "react";
 
-export default function SaveForm({
+export default function PatientForm({
     patient,
     setPatient,
     setEditing,

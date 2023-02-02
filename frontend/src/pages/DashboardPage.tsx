@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import Patient from "../types/Patient";
 import axios from "axios";
 import PatientGallery from "../components/patient/PatientGallery";
-import SaveForm from "../components/SaveForm";
+import PatientForm from "../components/PatientForm";
 import usePatients from "../hooks/usePatients";
 import useFormActions from "../hooks/useFormActions";
 
@@ -95,12 +95,12 @@ export default function DashboardPage(){
                             onDelete={onDelete}
                             onEdit={handleEditClick}/>
 
-            <SaveForm patient={patient}
-                      setPatient={setPatient}
-                      setEditing={setEditing}
-                      open={open}
-                      handleClose={handleClose}
-                      onSave={editing? onUpdate: onSave}/>
+            <PatientForm patient={patient}
+                         setPatient={setPatient}
+                         setEditing={setEditing}
+                         open={open}
+                         handleClose={handleClose}
+                         onSave={editing? onUpdate: onSave}/>
         </Container>
     );
 }
