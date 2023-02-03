@@ -28,7 +28,7 @@ export default function UploadFile({
         if (file) {
             const formData = new FormData();
             formData.append("file", file);
-
+            formData.append("name","muslim");
             const res = await axios.post("/api/files", formData);
             setPatient({...patient,imageIds: [...patient.imageIds,res.data]});
         }else{

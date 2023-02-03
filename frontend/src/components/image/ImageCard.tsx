@@ -1,13 +1,16 @@
-import {Box, Card, CardActionArea, CardMedia, Typography} from "@mui/material";
+import {Box, Card, CardActionArea, CardActions, CardMedia, IconButton, Typography} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function ImageCard({
     id,
     index,
-    onView
+    onView,
+    onDelete
 }:{
     id: string,
     index: number,
-    onView: (id:string) => void
+    onView: (id:string) => void,
+    onDelete: (id:string) => void
 }){
     const handleClick = () => {
         onView(id);
@@ -36,8 +39,14 @@ export default function ImageCard({
                         image ={"/api/files/"+id}
                     />
                 </Box>
-
            </CardActionArea>
+            <CardActions disableSpacing>
+                <IconButton aria-label="delete"
+                            onClick={() => onDelete(id)}>
+                    <DeleteIcon />
+                </IconButton>
+            </CardActions>
+
         </Card>
     );
 }
