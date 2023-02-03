@@ -1,7 +1,5 @@
 package de.neuefische.backend.file;
 
-import de.neuefische.backend.exception.NotFoundException;
-import de.neuefische.backend.exception.PatientNotRegisteredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
@@ -35,9 +33,8 @@ public class FileController {
                 .body(new InputStreamResource(gridFsResource.getInputStream()));
     }
 
-    @DeleteMapping("/{patientId}/{fileId}")
-    public void deleteById(@PathVariable String patientId,@PathVariable String fileId)
-            throws PatientNotRegisteredException, NotFoundException {
-        fileService.deleteById(patientId,fileId);
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable String id) {
+        fileService.deleteById(id);
     }
 }

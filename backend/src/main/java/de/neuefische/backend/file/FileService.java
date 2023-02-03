@@ -2,10 +2,10 @@ package de.neuefische.backend.file;
 
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.client.gridfs.model.GridFSFile;
-import de.neuefische.backend.exception.NotFoundException;
 import de.neuefische.backend.exception.PatientNotRegisteredException;
-import de.neuefische.backend.note.NoteService;
-import de.neuefische.backend.patient.PatientService;
+import de.neuefische.backend.note.NoteRepository;
+import de.neuefische.backend.patient.Patient;
+import de.neuefische.backend.patient.PatientRepository;
 import de.neuefische.backend.user.AppUser;
 import de.neuefische.backend.user.AppUserService;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +28,8 @@ import java.util.Optional;
 public class FileService {
     private final GridFsTemplate gridFsTemplate;
     private final AppUserService appUserService;
-    private final PatientService patientService;
-    private final NoteService noteService;
+    private final PatientRepository patientRepository;
+    private final NoteRepository noteRepository;
 
     public String saveFile(MultipartFile multipartFile) throws IOException {
         if (multipartFile.isEmpty()) {
@@ -70,25 +70,24 @@ public class FileService {
         );
     }
 
-    public void deleteById(String patientId, String fileId)
-            throws PatientNotRegisteredException, NotFoundException {
-        List<String> updatedImageIds = patientService
-                .getById(patientId)
-                .getImageIds()
-                .stream()
-                .filter(id -> !id.equals(fileId)).toList();
-
-        noteService.deleteAllByFileId(fileId);
-        patientService.getById(patientId).setImageIds(updatedImageIds);
+    public void deleteById(String fileId){
+        noteRepository.deleteAllByImageId(fileId);
         gridFsTemplate.delete(new Query(Criteria.where("_id").is(fileId)));
+        // patient data must be updated by put request
     }
 
     public void deleteAllByPatientId(String patientId)
             throws PatientNotRegisteredException {
-        List<String> imageIds = patientService.getById(patientId).getImageIds();
+        Optional<Patient> patient = patientRepository.findById(patientId);
 
-        for (String imagId: imageIds){
-            gridFsTemplate.delete(new Query(Criteria.where("_id").is(imagId)));
+        if(patient.isPresent()) {
+            List<String> imageIds = patient.get().getImageIds();
+
+            for (String imagId : imageIds) {
+                gridFsTemplate.delete(new Query(Criteria.where("_id").is(imagId)));
+            }
+        }else{
+            throw new PatientNotRegisteredException();
         }
     }
 }
