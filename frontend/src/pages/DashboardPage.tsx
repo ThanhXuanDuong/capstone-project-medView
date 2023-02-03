@@ -3,8 +3,10 @@ import React, {useState} from "react";
 import Patient from "../types/Patient";
 import axios from "axios";
 import PatientGallery from "../components/patient/PatientGallery";
-import PatientForm from "../components/PatientForm";
+import PatientForm from "../components/patient/PatientForm";
 import useFormActions from "../hooks/useFormActions";
+import ConfirmationDialog from "../components/ConfirmationDialog";
+import useDialogActions from "../hooks/useDialogActions";
 
 export default function DashboardPage({
     patients,
@@ -23,9 +25,13 @@ export default function DashboardPage({
         imageIds: []
     };
     const [patient, setPatient] = useState<Patient>(initial);
-    const {open,setOpen, handleClickOpen, handleClose} = useFormActions();
+
+    const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
+    const {openDialog,handleOpenDialog, handleCloseDialog} = useDialogActions();
+
     const [searchName, setSearchName] = useState<string>("");
     const [editing, setEditing] = useState<boolean>(false);
+    const [deletingId, setDeletingId] = useState<string|undefined>("");
 
     const searchPatients = patients.filter(patient =>
         patient.firstname.toLowerCase().includes(searchName)
@@ -37,7 +43,7 @@ export default function DashboardPage({
             setPatients([...patients, response.data]);
             setPatient(initial);
         })();
-        setOpen(false);
+        handleCloseForm();
     };
 
     const onUpdate = (patient:Patient) => {
@@ -50,7 +56,7 @@ export default function DashboardPage({
                     : patient));
             setPatient(initial);
         })();
-        setOpen(false);
+        handleCloseForm();
     };
 
     const onDelete = (id:string|undefined) => {
@@ -58,17 +64,22 @@ export default function DashboardPage({
             await axios.delete(`/api/patients/${id}`);
             setPatients(patients.filter(patient => patient.id !==id));
         })();
+        handleCloseDialog();
     }
 
-    const handleEditClick = async(editingPatient:Patient|undefined) =>{
+    const handleClickDelete = (id:string|undefined) => {
+       handleOpenDialog();
+       setDeletingId(id);
+    }
+
+    const handleClickEdit = (editingPatient:Patient|undefined) =>{
         if (editingPatient) {
             setPatient(editingPatient);
-            setOpen(true);
+            handleOpenForm();
             setEditing(true);
         }else{
             console.log("No patient");
         }
-
     };
 
     return(
@@ -90,21 +101,28 @@ export default function DashboardPage({
                 <Button variant="contained">Sort</Button>
 
                 <Button variant="contained"
-                        onClick={handleClickOpen}
+                        onClick={handleOpenForm}
                 >Add</Button>
 
             </Box>
 
             <PatientGallery patients={searchPatients}
-                            onDelete={onDelete}
-                            onEdit={handleEditClick}/>
+                            onDelete={handleClickDelete}
+                            onEdit={handleClickEdit}/>
 
             <PatientForm patient={patient}
                          setPatient={setPatient}
                          setEditing={setEditing}
-                         open={open}
-                         handleClose={handleClose}
+                         open={openForm}
+                         handleClose={handleCloseForm}
                          onSave={editing? onUpdate: onAdd}/>
+
+            {deletingId &&
+                <ConfirmationDialog open={openDialog}
+                                    handleClose={handleCloseDialog}
+                                    onDelete={() => onDelete(deletingId)}
+                />
+            }
         </Container>
     );
 }
