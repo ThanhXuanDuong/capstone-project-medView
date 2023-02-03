@@ -23,7 +23,6 @@ export default function DashboardPage({
         imageIds: []
     };
     const [patient, setPatient] = useState<Patient>(initial);
-    //const {patients,setPatients} = usePatients();
     const {open,setOpen, handleClickOpen, handleClose} = useFormActions();
     const [searchName, setSearchName] = useState<string>("");
     const [editing, setEditing] = useState<boolean>(false);
