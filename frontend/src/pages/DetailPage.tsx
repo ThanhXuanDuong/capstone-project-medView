@@ -9,18 +9,12 @@ import axios from "axios";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import useFormActions from "../hooks/useFormActions";
 import NoteForm from "../components/note/NoteForm";
-import Patient from "../types/Patient";
 import useDialogActions from "../hooks/useDialogActions";
 import ConfirmationDialog from "../components/ConfirmationDialog";
+import usePatients from "../hooks/usePatients";
 
-export default function DetailPage({
-    patients,
-    setPatients,
-}:{
-    patients: Patient[],
-    setPatients: (patients: Patient[]) => void
-}){
-
+export default function DetailPage(){
+    const {patients,setPatients} = usePatients();
     const {viewPatient,setViewPatient} = usePatient();
     const [viewImageId, setViewImageId] = useState <string> (viewPatient.imageIds[0]);
 

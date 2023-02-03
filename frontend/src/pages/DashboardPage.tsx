@@ -7,14 +7,9 @@ import PatientForm from "../components/patient/PatientForm";
 import useFormActions from "../hooks/useFormActions";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import useDialogActions from "../hooks/useDialogActions";
+import usePatients from "../hooks/usePatients";
 
-export default function DashboardPage({
-    patients,
-    setPatients,
-}:{
-    patients: Patient[],
-    setPatients: (patients:Patient[]) => void
-}){
+export default function DashboardPage(){
     const initial ={
         firstname: "",
         lastname: "",
@@ -25,6 +20,7 @@ export default function DashboardPage({
         imageIds: []
     };
     const [patient, setPatient] = useState<Patient>(initial);
+    const {patients,setPatients} = usePatients();
 
     const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
     const {openDialog,handleOpenDialog, handleCloseDialog} = useDialogActions();
