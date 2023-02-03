@@ -1,5 +1,6 @@
 package de.neuefische.backend.patient;
 
+import de.neuefische.backend.exception.NotFoundException;
 import de.neuefische.backend.exception.PatientNotRegisteredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +28,14 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
-    public Patient updateById(@PathVariable String id, @RequestBody Patient patient) throws PatientNotRegisteredException {
+    public Patient updateById(@PathVariable String id, @RequestBody Patient patient)
+            throws PatientNotRegisteredException {
         return patientService.updateById(id,patient);
     }
 
     @DeleteMapping("/{id}")
-    public  void deleteById(@PathVariable String id) throws PatientNotRegisteredException {
+    public  void deleteById(@PathVariable String id)
+            throws PatientNotRegisteredException, NotFoundException {
         patientService.deleteById(id);
     }
 }

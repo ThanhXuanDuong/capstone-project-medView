@@ -2,6 +2,10 @@ package de.neuefische.backend.file;
 
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.client.gridfs.model.GridFSFile;
+import de.neuefische.backend.exception.PatientNotRegisteredException;
+import de.neuefische.backend.note.NoteRepository;
+import de.neuefische.backend.patient.Patient;
+import de.neuefische.backend.patient.PatientRepository;
 import de.neuefische.backend.user.AppUser;
 import de.neuefische.backend.user.AppUserService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +28,8 @@ import java.util.Optional;
 public class FileService {
     private final GridFsTemplate gridFsTemplate;
     private final AppUserService appUserService;
+    private final PatientRepository patientRepository;
+    private final NoteRepository noteRepository;
 
     public String saveFile(MultipartFile multipartFile) throws IOException {
         if (multipartFile.isEmpty()) {
@@ -61,5 +68,26 @@ public class FileService {
                         "File not found"
                 )
         );
+    }
+
+    public void deleteById(String fileId){
+        noteRepository.deleteAllByImageId(fileId);
+        gridFsTemplate.delete(new Query(Criteria.where("_id").is(fileId)));
+        // patient data must be updated by put request
+    }
+
+    public void deleteAllByPatientId(String patientId)
+            throws PatientNotRegisteredException {
+        Optional<Patient> patient = patientRepository.findById(patientId);
+
+        if(patient.isPresent()) {
+            List<String> imageIds = patient.get().getImageIds();
+
+            for (String imagId : imageIds) {
+                gridFsTemplate.delete(new Query(Criteria.where("_id").is(imagId)));
+            }
+        }else{
+            throw new PatientNotRegisteredException();
+        }
     }
 }

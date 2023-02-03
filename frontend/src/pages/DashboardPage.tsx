@@ -4,10 +4,15 @@ import Patient from "../types/Patient";
 import axios from "axios";
 import PatientGallery from "../components/patient/PatientGallery";
 import PatientForm from "../components/PatientForm";
-import usePatients from "../hooks/usePatients";
 import useFormActions from "../hooks/useFormActions";
 
-export default function DashboardPage(){
+export default function DashboardPage({
+    patients,
+    setPatients,
+}:{
+    patients: Patient[],
+    setPatients: (patients:Patient[]) => void
+}){
     const initial ={
         firstname: "",
         lastname: "",
@@ -18,7 +23,6 @@ export default function DashboardPage(){
         imageIds: []
     };
     const [patient, setPatient] = useState<Patient>(initial);
-    const {patients,setPatients} = usePatients();
     const {open,setOpen, handleClickOpen, handleClose} = useFormActions();
     const [searchName, setSearchName] = useState<string>("");
     const [editing, setEditing] = useState<boolean>(false);
@@ -51,7 +55,7 @@ export default function DashboardPage(){
 
     const onDelete = (id:string|undefined) => {
         (async () => {
-            await axios.delete("/api/patients/" +id);
+            await axios.delete(`/api/patients/${id}`);
             setPatients(patients.filter(patient => patient.id !==id));
         })();
     }

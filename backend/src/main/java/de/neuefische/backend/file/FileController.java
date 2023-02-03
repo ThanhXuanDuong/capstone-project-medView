@@ -33,4 +33,8 @@ public class FileController {
                 .body(new InputStreamResource(gridFsResource.getInputStream()));
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable String id) {
+        fileService.deleteById(id);
+    }
 }

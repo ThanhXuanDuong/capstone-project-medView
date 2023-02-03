@@ -9,11 +9,18 @@ import axios from "axios";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import useFormActions from "../hooks/useFormActions";
 import NoteForm from "../components/note/NoteForm";
+import Patient from "../types/Patient";
 
-export default function DetailPage(){
+export default function DetailPage({
+    patients,
+    setPatients,
+}:{
+    patients: Patient[],
+    setPatients: (patients: Patient[]) => void
+}){
 
-    const patient = usePatient();
-    const [viewImageId, setViewImageId] = useState <string> (patient.imageIds[0]);
+    const {viewPatient,setViewPatient} = usePatient();
+    const [viewImageId, setViewImageId] = useState <string> (viewPatient.imageIds[0]);
     const [notes, setNotes] = useState<Note[]>([]);
     const [note, setNote] = useState<Note>({imageId:"", text:""});
     const {open,setOpen, handleClickOpen, handleClose} = useFormActions();
@@ -63,10 +70,27 @@ export default function DetailPage(){
        setOpen(false);
     };
 
-    const onDelete =(id: string|undefined) =>{
+    const onDeleteNote =(id: string|undefined) =>{
         (async () => {
             await axios.delete("/api/notes/" +id);
             setNotes(notes.filter(note => note.id !==id));
+        })();
+    };
+
+    const onDeleteImage =(id: string|undefined) =>{
+        (async () => {
+            await axios.delete("/api/files/" +id);
+            const p = {...viewPatient,
+                imageIds: viewPatient.imageIds.filter(imageId => imageId!==id)};
+            setViewPatient(p);
+
+            const response = await axios.put("/api/patients/" +p.id,p);
+            const updatedPatient =response.data;
+            setPatients(patients.map(outdatedPatient =>
+                outdatedPatient.id === updatedPatient.id
+                    ? updatedPatient
+                    : outdatedPatient));
+            setNotes([]);
         })();
     };
 
@@ -82,10 +106,10 @@ export default function DetailPage(){
                          boxShadow={1}
                     >
                         <Typography variant="h5" color="text.secondary">
-                            {patient.lastname}, {patient.firstname}
+                            {viewPatient.lastname}, {viewPatient.firstname}
                         </Typography>
                         <Typography variant="body1" color="text.secondary">
-                            Patient-ID: {patient.id}
+                            Patient-ID: {viewPatient.id}
                         </Typography>
                     </Box>
 
@@ -99,11 +123,12 @@ export default function DetailPage(){
                          boxShadow={1}
                          gap= "1rem"
                     >
-                        {patient.imageIds.map((id,index) =>
+                        {viewPatient.imageIds.map((id, index) =>
                             <ImageCard  key={id}
                                         id={id}
                                         index={index}
                                         onView={onView}
+                                        onDelete={onDeleteImage}
                             />)}
                     </Box>
 
@@ -132,7 +157,7 @@ export default function DetailPage(){
                         {notes.map(note =>
                             <NoteCard  key={note.id}
                                         note={note}
-                                        onDelete={onDelete}
+                                        onDelete={onDeleteNote}
                                         onEdit={handleEditClick}
                             />)}
 

@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface NoteRepository extends MongoRepository<Note,String> {
     List<Note> findAllByImageId(String imageId);
+    void deleteAllByImageId(String imageId);
 }
