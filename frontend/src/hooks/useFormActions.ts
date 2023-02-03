@@ -11,5 +11,5 @@ export default function useFormActions() {
         setOpen(false);
     };
 
-    return {open,setOpen, handleClickOpen, handleClose};
+    return {openForm: open, handleOpenForm: handleClickOpen, handleCloseForm: handleClose};
 }

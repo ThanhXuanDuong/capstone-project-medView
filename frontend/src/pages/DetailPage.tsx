@@ -2,7 +2,7 @@ import usePatient from "../hooks/usePatient";
 import ImageCard from "../components/image/ImageCard";
 import {Box, Grid, IconButton, Typography} from "@mui/material";
 import ImageViewer from "../components/image/ImageViewer";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import NoteCard from "../components/note/NoteCard";
 import Note from "../types/Note";
 import axios from "axios";
@@ -10,6 +10,8 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import useFormActions from "../hooks/useFormActions";
 import NoteForm from "../components/note/NoteForm";
 import Patient from "../types/Patient";
+import useDialogActions from "../hooks/useDialogActions";
+import ConfirmationDialog from "../components/ConfirmationDialog";
 
 export default function DetailPage({
     patients,
@@ -21,10 +23,15 @@ export default function DetailPage({
 
     const {viewPatient,setViewPatient} = usePatient();
     const [viewImageId, setViewImageId] = useState <string> (viewPatient.imageIds[0]);
+
     const [notes, setNotes] = useState<Note[]>([]);
     const [note, setNote] = useState<Note>({imageId:"", text:""});
-    const {open,setOpen, handleClickOpen, handleClose} = useFormActions();
+
+    const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
+    const {openDialog,handleOpenDialog, handleCloseDialog} = useDialogActions();
     const [editing, setEditing] = useState<boolean>(false);
+    const [deletingImageId, setDeletingImageId] = useState<string|undefined>("");
+    const [deletingNoteId, setDeletingNoteId] = useState<string|undefined>("");
 
     const onView = (id:string) => {
         setViewImageId(id);
@@ -42,15 +49,15 @@ export default function DetailPage({
         (async () => {
             const response = await axios.post("/api/notes", createdNote);
             setNotes([...notes, response.data]);
-            setNote({imageId: "", text: ""});
+            setNote({...note, text: ""});
         })();
-        setOpen(false);
+        handleCloseForm();
     }
 
     const handleEditClick = async(editingNote:Note|undefined) =>{
         if (editingNote) {
             setNote(editingNote);
-            setOpen(true);
+            handleOpenForm();
             setEditing(true);
         }else{
             console.log("No note");
@@ -65,9 +72,9 @@ export default function DetailPage({
                note.id === editedNote.id
                    ? editedNote
                    : note));
-           setNote({imageId: "", text: ""});
+           setNote({...note, text: ""});
        })();
-       setOpen(false);
+        handleCloseForm();
     };
 
     const onDeleteNote =(id: string|undefined) =>{
@@ -75,6 +82,7 @@ export default function DetailPage({
             await axios.delete("/api/notes/" +id);
             setNotes(notes.filter(note => note.id !==id));
         })();
+        handleCloseDialog();
     };
 
     const onDeleteImage =(id: string|undefined) =>{
@@ -91,6 +99,7 @@ export default function DetailPage({
                     ? updatedPatient
                     : outdatedPatient));
             setNotes([]);
+            handleCloseDialog();
         })();
     };
 
@@ -128,7 +137,10 @@ export default function DetailPage({
                                         id={id}
                                         index={index}
                                         onView={onView}
-                                        onDelete={onDeleteImage}
+                                        onDelete={() =>{
+                                            handleOpenDialog();
+                                            setDeletingImageId(id);
+                                        }}
                             />)}
                     </Box>
 
@@ -149,7 +161,7 @@ export default function DetailPage({
                                 Note
                             </Typography>
 
-                            <IconButton aria-label="add" onClick={handleClickOpen}>
+                            <IconButton aria-label="add" onClick={handleOpenForm}>
                                 <AddBoxIcon />
                             </IconButton>
                         </Box>
@@ -157,17 +169,33 @@ export default function DetailPage({
                         {notes.map(note =>
                             <NoteCard  key={note.id}
                                         note={note}
-                                        onDelete={onDeleteNote}
+                                        onDelete={() =>{
+                                            handleOpenDialog();
+                                            setDeletingNoteId(note.id);
+                                        }}
                                         onEdit={handleEditClick}
                             />)}
 
                         <NoteForm note={note}
                                   setNote={setNote}
                                   setEditing={setEditing}
-                                  open={open}
-                                  handleClose={handleClose}
+                                  open={openForm}
+                                  handleClose={handleCloseForm}
                                   onSave={editing? onEdit: onAdd}/>
                     </Box>
+
+                    {deletingImageId &&
+                        <ConfirmationDialog open={openDialog}
+                                            handleClose={handleCloseDialog}
+                                            onDelete={() => onDeleteImage(deletingImageId)}
+                        />
+                    }
+                    {deletingNoteId &&
+                        <ConfirmationDialog open={openDialog}
+                                            handleClose={handleCloseDialog}
+                                            onDelete={() => onDeleteNote(deletingNoteId)}
+                        />
+                    }
                 </Grid>
             </Grid>
         </>
