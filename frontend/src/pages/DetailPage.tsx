@@ -104,12 +104,12 @@ export default function DetailPage(){
 
     return(
         <>
-            <Grid container sx={{ mt:0, mb:0, height: "100vh"}} >
-                <Grid xs={12} sm={8} item={true} sx={{backgroundColor:"black"}}>
+            <Grid container sx={{ mt:0, mb:0, height: "100vh",overflow:'hidden'}} >
+                <Grid item xs={12} sm={8}  sx={{height: "100%",backgroundColor:"black"}}>
                     <ImageViewer key={viewImageId} id={viewImageId}/>
                 </Grid>
 
-                <Grid xs={12} sm={4} item={true}>
+                <Grid item xs={12} sm={4} sx={{height: "100%"}}>
                     <Box sx={{height: "4rem", p:2}}
                          boxShadow={1}
                     >
@@ -123,8 +123,7 @@ export default function DetailPage(){
 
                     <Box sx={{display: 'flex',
                             height:'20rem',
-                            p:2,
-                            overflowY:'scroll'
+                            p:2
                     }}
                          flexDirection={"column"}
                          alignItems={"stretch"}
@@ -154,9 +153,7 @@ export default function DetailPage(){
 
                     <Box sx={{display: 'flex',
                             height: 'calc(100vh - 24rem)',
-                            p:2,
-                            overflow: 'hidden',
-                            overflowY: 'scroll'
+                            p:2
                     }}
                          flexDirection={"column"}
                          alignItems={"stretch"}
