@@ -11,7 +11,7 @@ export default function usePatients(){
         (async () =>{
             try{
                 const response = await axios.get("api/patients");
-                setPatients(response.data);
+                setPatients(response.data.reverse());
             }catch (e){
                 console.log("No data found!");
             }finally {

@@ -13,14 +13,15 @@ export default function SortDropDown({
     patients: Patient[]
     setPatients: (sortList :Patient[]) => void
 }) {
+
     const handleChange = (event: SelectChangeEvent) => {
-        const sortDirection = event.target.value;
+        const sortType = event.target.value;
         const copyPatients = [...patients];
 
         copyPatients.sort((a, b) => {
-            return sortDirection === "Newest"
-                ? (new Date(b.timeStamp).valueOf()- new Date(a.timeStamp).valueOf())
-                : (new Date(a.timeStamp).valueOf()- new Date(b.timeStamp).valueOf());
+            return sortType === "Oldest"
+                ? (new Date(a.timeStamp).valueOf()- new Date(b.timeStamp).valueOf())
+                : (new Date(b.timeStamp).valueOf()- new Date(a.timeStamp).valueOf());
         });
         setPatients(copyPatients);
     };
