@@ -16,7 +16,6 @@ import usePatients from "../hooks/usePatients";
 export default function DetailPage(){
     const {patients,setPatients} = usePatients();
     const {viewPatient,setViewPatient,viewImageId, setViewImageId} = usePatient();
-    //const [viewImageId, setViewImageId] = useState <string> (viewPatient.imageIds[0]);
 
     const [notes, setNotes] = useState<Note[]>([]);
     const [note, setNote] = useState<Note>({imageId:"", text:""});
@@ -33,14 +32,14 @@ export default function DetailPage(){
     }
 
     useEffect(() => {
-        try{
-            (async () =>{
-                const response = await axios.get(`/api/notes/image/${viewImageId}`);
-                setNotes(response.data);
-            })();
-        }catch (e){
-            console.log("Image Id not found");
-        }
+        (async () =>{
+            try{
+            const response = await axios.get(`/api/notes/image/${viewImageId}`);
+            setNotes(response.data);
+            }catch (e){
+                console.log("Image Id not found");
+            }
+        })();
 
     },[viewImageId]);
 

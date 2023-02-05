@@ -8,8 +8,13 @@ export default function usePatients(){
 
     useEffect(() => {
         (async () =>{
-            const response = await axios.get("api/patients");
-            setPatients(response.data);
+            try{
+                const response = await axios.get("api/patients");
+                setPatients(response.data);
+            }catch (e){
+                console.log("No data found!");
+            }
+
         })();
     },[]);
 
