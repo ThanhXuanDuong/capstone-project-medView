@@ -1,6 +1,6 @@
 import usePatient from "../hooks/usePatient";
 import ImageCard from "../components/image/ImageCard";
-import {Box, Grid, IconButton, Typography} from "@mui/material";
+import {Box, Grid, IconButton, List, ListItem, Typography} from "@mui/material";
 import ImageViewer from "../components/image/ImageViewer";
 import React, {useEffect, useState} from "react";
 import NoteCard from "../components/note/NoteCard";
@@ -15,8 +15,8 @@ import usePatients from "../hooks/usePatients";
 
 export default function DetailPage(){
     const {patients,setPatients} = usePatients();
-    const {viewPatient,setViewPatient} = usePatient();
-    const [viewImageId, setViewImageId] = useState <string> (viewPatient.imageIds[0]);
+    const {viewPatient,setViewPatient,viewImageId, setViewImageId} = usePatient();
+    //const [viewImageId, setViewImageId] = useState <string> (viewPatient.imageIds[0]);
 
     const [notes, setNotes] = useState<Note[]>([]);
     const [note, setNote] = useState<Note>({imageId:"", text:""});
@@ -33,10 +33,15 @@ export default function DetailPage(){
     }
 
     useEffect(() => {
-        (async () =>{
-            const response = await axios.get(`/api/notes/image/${viewImageId}`);
-            setNotes(response.data);
-        })();
+        try{
+            (async () =>{
+                const response = await axios.get(`/api/notes/image/${viewImageId}`);
+                setNotes(response.data);
+            })();
+        }catch (e){
+            console.log("Image Id not found");
+        }
+
     },[viewImageId]);
 
     const onAdd= (createdNote:Note) => {
@@ -100,11 +105,11 @@ export default function DetailPage(){
     return(
         <>
             <Grid container sx={{ mt:0, mb:0, height: "100vh"}} >
-                <Grid xs={12} sm={8} sx={{backgroundColor:"black"}}>
+                <Grid xs={12} sm={8} item={true} sx={{backgroundColor:"black"}}>
                     <ImageViewer key={viewImageId} id={viewImageId}/>
                 </Grid>
 
-                <Grid xs={12} sm={4}>
+                <Grid xs={12} sm={4} item={true}>
                     <Box sx={{height: "4rem", p:2}}
                          boxShadow={1}
                     >
@@ -117,33 +122,43 @@ export default function DetailPage(){
                     </Box>
 
                     <Box sx={{display: 'flex',
-                            height: "20rem",
+                            height:'20rem',
                             p:2,
-                            overflow: 'auto'}}
+                            overflowY:'scroll'
+                    }}
                          flexDirection={"column"}
-                         justifyContent={"flex-start"}
                          alignItems={"stretch"}
                          boxShadow={1}
                          gap= "1rem"
                     >
-                        {viewPatient.imageIds.map((id, index) =>
-                            <ImageCard  key={id}
-                                        id={id}
-                                        index={index}
-                                        onView={onView}
-                                        onDelete={() =>{
-                                            handleOpenDialog();
-                                            setDeletingImageId(id);
-                                        }}
-                            />)}
+                        <List sx={{
+                            position: 'relative',
+                            overflow: 'auto',
+                            maxHeight: '19rem',
+                        }}>
+                            {viewPatient.imageIds.map((id, index) => (
+                                <ListItem key={`image-item-${id}`}>
+                                    <ImageCard  key={id}
+                                                id={id}
+                                                index={index}
+                                                onView={onView}
+                                                onDelete={() =>{
+                                                    handleOpenDialog();
+                                                    setDeletingImageId(id);
+                                                }}
+                                    />
+                                </ListItem>
+                            ))}
+                        </List>
                     </Box>
 
                     <Box sx={{display: 'flex',
                             height: 'calc(100vh - 24rem)',
                             p:2,
-                            overflow: 'auto'}}
+                            overflow: 'hidden',
+                            overflowY: 'scroll'
+                    }}
                          flexDirection={"column"}
-                         justifyContent={"flex-start"}
                          alignItems={"stretch"}
                          boxShadow={1}
                          gap= "1rem"
@@ -160,15 +175,24 @@ export default function DetailPage(){
                             </IconButton>
                         </Box>
 
-                        {notes.map(note =>
-                            <NoteCard  key={note.id}
-                                        note={note}
-                                        onDelete={() =>{
-                                            handleOpenDialog();
-                                            setDeletingNoteId(note.id);
-                                        }}
-                                        onEdit={handleEditClick}
-                            />)}
+                        <List sx={{
+                            position: 'relative',
+                            overflow: 'auto',
+                            maxHeight: 200,
+                        }}>
+                            {notes.map((note) => (
+                                <ListItem key={`note-item-${note.id}`}>
+                                    <NoteCard  key={note.id}
+                                               note={note}
+                                               onDelete={() =>{
+                                                   handleOpenDialog();
+                                                   setDeletingNoteId(note.id);
+                                               }}
+                                               onEdit={handleEditClick}
+                                    />
+                                </ListItem>
+                            ))}
+                        </List>
 
                         <NoteForm note={note}
                                   setNote={setNote}
