@@ -105,13 +105,16 @@ export default function PatientForm({
                     />
 
                     <TextField
-                        sx={{ width: 500, mb: 2 }}
-                        id="birthday"
-                        label={"Birthday"}
+                        id="date"
+                        type="date"
+                        label="Birthday"
                         name="birthday"
                         value={patient.birthday}
-                        variant="outlined"
-                        size="small"
+                        sx={{  width: 500, mb: 2  }}
+                        size={"small"}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                         onChange={handleChange}
                     />
 

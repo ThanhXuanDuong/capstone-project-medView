@@ -9,6 +9,7 @@ import ConfirmationDialog from "../components/ConfirmationDialog";
 import useDialogActions from "../hooks/useDialogActions";
 import usePatients from "../hooks/usePatients";
 import {toast} from "react-toastify";
+import SortDropDown from "../components/SortDropDown";
 
 export default function DashboardPage(){
     const initial ={
@@ -18,7 +19,8 @@ export default function DashboardPage(){
         address: "",
         birthday: "",
         telephone: "",
-        imageIds: []
+        imageIds: [],
+        timeStamp: ""
     };
     const [patient, setPatient] = useState<Patient>(initial);
     const {patients,setPatients,isReady} = usePatients();
@@ -38,7 +40,7 @@ export default function DashboardPage(){
         (async () => {
             try{
                 const response = await axios.post("/api/patients",patient);
-                setPatients([...patients, response.data]);
+                setPatients([response.data,...patients]);
                 setPatient(initial);
 
                 toast.success("Successfully saving new patient!",
@@ -115,10 +117,11 @@ export default function DashboardPage(){
             ? <div>Loading data</div>
             : <Container >
                 <Box sx={{display:'flex',
-                mt: 10,
-                mb: 5,
-                gap:2,
-                flexDirection:'row-reverse'
+                    mt: 10,
+                    mb: 5,
+                    mx: 10,
+                    gap:2,
+                    flexDirection:'row-reverse'
                 }}>
                     <TextField
                     hiddenLabel
@@ -128,16 +131,22 @@ export default function DashboardPage(){
                     onChange={(e)=> setSearchName(e.target.value)}
                     />
 
-                    <Button variant="contained">Sort</Button>
+                    <SortDropDown patients={patients} setPatients={setPatients}/>
 
                     <Button variant="contained"
+                            size="small"
                     onClick={handleOpenForm}
                     >Add</Button>
                 </Box>
 
-                <PatientGallery patients={searchPatients}
-                onDelete={handleClickDelete}
-                onEdit={handleClickEdit}/>
+                <Box sx={{display:'flex',
+                        mx: 10,
+                        gap:2
+                    }}>
+                    <PatientGallery patients={searchPatients}
+                    onDelete={handleClickDelete}
+                    onEdit={handleClickEdit}/>
+                </Box>
 
                 <PatientForm patient={patient}
                 setPatient={setPatient}

@@ -7,7 +7,8 @@ type Patient={
     birthday: string,
     telephone: string,
     imageIds: string[],
-    createdBy?: string
+    createdBy?: string,
+    timeStamp:string
 };
 
 export default Patient;

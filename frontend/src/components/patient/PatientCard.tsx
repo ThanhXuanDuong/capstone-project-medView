@@ -1,4 +1,5 @@
 import {
+    Box,
     ButtonBase,
     Card,
     CardActions,
@@ -25,7 +26,7 @@ export default function PatientCard({
     const navigate = useNavigate();
 
     return (
-        <Card sx={{ display: 'flex'}}>
+        <Card sx={{ display: 'flex',width:"100%",justifyContent:'space-evenly'}}>
             <ButtonBase onClick={() => navigate(`/patients/${patient.id}`)}>
                 <CardMedia
                     component="img"
@@ -50,16 +51,28 @@ export default function PatientCard({
                 </CardContent>
             </ButtonBase>
 
-            <CardActions disableSpacing>
-                <IconButton aria-label="edit"
-                            onClick={() => onEdit(patient)}>
-                    <EditIcon />
-                </IconButton>
-                <IconButton aria-label="delete"
-                            onClick={() => onDelete(patient.id)}>
-                    <DeleteIcon />
-                </IconButton>
-            </CardActions>
+            <Box sx={{ display: 'flex', flexDirection:'column'}}>
+                <CardActions disableSpacing sx={{ height: '70%'}}>
+                    <IconButton aria-label="edit"
+                                onClick={() => onEdit(patient)}>
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton aria-label="delete"
+                                onClick={() => onDelete(patient.id)}>
+                        <DeleteIcon />
+                    </IconButton>
+                </CardActions>
+
+                <Typography variant="body2" color="text.secondary" align={'center'}>
+                     {new Date(patient.timeStamp).getFullYear() + "/" +
+                      (new Date(patient.timeStamp).getMonth() + 1) + "/" +
+                      new Date(patient.timeStamp).getDate() + " " +
+                      new Date(patient.timeStamp).getHours() + ":" +
+                      new Date(patient.timeStamp).getMinutes()
+                    }
+                </Typography>
+            </Box>
+
         </Card>
     );
 }

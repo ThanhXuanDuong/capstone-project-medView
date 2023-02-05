@@ -12,7 +12,7 @@ export default function PatientGallery({
     onEdit: (patient: Patient|undefined) => void
 }) {
     return (
-            <Box sx={{display: 'flex'}}
+            <Box sx={{display: 'flex', width:'100%'}}
                  flexDirection={"column"}
                  justifyContent={"space-between"}
                  alignItems={"center"}
