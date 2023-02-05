@@ -7,6 +7,8 @@ import React, {useMemo} from "react";
 import NoAuth from "../components/login/NoAuth";
 import NavBar from "../components/NavBar";
 import NotFoundPage from "./NotFoundPage";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Root() {
     const [searchParams] = useSearchParams();
@@ -18,6 +20,17 @@ export default function Root() {
     return (
         <>
             <NavBar isLoggedIn={true}/>
+            <ToastContainer
+                position="top-center"
+                autoClose={1000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
                 <Routes>
                     <Route path={"/"} element={
                         <Auth>

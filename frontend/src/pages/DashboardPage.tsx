@@ -8,6 +8,7 @@ import useFormActions from "../hooks/useFormActions";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import useDialogActions from "../hooks/useDialogActions";
 import usePatients from "../hooks/usePatients";
+import {toast} from "react-toastify";
 
 export default function DashboardPage(){
     const initial ={
@@ -20,7 +21,7 @@ export default function DashboardPage(){
         imageIds: []
     };
     const [patient, setPatient] = useState<Patient>(initial);
-    const {patients,setPatients} = usePatients();
+    const {patients,setPatients,isReady} = usePatients();
 
     const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
     const {openDialog,handleOpenDialog, handleCloseDialog} = useDialogActions();
@@ -35,32 +36,62 @@ export default function DashboardPage(){
 
     const onAdd = (patient:Patient) => {
         (async () => {
-            const response = await axios.post("/api/patients",patient);
-            setPatients([...patients, response.data]);
-            setPatient(initial);
+            try{
+                const response = await axios.post("/api/patients",patient);
+                setPatients([...patients, response.data]);
+                setPatient(initial);
+
+                toast.success("Successfully saving new patient!",
+                    {toastId:"successAdd"});
+            }catch(e){
+                toast.error("Error while saving new patient!",
+                    {toastId:"errorAdd"});
+            }finally {
+                handleCloseForm();
+            }
         })();
-        handleCloseForm();
     };
 
     const onUpdate = (patient:Patient) => {
         (async () => {
-            const response = await axios.put("/api/patients/"+patient.id,patient);
-            const updatedPatient =response.data;
-            setPatients(patients.map(patient =>
-                patient.id === updatedPatient.id
-                    ? updatedPatient
-                    : patient));
-            setPatient(initial);
+            try{
+                const response = await axios.put("/api/patients/"+patient.id,patient);
+                const updatedPatient =response.data;
+                setPatients(patients.map(patient =>
+                    patient.id === updatedPatient.id
+                        ? updatedPatient
+                        : patient));
+                setPatient(initial);
+
+                toast.success("Successfully updating data!",
+                    {toastId:"successUpdate"});
+            }catch(e){
+                toast.error("Error while updating data!",
+                    {toastId:"errorUpdate"});
+            }finally {
+                handleCloseForm();
+            }
         })();
-        handleCloseForm();
+
     };
 
     const onDelete = (id:string|undefined) => {
         (async () => {
-            await axios.delete(`/api/patients/${id}`);
-            setPatients(patients.filter(patient => patient.id !==id));
+            try{
+                await axios.delete(`/api/patients/${id}`);
+                setPatients(patients.filter(patient => patient.id !==id));
+
+                toast.success("Successfully deleting data!",
+                    {toastId:"successDelete"});
+            }catch(e){
+                toast.error("Error while deleting data!",
+                    {toastId:"errorDelete"});
+            }finally {
+                handleCloseDialog();
+            }
+
         })();
-        handleCloseDialog();
+
     }
 
     const handleClickDelete = (id:string|undefined) => {
@@ -79,46 +110,50 @@ export default function DashboardPage(){
     };
 
     return(
-        <Container >
-            <Box sx={{display:'flex',
-                    mt: 10,
-                    mb: 5,
-                    gap:2,
-                    flexDirection:'row-reverse'
-            }}>
-                <TextField
+        <>
+            {!isReady
+            ? <div>Loading data</div>
+            : <Container >
+                <Box sx={{display:'flex',
+                mt: 10,
+                mb: 5,
+                gap:2,
+                flexDirection:'row-reverse'
+                }}>
+                    <TextField
                     hiddenLabel
                     id="Search"
                     placeholder="Search..."
                     size="small"
                     onChange={(e)=> setSearchName(e.target.value)}
-                />
+                    />
 
-                <Button variant="contained">Sort</Button>
+                    <Button variant="contained">Sort</Button>
 
-                <Button variant="contained"
-                        onClick={handleOpenForm}
-                >Add</Button>
+                    <Button variant="contained"
+                    onClick={handleOpenForm}
+                    >Add</Button>
+                </Box>
 
-            </Box>
+                <PatientGallery patients={searchPatients}
+                onDelete={handleClickDelete}
+                onEdit={handleClickEdit}/>
 
-            <PatientGallery patients={searchPatients}
-                            onDelete={handleClickDelete}
-                            onEdit={handleClickEdit}/>
+                <PatientForm patient={patient}
+                setPatient={setPatient}
+                setEditing={setEditing}
+                open={openForm}
+                handleClose={handleCloseForm}
+                onSave={editing? onUpdate: onAdd}/>
 
-            <PatientForm patient={patient}
-                         setPatient={setPatient}
-                         setEditing={setEditing}
-                         open={openForm}
-                         handleClose={handleCloseForm}
-                         onSave={editing? onUpdate: onAdd}/>
-
-            {deletingId &&
-                <ConfirmationDialog open={openDialog}
-                                    handleClose={handleCloseDialog}
-                                    onDelete={() => onDelete(deletingId)}
-                />
+                {deletingId &&
+                    <ConfirmationDialog open={openDialog}
+                    handleClose={handleCloseDialog}
+                    onDelete={() => onDelete(deletingId)}
+                    />
+                }
+            </Container>
             }
-        </Container>
+        </>
     );
 }

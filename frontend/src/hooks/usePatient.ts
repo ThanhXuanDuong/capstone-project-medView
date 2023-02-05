@@ -16,20 +16,22 @@ export default function usePatient(){
 
     const {id} = useParams<{id:string}>();
     const [patient, setPatient] = useState<Patient>(initial);
-    const [viewImageId, setViewImageId] = useState <string> ("");
+    const [viewImageId, setViewImageId] = useState <string> (patient.imageIds[0]);
+    const [isReady, setIsReady] = useState<boolean>(false);
 
     useEffect( () =>{
         (async () =>{
             try{
             const response = await axios.get("/api/patients/" +id);
             setPatient(response.data);
-            setViewImageId(() =>patient.imageIds[0]);
             }catch(e){
                 console.log("Patient not registered!");
+            }finally {
+                setIsReady(true);
             }
         })();
 
     },[id]);
 
-    return {viewPatient: patient,setViewPatient: setPatient,viewImageId, setViewImageId};
+    return {isReady,viewPatient: patient,setViewPatient: setPatient,viewImageId, setViewImageId};
 }

@@ -1,6 +1,6 @@
 import usePatient from "../hooks/usePatient";
 import ImageCard from "../components/image/ImageCard";
-import {Box, Grid, IconButton, List, ListItem, Typography} from "@mui/material";
+import {Box, Grid, IconButton, List, ListItem,Typography} from "@mui/material";
 import ImageViewer from "../components/image/ImageViewer";
 import React, {useEffect, useState} from "react";
 import NoteCard from "../components/note/NoteCard";
@@ -12,10 +12,11 @@ import NoteForm from "../components/note/NoteForm";
 import useDialogActions from "../hooks/useDialogActions";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import usePatients from "../hooks/usePatients";
+import {toast} from "react-toastify";
 
 export default function DetailPage(){
     const {patients,setPatients} = usePatients();
-    const {viewPatient,setViewPatient,viewImageId, setViewImageId} = usePatient();
+    const {isReady,viewPatient,setViewPatient,viewImageId, setViewImageId} = usePatient();
 
     const [notes, setNotes] = useState<Note[]>([]);
     const [note, setNote] = useState<Note>({imageId:"", text:""});
@@ -37,19 +38,28 @@ export default function DetailPage(){
             const response = await axios.get(`/api/notes/image/${viewImageId}`);
             setNotes(response.data);
             }catch (e){
-                console.log("Image Id not found");
+                console.log("Error while loading data!")
             }
         })();
-
     },[viewImageId]);
 
     const onAdd= (createdNote:Note) => {
         (async () => {
-            const response = await axios.post("/api/notes", createdNote);
-            setNotes([...notes, response.data]);
-            setNote({...note, text: ""});
+            try{
+                const response = await axios.post("/api/notes", createdNote);
+                setNotes([...notes, response.data]);
+                setNote({...note, text: ""});
+
+                toast.success("Successfully saving new note!",
+                    {toastId:"successAdd"});
+            }catch(e)
+            {
+                toast.error("Error while saving new note!",
+                    {toastId:"errorAdd"})
+            }finally {
+                handleCloseForm();
+            }
         })();
-        handleCloseForm();
     }
 
     const handleEditClick = async(editingNote:Note|undefined) =>{
@@ -58,58 +68,93 @@ export default function DetailPage(){
             handleOpenForm();
             setEditing(true);
         }else{
-            console.log("No note");
+            toast.error("Note doesn't exist!",{toastId:"errorEditClick"})
         }
 
     };
+
     const onEdit =(note:Note) =>{
        (async () => {
-           const response = await axios.put(`/api/notes/${note.id}`,note);
-           const editedNote = response.data;
-           setNotes(notes.map(note =>
-               note.id === editedNote.id
-                   ? editedNote
-                   : note));
-           setNote({...note, text: ""});
+           try{
+               const response = await axios.put(`/api/notes/${note.id}`,note);
+               const editedNote = response.data;
+               setNotes(notes.map(note =>
+                   note.id === editedNote.id
+                       ? editedNote
+                       : note));
+               setNote({...note, text: ""});
+
+               toast.success("Successfully saving edited note!",
+                   {toastId:"successEdit"})
+           }catch(e){
+               toast.error("Error while saving edited note!",
+                   {toastId:"errorEdit"})
+           }finally {
+               handleCloseForm();
+           }
+
        })();
-        handleCloseForm();
     };
 
-    const onDeleteNote =(id: string|undefined) =>{
+    const onDeleteNote =(noteId: string|undefined) =>{
         (async () => {
-            await axios.delete("/api/notes/" +id);
-            setNotes(notes.filter(note => note.id !==id));
+            try{
+                await axios.delete("/api/notes/" +noteId);
+                setNotes(notes.filter(note => note.id !==noteId));
+                setDeletingNoteId("");
+
+                toast.success("Successfully deleting note!",
+                    {toastId:"successDeleteNote"});
+            }catch(e){
+                toast.error("Error while deleting note!",
+                    {toastId:"errorDeleteNote"})
+            }finally {
+                handleCloseDialog();
+            }
         })();
-        handleCloseDialog();
+
     };
 
     const onDeleteImage =(id: string|undefined) =>{
         (async () => {
-            await axios.delete("/api/files/" +id);
-            const p = {...viewPatient,
-                imageIds: viewPatient.imageIds.filter(imageId => imageId!==id)};
-            setViewPatient(p);
+            try{
+                await axios.delete("/api/files/" +id);
+                const p = {...viewPatient,
+                    imageIds: viewPatient.imageIds.filter(imageId => imageId!==id)};
+                setViewPatient(p);
 
-            const response = await axios.put("/api/patients/" +p.id,p);
-            const updatedPatient =response.data;
-            setPatients(patients.map(outdatedPatient =>
-                outdatedPatient.id === updatedPatient.id
-                    ? updatedPatient
-                    : outdatedPatient));
-            setNotes([]);
-            handleCloseDialog();
+                const response = await axios.put("/api/patients/" +p.id,p);
+                const updatedPatient =response.data;
+                setPatients(patients.map(outdatedPatient =>
+                    outdatedPatient.id === updatedPatient.id
+                        ? updatedPatient
+                        : outdatedPatient));
+
+                setDeletingImageId("");
+                setNotes([]);
+
+                toast.success("Successfully deleting image!",
+                    {toastId:"successDeleteImage"})
+            }catch (e){
+                toast.error("Error while deleting image!",
+                    {toastId:"errorDeleteImage"})
+            }finally {
+                handleCloseDialog();
+            }
         })();
     };
 
     return(
-        <>
-            <Grid container sx={{ mt:0, mb:0, height: "100vh",overflow:'hidden'}} >
-                <Grid item xs={12} sm={8}  sx={{height: "100%",backgroundColor:"black"}}>
+        <>  {!isReady
+            ? null
+            :
+            <Grid container sx={{mt: 0, mb: 0, height: "100vh", overflow: 'hidden'}}>
+                <Grid item xs={12} sm={8} sx={{height: "100%", backgroundColor: "black"}}>
                     <ImageViewer key={viewImageId} id={viewImageId}/>
                 </Grid>
 
                 <Grid item xs={12} sm={4} sx={{height: "100%"}}>
-                    <Box sx={{height: "10%", p:2}}
+                    <Box sx={{height: "10%", p: 2}}
                          boxShadow={1}
                     >
                         <Typography variant="h5" color="text.secondary">
@@ -120,15 +165,16 @@ export default function DetailPage(){
                         </Typography>
                     </Box>
 
-                    <Box sx={{display: 'flex',
-                            height:'50%',
-                            p:2
+                    <Box sx={{
+                        display: 'flex',
+                        height: '50%',
+                        p: 2
                     }}
                          flexDirection={'column'}
                          justifyContent={'center'}
                          alignItems={'stretch'}
                          boxShadow={1}
-                         gap= '1rem'
+                         gap='1rem'
                     >
                         <List sx={{
                             position: 'relative',
@@ -137,39 +183,42 @@ export default function DetailPage(){
                         }}>
                             {viewPatient.imageIds.map((id, index) => (
                                 <ListItem key={`image-item-${id}`}>
-                                    <ImageCard  key={id}
-                                                id={id}
-                                                index={index}
-                                                onView={onView}
-                                                onDelete={() =>{
-                                                    handleOpenDialog();
-                                                    setDeletingImageId(id);
-                                                }}
+                                    <ImageCard key={id}
+                                               id={id}
+                                               index={index}
+                                               onView={onView}
+                                               onDelete={() => {
+                                                   handleOpenDialog();
+                                                   setDeletingImageId(id);
+                                               }}
                                     />
                                 </ListItem>
                             ))}
                         </List>
                     </Box>
 
-                    <Box sx={{display: 'flex',
-                            height: '30%',
-                            p:2
+                    <Box sx={{
+                        display: 'flex',
+                        height: '30%',
+                        p: 2
                     }}
                          flexDirection={'column'}
                          justifyContent={'flex-start'}
                          alignItems={'stretch'}
                          boxShadow={1}
-                         gap= '1rem'
+                         gap='1rem'
                     >
-                        <Box sx={{display: 'flex',
-                                justifyContent:"space-between",
-                                alignItems:"center"}}>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: "space-between",
+                            alignItems: "center"
+                        }}>
                             <Typography variant="h5" color="text.secondary">
                                 Note
                             </Typography>
 
                             <IconButton aria-label="add" onClick={handleOpenForm}>
-                                <AddBoxIcon />
+                                <AddBoxIcon/>
                             </IconButton>
                         </Box>
 
@@ -180,13 +229,13 @@ export default function DetailPage(){
                         }}>
                             {notes.map((note) => (
                                 <ListItem key={`note-item-${note.id}`}>
-                                    <NoteCard  key={note.id}
-                                               note={note}
-                                               onDelete={() =>{
-                                                   handleOpenDialog();
-                                                   setDeletingNoteId(note.id);
-                                               }}
-                                               onEdit={handleEditClick}
+                                    <NoteCard key={note.id}
+                                              note={note}
+                                              onDelete={() => {
+                                                  handleOpenDialog();
+                                                  setDeletingNoteId(note.id);
+                                              }}
+                                              onEdit={handleEditClick}
                                     />
                                 </ListItem>
                             ))}
@@ -197,7 +246,7 @@ export default function DetailPage(){
                                   setEditing={setEditing}
                                   open={openForm}
                                   handleClose={handleCloseForm}
-                                  onSave={editing? onEdit: onAdd}/>
+                                  onSave={editing ? onEdit : onAdd}/>
                     </Box>
 
                     {deletingImageId &&
@@ -214,6 +263,7 @@ export default function DetailPage(){
                     }
                 </Grid>
             </Grid>
+            }
         </>
     );
 }
