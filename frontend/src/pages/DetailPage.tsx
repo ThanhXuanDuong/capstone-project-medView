@@ -110,7 +110,7 @@ export default function DetailPage(){
                 </Grid>
 
                 <Grid item xs={12} sm={4} sx={{height: "100%"}}>
-                    <Box sx={{height: "4rem", p:2}}
+                    <Box sx={{height: "10%", p:2}}
                          boxShadow={1}
                     >
                         <Typography variant="h5" color="text.secondary">
@@ -122,18 +122,19 @@ export default function DetailPage(){
                     </Box>
 
                     <Box sx={{display: 'flex',
-                            height:'20rem',
+                            height:'50%',
                             p:2
                     }}
-                         flexDirection={"column"}
-                         alignItems={"stretch"}
+                         flexDirection={'column'}
+                         justifyContent={'center'}
+                         alignItems={'stretch'}
                          boxShadow={1}
-                         gap= "1rem"
+                         gap= '1rem'
                     >
                         <List sx={{
                             position: 'relative',
                             overflow: 'auto',
-                            maxHeight: '19rem',
+                            height: '95%',
                         }}>
                             {viewPatient.imageIds.map((id, index) => (
                                 <ListItem key={`image-item-${id}`}>
@@ -152,13 +153,14 @@ export default function DetailPage(){
                     </Box>
 
                     <Box sx={{display: 'flex',
-                            height: 'calc(100vh - 24rem)',
+                            height: '30%',
                             p:2
                     }}
-                         flexDirection={"column"}
-                         alignItems={"stretch"}
+                         flexDirection={'column'}
+                         justifyContent={'flex-start'}
+                         alignItems={'stretch'}
                          boxShadow={1}
-                         gap= "1rem"
+                         gap= '1rem'
                     >
                         <Box sx={{display: 'flex',
                                 justifyContent:"space-between",
@@ -175,7 +177,7 @@ export default function DetailPage(){
                         <List sx={{
                             position: 'relative',
                             overflow: 'auto',
-                            maxHeight: 200,
+                            height: '95%',
                         }}>
                             {notes.map((note) => (
                                 <ListItem key={`note-item-${note.id}`}>
