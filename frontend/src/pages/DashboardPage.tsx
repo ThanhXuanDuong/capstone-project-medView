@@ -40,7 +40,7 @@ export default function DashboardPage(){
         (async () => {
             try{
                 const response = await axios.post("/api/patients",patient);
-                setPatients([...patients, response.data]);
+                setPatients([response.data,...patients]);
                 setPatient(initial);
 
                 toast.success("Successfully saving new patient!",
