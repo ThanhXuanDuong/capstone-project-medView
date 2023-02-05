@@ -11,7 +11,8 @@ export default function usePatient(){
         address: "",
         birthday: "",
         telephone: "",
-        imageIds: []
+        imageIds: [],
+        timeStamp: ""
     };
 
     const {id} = useParams<{id:string}>();

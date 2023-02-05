@@ -25,7 +25,7 @@ export default function PatientCard({
     const navigate = useNavigate();
 
     return (
-        <Card sx={{ display: 'flex'}}>
+        <Card sx={{ display: 'flex',width:"100%"}}>
             <ButtonBase onClick={() => navigate(`/patients/${patient.id}`)}>
                 <CardMedia
                     component="img"
