@@ -1,7 +1,8 @@
 import {useCallback} from "react";
 import axios from "axios";
 import {useLocation, useNavigate} from "react-router-dom";
-import {Button} from "@mui/material";
+import {IconButton} from "@mui/material";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function Logout() {
     const navigate = useNavigate();
@@ -15,6 +16,8 @@ export default function Logout() {
     }, [location, navigate]);
 
     return (
-        <Button color="inherit" onClick={logout}>Logout</Button>
+        <IconButton color="inherit" onClick={logout}>
+            <LogoutIcon/>
+        </IconButton>
     )
 }

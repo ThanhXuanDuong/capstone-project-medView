@@ -17,9 +17,12 @@ export default function ImageCard({
     }
 
     return (
-        <Card sx={{ display: 'flex',
+        <Card sx={{
+            display: 'flex',
             justifyContent:'space-evenly',
-            alignItems:'center'}}
+            alignItems:'center',
+            width: '100%'
+        }}
         >
 
             <CardActionArea onClick={handleClick}>

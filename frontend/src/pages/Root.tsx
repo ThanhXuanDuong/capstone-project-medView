@@ -7,7 +7,6 @@ import React, {useMemo} from "react";
 import NoAuth from "../components/login/NoAuth";
 import NavBar from "../components/NavBar";
 import NotFoundPage from "./NotFoundPage";
-import usePatients from "../hooks/usePatients";
 
 export default function Root() {
     const [searchParams] = useSearchParams();
@@ -15,7 +14,6 @@ export default function Root() {
         () => searchParams.get("redirect") || "/",
         [searchParams]
     );
-    const {patients,setPatients} = usePatients();
 
     return (
         <>
@@ -23,8 +21,7 @@ export default function Root() {
                 <Routes>
                     <Route path={"/"} element={
                         <Auth>
-                            <DashboardPage patients={patients}
-                                           setPatients={setPatients}/>
+                            <DashboardPage />
                         </Auth>
                     }/>
 
@@ -36,8 +33,7 @@ export default function Root() {
 
                     <Route path={"/patients/:id"} element={
                         <Auth>
-                            <DetailPage patients={patients}
-                                        setPatients={setPatients}/>
+                            <DetailPage/>
                         </Auth>}
                     />
 

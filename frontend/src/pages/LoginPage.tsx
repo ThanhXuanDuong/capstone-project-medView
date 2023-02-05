@@ -1,10 +1,20 @@
-import {Alert, AlertTitle, Box, Button, FormControl, TextField, Typography} from "@mui/material";
+import {
+    Alert,
+    AlertTitle, Avatar,
+    Box,
+    Button,
+    Container, createTheme, CssBaseline,
+    TextField,
+    ThemeProvider,
+    Typography
+} from "@mui/material";
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {ChangeEvent, FormEvent, useCallback, useMemo, useState} from "react";
 import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router-dom";
 
 export default function LoginPage(){
-
+    const theme = createTheme();
     const [credentials,setCredentials] = useState({"username":"","password":""});
 
     const handleChange =useCallback((event:ChangeEvent<HTMLInputElement>) =>{
@@ -41,52 +51,69 @@ export default function LoginPage(){
     );
 
     return(
-            <div className={"login-container"}>
-                <Box  sx={{ display: 'flex', mt: 15}}
-                      justifyContent={"center"}
-                      alignItems={"center"}>
-                    <form onSubmit={onSubmit}>
-                        <FormControl >
-                            <Typography variant="h3"
-                                        align={"center"}
-                                        sx={{ mb: 2 }}
-                            >Login</Typography>
+        <ThemeProvider theme={theme}>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
 
-                            <TextField
-                                sx={{ width: 350, mb: 2 }}
-                                id="username"
-                                label={"Username"}
-                                name="username"
-                                value={credentials.username}
-                                variant="outlined"
-                                onChange={handleChange}
-                            />
+                <Box
+                    sx={{
+                        marginTop: 10,
+                        padding:5,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        borderRadius:5
+                    }}
+                >
+                    <Avatar sx={{ m: 1 }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Log in
+                    </Typography>
 
-                            <TextField
-                                sx={{ width: 350, mb: 2 }}
-                                id="password"
-                                label={"Password"}
-                                name="password"
-                                value={credentials.password}
-                                variant="outlined"
-                                type={"password"}
-                                onChange={handleChange}
-                            />
+                    <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="username"
+                            label={"Username"}
+                            name="username"
+                            value={credentials.username}
+                            variant="outlined"
+                            onChange={handleChange}
+                        />
 
-                            {error &&
-                                <Alert severity="error" sx={{mb: 2}}>
-                                    <AlertTitle>Error</AlertTitle>
-                                    Invalid username or password
-                                </Alert>
-                            }
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="password"
+                            label={"Password"}
+                            name="password"
+                            value={credentials.password}
+                            variant="outlined"
+                            type={"password"}
+                            onChange={handleChange}
+                        />
 
-                            <Button type="submit"
-                                variant="contained"
-                            >Login</Button>
+                        {error &&
+                            <Alert severity="error" sx={{mb: 2}}>
+                                <AlertTitle>Error</AlertTitle>
+                                Invalid username or password
+                            </Alert>
+                        }
 
-                        </FormControl>
-                    </form>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >Login</Button>
+                     </Box>
                 </Box>
-            </div>
+            </Container>
+        </ThemeProvider>
     );
 }

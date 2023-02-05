@@ -1,5 +1,7 @@
 import {AppBar, Box, IconButton, Toolbar, Typography} from "@mui/material";
 import Logout from "./login/Logout";
+import HomeIcon from '@mui/icons-material/Home';
+import {useNavigate} from "react-router-dom";
 
 export default function NavBar ({
     isLoggedIn
@@ -7,6 +9,8 @@ export default function NavBar ({
     isLoggedIn: boolean
 }
     ){
+
+    const navigate = useNavigate();
     return (
         <>
             <Box sx={{ flexGrow: 1 }}>
@@ -26,7 +30,12 @@ export default function NavBar ({
                             Logo
                         </Typography>
 
-                        {isLoggedIn && <Logout/>}
+                        <Box sx={{display:'flex', justifyContent:'center', gap:'1rem'}}>
+                            <IconButton color="inherit" onClick={() => navigate("/")}>
+                                <HomeIcon/>
+                            </IconButton>
+                            {isLoggedIn && <Logout/>}
+                        </Box>
 
                     </Toolbar>
                 </AppBar>
