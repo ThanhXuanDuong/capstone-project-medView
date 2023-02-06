@@ -4,8 +4,8 @@ import {
     Card,
     CardActions,
     CardContent,
-    CardMedia,
-    IconButton,
+    CardMedia, Divider,
+    IconButton, ThemeProvider,
     Typography
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -13,6 +13,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Patient from "../../types/Patient";
 import {IMAGES_PATH} from "../../application";
 import {useNavigate} from "react-router-dom";
+import theme from "../styling/theme";
 
 export default function PatientCard({
     patient,
@@ -26,33 +27,43 @@ export default function PatientCard({
     const navigate = useNavigate();
 
     return (
-        <Card sx={{ display: 'flex',width:"100%",justifyContent:'space-evenly'}}>
-            <ButtonBase onClick={() => navigate(`/patients/${patient.id}`)}>
+        <ThemeProvider theme={theme}>
+        <Card sx={{ display: 'flex',
+            width:"100%",
+            justifyContent:'space-between',
+            backgroundColor: '#202124'
+        }}>
+            <ButtonBase sx={{display:'flex',justifyContent:'flex-start', width:'80%'}}
+                        onClick={() => navigate(`/patients/${patient.id}`)}>
                 <CardMedia
                     component="img"
-                    style={{ height: "120px", width:"120px", padding: "2%" }}
+                    style={{ maxWidth: "6rem", maxHeight:"6rem", padding: "1rem" }}
                     image= {IMAGES_PATH + "profile-placeholder.png"}
                     alt="Profile"
                 />
 
-                <CardContent>
-                    <Typography variant="h4" color="text.secondary">
-                        {patient.lastname}
-                    </Typography>
+                <CardContent sx={{width:'40%'}}>
                     <Typography variant="h5" color="text.secondary">
-                        {patient.firstname}
+                        {patient.firstname} {patient.lastname}
                     </Typography>
                 </CardContent>
 
                 <CardContent>
-                    <Typography variant="h6" color="text.secondary">
+                    <Typography variant="body1" color="text.secondary">
                         Patient-ID: {patient.id}
                     </Typography>
                 </CardContent>
             </ButtonBase>
 
-            <Box sx={{ display: 'flex', flexDirection:'column'}}>
-                <CardActions disableSpacing sx={{ height: '70%'}}>
+            <Divider orientation="vertical" flexItem />
+
+            <Box sx={{ display: 'flex',
+                flexDirection:'column',
+                justifyContent:'space-between',
+                alignItems:'center',
+                p: 1,
+                gap:'0.5rem'}}>
+                <CardActions disableSpacing = {false} sx={{ height: '70%'}}>
                     <IconButton aria-label="edit"
                                 onClick={() => onEdit(patient)}>
                         <EditIcon />
@@ -72,7 +83,7 @@ export default function PatientCard({
                     }
                 </Typography>
             </Box>
-
         </Card>
+        </ThemeProvider >
     );
 }

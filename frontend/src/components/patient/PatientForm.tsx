@@ -42,12 +42,13 @@ export default function PatientForm({
 
     return (
         <Dialog sx={{p: 10}} open={open} onClose={handleClose}>
-            <DialogTitle>Save Form</DialogTitle>
+            <DialogTitle>Formula</DialogTitle>
 
             <DialogContent >
 
                 <FormControl >
-                    <Box sx={{display:'flex',justifyContent:'space-between'}}>
+                    <Box sx={{display:'flex',
+                            justifyContent:'space-between'}}>
                         <Avatar
                             alt="Avatar"
                             src={IMAGES_PATH + "profile-placeholder.png"}
@@ -109,6 +110,7 @@ export default function PatientForm({
                         type="date"
                         label="Birthday"
                         name="birthday"
+                        defaultValue= "2017-05-24"
                         value={patient.birthday}
                         sx={{  width: 500, mb: 2  }}
                         size={"small"}
