@@ -19,15 +19,15 @@ export default function NavBar ({
                         <IconButton
                             size="large"
                             edge="start"
-                            color="inherit"
+                            color= "inherit"
                             aria-label="menu"
                             sx={{ mr: 2 }}
                         >
                         </IconButton>
                         <Typography variant="h6"
                                     component="div"
-                                    sx={{ flexGrow: 1 }}>
-                            Logo
+                                    sx={{ flexGrow: 1}}>
+                            LOGO
                         </Typography>
 
                         <Box sx={{display:'flex', justifyContent:'center', gap:'1rem'}}>

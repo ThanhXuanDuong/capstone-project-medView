@@ -42,12 +42,13 @@ export default function PatientForm({
 
     return (
         <Dialog sx={{p: 10}} open={open} onClose={handleClose}>
-            <DialogTitle>Save Form</DialogTitle>
+            <DialogTitle>Formula</DialogTitle>
 
             <DialogContent >
 
                 <FormControl >
-                    <Box sx={{display:'flex',justifyContent:'space-between'}}>
+                    <Box sx={{display:'flex',
+                            justifyContent:'space-between'}}>
                         <Avatar
                             alt="Avatar"
                             src={IMAGES_PATH + "profile-placeholder.png"}

@@ -1,6 +1,6 @@
 import usePatient from "../hooks/usePatient";
 import ImageCard from "../components/image/ImageCard";
-import {Box, Grid, IconButton, List, ListItem,Typography} from "@mui/material";
+import {Box, Divider, Grid, IconButton, List, ListItem, Typography} from "@mui/material";
 import ImageViewer from "../components/image/ImageViewer";
 import React, {useEffect, useState} from "react";
 import NoteCard from "../components/note/NoteCard";
@@ -149,31 +149,31 @@ export default function DetailPage(){
             ? null
             :
             <Grid container sx={{mt: 0, mb: 0, height: "100vh", overflow: 'hidden'}}>
-                <Grid item xs={12} sm={8} sx={{height: "100%", backgroundColor: "black"}}>
+                <Grid item xs={12} md={9} sm={8}  sx={{height: "100%", backgroundColor: "black"}}>
                     <ImageViewer key={viewImageId} id={viewImageId}/>
                 </Grid>
 
-                <Grid item xs={12} sm={4} sx={{height: "100%"}}>
-                    <Box sx={{height: "10%", p: 2}}
-                         boxShadow={1}
-                    >
+                <Grid item xs={12} md={3} sm={4}  sx={{height: "100%"}}>
+                    <Box sx={{height: "12%", p: 2}}>
                         <Typography variant="h5" color="text.secondary">
                             {viewPatient.lastname}, {viewPatient.firstname}
                         </Typography>
-                        <Typography variant="body1" color="text.secondary">
+                        <Typography variant="body2" color="text.secondary">
                             Patient-ID: {viewPatient.id}
                         </Typography>
                     </Box>
 
+                    <Divider/>
+
                     <Box sx={{
                         display: 'flex',
                         height: '50%',
-                        p: 2
-                    }}
+                        px: 2,
+                        py:1
+                        }}
                          flexDirection={'column'}
                          justifyContent={'center'}
                          alignItems={'stretch'}
-                         boxShadow={1}
                          gap='1rem'
                     >
                         <List sx={{
@@ -197,15 +197,15 @@ export default function DetailPage(){
                         </List>
                     </Box>
 
-                    <Box sx={{
-                        display: 'flex',
-                        height: '30%',
-                        p: 2
-                    }}
+                    <Divider />
+
+                    <Box sx={{display: 'flex',
+                              height: '30%',
+                              px: 2,
+                              py:1}}
                          flexDirection={'column'}
                          justifyContent={'flex-start'}
                          alignItems={'stretch'}
-                         boxShadow={1}
                          gap='1rem'
                     >
                         <Box sx={{

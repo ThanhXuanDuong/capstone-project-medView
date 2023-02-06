@@ -41,10 +41,9 @@ export default function UploadFile({
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                width: 250,
+                width: 240,
                 height: 120,
-                backgroundColor: 'white',
-                border: '1px solid lightgrey',
+                border: '1px solid white',
                 justifyContent: 'center',
                 alignItems: 'center'
             }}

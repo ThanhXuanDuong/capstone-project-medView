@@ -17,12 +17,13 @@ export default function PatientGallery({
                  justifyContent={"space-between"}
                  alignItems={"center"}
                  gap= "1rem">
-            {patients.map(patient => <PatientCard
-                key={patient.id}
-                patient ={patient}
-                onDelete={onDelete}
-                onEdit={onEdit}
-            />)}
+
+                {patients.map(patient => <PatientCard
+                    key={patient.id}
+                    patient ={patient}
+                    onDelete={onDelete}
+                    onEdit={onEdit}
+                />)}
             </Box>
     )
 }

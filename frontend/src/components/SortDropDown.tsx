@@ -28,7 +28,7 @@ export default function SortDropDown({
 
     return (
         <Box sx={{ minWidth: 80}}>
-            <FormControl variant="filled" fullWidth size={"small"}>
+            <FormControl variant="outlined" fullWidth size={"small"}>
                 <InputLabel id="sort" >Sort</InputLabel>
                 <Select
                     labelId="sort-type"

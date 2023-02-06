@@ -1,4 +1,4 @@
-import {Box, Button, Container, TextField} from "@mui/material";
+import {Box, Button, Container, TextField, ThemeProvider} from "@mui/material";
 import React, {useState} from "react";
 import Patient from "../types/Patient";
 import axios from "axios";
@@ -10,6 +10,8 @@ import useDialogActions from "../hooks/useDialogActions";
 import usePatients from "../hooks/usePatients";
 import {toast} from "react-toastify";
 import SortDropDown from "../components/SortDropDown";
+import theme from "../components/styling/theme";
+import AddBoxIcon from '@mui/icons-material/Add';
 
 export default function DashboardPage(){
     const initial ={
@@ -112,7 +114,7 @@ export default function DashboardPage(){
     };
 
     return(
-        <>
+        <ThemeProvider theme={theme}>
             {!isReady
             ? <div>Loading data</div>
             : <Container >
@@ -124,36 +126,40 @@ export default function DashboardPage(){
                     flexDirection:'row-reverse'
                 }}>
                     <TextField
-                    hiddenLabel
-                    id="Search"
-                    placeholder="Search..."
-                    size="small"
-                    onChange={(e)=> setSearchName(e.target.value)}
+                        hiddenLabel
+                        id="Search"
+                        placeholder="Search..."
+                        size="small"
+                        onChange={(e)=> setSearchName(e.target.value)}
                     />
 
                     <SortDropDown patients={patients} setPatients={setPatients}/>
 
-                    <Button variant="contained"
-                            size="small"
-                    onClick={handleOpenForm}
-                    >Add</Button>
+
+                    <Button variant="outlined"
+                            startIcon={<AddBoxIcon />}
+                            onClick={handleOpenForm}>
+                        Add
+                    </Button>
+
+
                 </Box>
 
                 <Box sx={{display:'flex',
                         mx: 10,
-                        gap:2
-                    }}>
+                        gap:2}}>
                     <PatientGallery patients={searchPatients}
-                    onDelete={handleClickDelete}
-                    onEdit={handleClickEdit}/>
+                                    onDelete={handleClickDelete}
+                                    onEdit={handleClickEdit}
+                    />
                 </Box>
 
                 <PatientForm patient={patient}
-                setPatient={setPatient}
-                setEditing={setEditing}
-                open={openForm}
-                handleClose={handleCloseForm}
-                onSave={editing? onUpdate: onAdd}/>
+                            setPatient={setPatient}
+                            setEditing={setEditing}
+                            open={openForm}
+                            handleClose={handleCloseForm}
+                            onSave={editing? onUpdate: onAdd}/>
 
                 {deletingId &&
                     <ConfirmationDialog open={openDialog}
@@ -161,8 +167,7 @@ export default function DashboardPage(){
                     onDelete={() => onDelete(deletingId)}
                     />
                 }
-            </Container>
-            }
-        </>
+            </Container>}
+        </ThemeProvider>
     );
 }
