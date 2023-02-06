@@ -1,7 +1,7 @@
 import {Box, Button, Container, TextField, ThemeProvider} from "@mui/material";
 import React, {useState} from "react";
 import Patient from "../types/Patient";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import PatientGallery from "../components/patient/PatientGallery";
 import PatientForm from "../components/patient/PatientForm";
 import useFormActions from "../hooks/useFormActions";
@@ -12,7 +12,6 @@ import {toast} from "react-toastify";
 import SortDropDown from "../components/SortDropDown";
 import theme from "../components/styling/theme";
 import AddBoxIcon from '@mui/icons-material/Add';
-import {AxiosError} from "axios";
 
 export default function DashboardPage(){
     const initial ={
