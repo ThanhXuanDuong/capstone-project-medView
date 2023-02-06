@@ -137,11 +137,10 @@ export default function DashboardPage(){
 
 
                     <Button variant="outlined"
+                            sx={{pl:3}}
                             startIcon={<AddBoxIcon />}
                             onClick={handleOpenForm}>
-                        Add
                     </Button>
-
 
                 </Box>
 

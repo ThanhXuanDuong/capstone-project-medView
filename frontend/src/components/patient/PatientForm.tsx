@@ -110,6 +110,7 @@ export default function PatientForm({
                         type="date"
                         label="Birthday"
                         name="birthday"
+                        defaultValue= "2017-05-24"
                         value={patient.birthday}
                         sx={{  width: 500, mb: 2  }}
                         size={"small"}
