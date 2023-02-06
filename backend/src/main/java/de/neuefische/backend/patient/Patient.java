@@ -5,6 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,13 +18,17 @@ import java.util.List;
 public class Patient {
     @Id
     private String id;
+    @NotBlank
     private String lastname;
+    @NotBlank
     private String firstname;
     private Gender gender;
+    @NotBlank
     private String birthday;
     private String address;
     private String telephone;
-    private List<String> imageIds;
+    @NotEmpty
+    private List<@NotNull @Size(min = 1) String> imageIds;
 
     private LocalDateTime timeStamp;
 

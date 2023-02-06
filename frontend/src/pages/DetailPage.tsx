@@ -5,7 +5,7 @@ import ImageViewer from "../components/image/ImageViewer";
 import React, {useEffect, useState} from "react";
 import NoteCard from "../components/note/NoteCard";
 import Note from "../types/Note";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import useFormActions from "../hooks/useFormActions";
 import NoteForm from "../components/note/NoteForm";
@@ -36,7 +36,7 @@ export default function DetailPage(){
         (async () =>{
             try{
             const response = await axios.get(`/api/notes/image/${viewImageId}`);
-            setNotes(response.data);
+            setNotes(response.data.reverse());
             }catch (e){
                 console.log("Error while loading data!")
             }
@@ -47,14 +47,15 @@ export default function DetailPage(){
         (async () => {
             try{
                 const response = await axios.post("/api/notes", createdNote);
-                setNotes([...notes, response.data]);
+                setNotes([response.data,...notes]);
                 setNote({...note, text: ""});
 
                 toast.success("Successfully saving new note!",
                     {toastId:"successAdd"});
-            }catch(e)
+            }catch(e: any|AxiosError)
             {
-                toast.error("Error while saving new note!",
+                toast.error("Error:"+
+                    JSON.stringify(e.response.data, null, 2),
                     {toastId:"errorAdd"})
             }finally {
                 handleCloseForm();
@@ -86,8 +87,9 @@ export default function DetailPage(){
 
                toast.success("Successfully saving edited note!",
                    {toastId:"successEdit"})
-           }catch(e){
-               toast.error("Error while saving edited note!",
+           }catch(e: any|AxiosError){
+               toast.error("Error: " +
+                   JSON.stringify(e.response.data, null, 2),
                    {toastId:"errorEdit"})
            }finally {
                handleCloseForm();

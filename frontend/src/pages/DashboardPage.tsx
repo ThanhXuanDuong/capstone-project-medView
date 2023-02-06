@@ -12,12 +12,13 @@ import {toast} from "react-toastify";
 import SortDropDown from "../components/SortDropDown";
 import theme from "../components/styling/theme";
 import AddBoxIcon from '@mui/icons-material/Add';
+import {AxiosError} from "axios";
 
 export default function DashboardPage(){
     const initial ={
         firstname: "",
         lastname: "",
-        gender: "",
+        gender: "FEMALE",
         address: "",
         birthday: "",
         telephone: "",
@@ -47,8 +48,9 @@ export default function DashboardPage(){
 
                 toast.success("Successfully saving new patient!",
                     {toastId:"successAdd"});
-            }catch(e){
-                toast.error("Error while saving new patient!",
+            }catch(e: any|AxiosError){
+                toast.error("Error: "+
+                    JSON.stringify(e.response.data, null, 2),
                     {toastId:"errorAdd"});
             }finally {
                 handleCloseForm();
@@ -69,8 +71,9 @@ export default function DashboardPage(){
 
                 toast.success("Successfully updating data!",
                     {toastId:"successUpdate"});
-            }catch(e){
-                toast.error("Error while updating data!",
+            }catch(e: any|AxiosError){
+                toast.error("Error: " +
+                    JSON.stringify(e.response.data, null, 2),
                     {toastId:"errorUpdate"});
             }finally {
                 handleCloseForm();

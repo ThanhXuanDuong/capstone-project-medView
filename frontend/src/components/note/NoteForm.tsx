@@ -20,6 +20,7 @@ export default function NoteForm({
     onSave: (note:Note) => void
 }){
     const onCancel= () =>{
+        setNote({...note, text:""});
         handleClose();
         setEditing(false);
     }
@@ -29,12 +30,14 @@ export default function NoteForm({
                 <DialogTitle>Add Note</DialogTitle>
                 <DialogContent>
                     <TextField
+                        required
+                        type="text"
+                        helperText={ "Text is required"}
                         autoFocus
                         sx={{ width: 500, mb: 2 }}
                         margin="dense"
                         id="note"
                         label="Note"
-                        type="text"
                         value={note.text}
                         variant="outlined"
                         onChange={(e) => setNote({...note, text: e.target.value})}

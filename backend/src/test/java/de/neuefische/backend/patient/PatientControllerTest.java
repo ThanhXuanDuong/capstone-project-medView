@@ -51,7 +51,7 @@ class PatientControllerTest {
                     "birthday":"2000-10-20",
                     "address":"",
                     "telephone":"",
-                    "imageIds":[]
+                    "imageIds":["1","2"]
                 }
                 """;
 
@@ -63,7 +63,7 @@ class PatientControllerTest {
                     "birthday":"2000-10-20",
                     "address":"",
                     "telephone":"",
-                    "imageIds":[],
+                    "imageIds":["1","2"],
                     "createdBy": "user"
                 }
                 """;

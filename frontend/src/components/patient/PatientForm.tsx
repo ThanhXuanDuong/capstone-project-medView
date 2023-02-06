@@ -38,6 +38,16 @@ export default function PatientForm({
     const onCancel= () =>{
         handleClose();
         setEditing(false);
+        setPatient({
+            firstname: "",
+            lastname: "",
+            gender: "FEMALE",
+            address: "",
+            birthday: "",
+            telephone: "",
+            imageIds: [],
+            timeStamp: ""
+        })
     }
 
     return (
