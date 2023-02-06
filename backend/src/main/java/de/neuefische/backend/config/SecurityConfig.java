@@ -28,8 +28,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers(HttpMethod.POST,"/api/app-users").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/login").permitAll()
+                .antMatchers("/api/**").authenticated()
                 .anyRequest()
-                .authenticated()
+                .permitAll()
                 .and()
                 .build();
     }
