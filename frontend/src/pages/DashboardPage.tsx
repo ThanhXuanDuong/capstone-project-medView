@@ -12,6 +12,7 @@ import {toast} from "react-toastify";
 import SortDropDown from "../components/SortDropDown";
 import theme from "../components/styling/theme";
 import AddBoxIcon from '@mui/icons-material/Add';
+import {useNavigate} from "react-router-dom";
 
 export default function DashboardPage(){
     const initial ={
@@ -33,6 +34,7 @@ export default function DashboardPage(){
     const [searchName, setSearchName] = useState<string>("");
     const [editing, setEditing] = useState<boolean>(false);
     const [deletingId, setDeletingId] = useState<string|undefined>("");
+    const navigate = useNavigate();
 
     const searchPatients = patients.filter(patient =>
         patient.firstname.toLowerCase().includes(searchName)
@@ -43,15 +45,16 @@ export default function DashboardPage(){
             try{
                 const response = await axios.post("/api/patients",patient);
                 setPatients([response.data,...patients]);
-                setPatient(initial);
 
                 toast.success("Successfully saving new patient!",
                     {toastId:"successAdd"});
-            }catch(e: any){
+            }catch(e: any) {
+                e.response.status === "401" && navigate("/login");
                 toast.error("Error: "+
                     JSON.stringify(e.response.data, null, 2),
                     {toastId:"errorAdd"});
             }finally {
+                setPatient(initial);
                 handleCloseForm();
             }
         })();
@@ -66,16 +69,17 @@ export default function DashboardPage(){
                     patient.id === updatedPatient.id
                         ? updatedPatient
                         : patient));
-                setPatient(initial);
 
                 toast.success("Successfully updating data!",
                     {toastId:"successUpdate"});
             }catch(e: any){
+                e.response.status === "401" && navigate("/login");
                 toast.error("Error: " +
                     JSON.stringify(e.response.data, null, 2),
                     {toastId:"errorUpdate"});
             }finally {
                 setEditing(false);
+                setPatient(initial);
                 handleCloseForm();
             }
         })();
@@ -90,7 +94,8 @@ export default function DashboardPage(){
 
                 toast.success("Successfully deleting data!",
                     {toastId:"successDelete"});
-            }catch(e){
+            }catch(e: any){
+                e.response.status === "401" && navigate("/login");
                 toast.error("Error while deleting data!",
                     {toastId:"errorDelete"});
             }finally {

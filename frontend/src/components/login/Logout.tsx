@@ -8,10 +8,15 @@ export default function Logout() {
     const navigate = useNavigate();
 
     const logout= useCallback(async () => {
-        await axios.get("/api/app-users/logout");
-        navigate("/login");
-        window.document.cookie = "";
-        window.localStorage.clear();
+        try{
+            await axios.get("/api/app-users/logout");
+        }catch(e:any){
+            console.log(e.response.message);
+        }finally {
+            navigate("/login");
+            window.document.cookie = "";
+            window.localStorage.clear();
+        }
     }, [navigate]);
 
     return (

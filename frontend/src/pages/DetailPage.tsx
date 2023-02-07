@@ -13,6 +13,7 @@ import useDialogActions from "../hooks/useDialogActions";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import usePatients from "../hooks/usePatients";
 import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 export default function DetailPage(){
     const {patients,setPatients} = usePatients();
@@ -26,6 +27,7 @@ export default function DetailPage(){
     const [editing, setEditing] = useState<boolean>(false);
     const [deletingImageId, setDeletingImageId] = useState<string|undefined>("");
     const [deletingNoteId, setDeletingNoteId] = useState<string|undefined>("");
+    const navigate = useNavigate();
 
     const onView = (id:string) => {
         setViewImageId(id);
@@ -37,27 +39,29 @@ export default function DetailPage(){
             try{
             const response = await axios.get(`/api/notes/image/${viewImageId}`);
             setNotes(response.data.reverse());
-            }catch (e){
+            }catch (e:any){
                 console.log("Error while loading data!")
+                e.response.status === "401" && navigate("/login");
             }
         })();
-    },[viewImageId]);
+    },[navigate, viewImageId]);
 
     const onAdd= (createdNote:Note) => {
         (async () => {
             try{
                 const response = await axios.post("/api/notes", createdNote);
                 setNotes([response.data,...notes]);
-                setNote({...note, text: ""});
 
                 toast.success("Successfully saving new note!",
                     {toastId:"successAdd"});
             }catch(e: any)
             {
+                e.response.status === "401" && navigate("/login");
                 toast.error("Error:"+
                     JSON.stringify(e.response.data, null, 2),
                     {toastId:"errorAdd"})
             }finally {
+                setNote({...note, text: ""});
                 handleCloseForm();
             }
         })();
@@ -83,15 +87,16 @@ export default function DetailPage(){
                    note.id === editedNote.id
                        ? editedNote
                        : note));
-               setNote({...note, text: ""});
 
                toast.success("Successfully saving edited note!",
                    {toastId:"successEdit"})
            }catch(e: any){
+               e.response.status === "401" && navigate("/login");
                toast.error("Error: " +
                    JSON.stringify(e.response.data, null, 2),
                    {toastId:"errorEdit"})
            }finally {
+               setNote({...note, text: ""});
                handleCloseForm();
            }
 
@@ -107,7 +112,8 @@ export default function DetailPage(){
 
                 toast.success("Successfully deleting note!",
                     {toastId:"successDeleteNote"});
-            }catch(e){
+            }catch(e: any){
+                e.response.status === "401" && navigate("/login");
                 toast.error("Error while deleting note!",
                     {toastId:"errorDeleteNote"})
             }finally {
@@ -137,7 +143,8 @@ export default function DetailPage(){
 
                 toast.success("Successfully deleting image!",
                     {toastId:"successDeleteImage"})
-            }catch (e){
+            }catch (e: any){
+                e.response.status === "401" && navigate("/login");
                 toast.error("Error while deleting image!",
                     {toastId:"errorDeleteImage"})
             }finally {
@@ -150,7 +157,7 @@ export default function DetailPage(){
         <>  {!isReady
             ? null
             :
-            <Grid container sx={{mt: 0, mb: 0, height: "100vh", overflow: 'hidden'}}>
+            <Grid container sx={{mt: 0, mb: 0, height: "100vh"}}>
                 <Grid item xs={12} md={9} sm={8}  sx={{height: "100%", backgroundColor: "black"}}>
                     <ImageViewer key={viewImageId} id={viewImageId}/>
                 </Grid>
@@ -229,18 +236,28 @@ export default function DetailPage(){
                             overflow: 'auto',
                             height: '95%',
                         }}>
-                            {notes.map((note) => (
-                                <ListItem key={`note-item-${note.id}`}>
-                                    <NoteCard key={note.id}
-                                              note={note}
-                                              onDelete={() => {
-                                                  handleOpenDialog();
-                                                  setDeletingNoteId(note.id);
-                                              }}
-                                              onEdit={handleEditClick}
-                                    />
-                                </ListItem>
-                            ))}
+                            {viewImageId
+                                ? ( notes.length>0
+                                    ? notes.map((note) => (
+                                        <ListItem key={`note-item-${note.id}`}>
+                                            <NoteCard key={note.id}
+                                                      note={note}
+                                                      onDelete={() => {
+                                                          handleOpenDialog();
+                                                          setDeletingNoteId(note.id);
+                                                      }}
+                                                      onEdit={handleEditClick}
+                                            />
+                                        </ListItem>))
+                                    : <Typography variant="body2" color="text.secondary">
+                                            There are no notes for this image.
+                                        </Typography>
+                                    )
+                                : <Typography variant="body2" color="text.secondary">
+                                    Chose image to see notes.
+                                  </Typography>
+                            }
+
                         </List>
 
                         <NoteForm note={note}
