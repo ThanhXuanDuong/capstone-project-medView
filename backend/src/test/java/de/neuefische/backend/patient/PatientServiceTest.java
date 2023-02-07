@@ -253,7 +253,7 @@ class PatientServiceTest {
 
     /*
     @Test
-    void deleteById_deletePatient_whenPatientRegistered() throws PatientNotRegisteredException, NotFoundException, NotFoundException {
+    void deleteById_deletePatient_whenPatientRegistered() throws PatientNotRegisteredException {
         //given
         PatientRepository patientRepository = mock(PatientRepository.class);
         when(patientRepository.existsById("patientId")).thenReturn(true);

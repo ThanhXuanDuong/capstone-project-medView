@@ -1,6 +1,5 @@
 package de.neuefische.backend.patient;
 
-import de.neuefische.backend.exception.NotFoundException;
 import de.neuefische.backend.exception.PatientNotRegisteredException;
 import de.neuefische.backend.file.FileService;
 import de.neuefische.backend.generator.TimeStampGenerator;
@@ -46,7 +45,7 @@ public class PatientService {
         return this.add(patient);
     }
 
-    public void deleteById(String id) throws PatientNotRegisteredException, NotFoundException {
+    public void deleteById(String id) throws PatientNotRegisteredException {
         if (patientRepository.existsById(id)){
             noteService.deleteAllByPatientId(id);
             fileService.deleteAllByPatientId(id);

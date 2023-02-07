@@ -75,6 +75,7 @@ export default function DashboardPage(){
                     JSON.stringify(e.response.data, null, 2),
                     {toastId:"errorUpdate"});
             }finally {
+                setEditing(false);
                 handleCloseForm();
             }
         })();

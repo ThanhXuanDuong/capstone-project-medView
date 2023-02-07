@@ -14,23 +14,25 @@ export default function UploadFile({
     setPatient: (patient:Patient) =>void
 }){
 
-    const [file, setFile] = useState<File|null>(null);
+    const [files, setFiles] = useState<File[]>([]);
     const [open, setOpen] = React.useState(false);
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) =>{
         if (event.target.files && event.target.files.length >0) {
-            setFile(event.target.files[0]);
+            setFiles(Array.from(event.target.files));
         }
     };
 
     const onUpload = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (file) {
+        if (files) {
             const formData = new FormData();
-            formData.append("file", file);
-
+            for (const file of files) {
+                formData.append("files", file);
+            }
             const res = await axios.post("/api/files", formData);
-            setPatient({...patient,imageIds: [...patient.imageIds,res.data]});
+            setPatient({...patient,imageIds: [...patient.imageIds].concat(res.data)});
+            setFiles([]);
         }else{
             setOpen(true);
         }
@@ -50,7 +52,7 @@ export default function UploadFile({
         >
             <form onSubmit={onUpload}>
                 <IconButton color="primary" aria-label="upload picture" component="label">
-                    <input  hidden accept="image/*" type="file" onChange={onChange}/>
+                    <input  hidden accept="image/*" type="file"  multiple onChange={onChange}/>
                     <DriveFolderUploadIcon/>
                 </IconButton>
 
