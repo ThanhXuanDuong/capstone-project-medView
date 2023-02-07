@@ -5,7 +5,7 @@ import ImageViewer from "../components/image/ImageViewer";
 import React, {useEffect, useState} from "react";
 import NoteCard from "../components/note/NoteCard";
 import Note from "../types/Note";
-import axios, {AxiosError} from "axios";
+import axios from "axios";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import useFormActions from "../hooks/useFormActions";
 import NoteForm from "../components/note/NoteForm";
@@ -52,7 +52,7 @@ export default function DetailPage(){
 
                 toast.success("Successfully saving new note!",
                     {toastId:"successAdd"});
-            }catch(e: any|AxiosError)
+            }catch(e: any)
             {
                 toast.error("Error:"+
                     JSON.stringify(e.response.data, null, 2),
@@ -87,7 +87,7 @@ export default function DetailPage(){
 
                toast.success("Successfully saving edited note!",
                    {toastId:"successEdit"})
-           }catch(e: any|AxiosError){
+           }catch(e: any){
                toast.error("Error: " +
                    JSON.stringify(e.response.data, null, 2),
                    {toastId:"errorEdit"})

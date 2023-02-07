@@ -1,7 +1,7 @@
 import {Box, Button, Container, TextField, ThemeProvider} from "@mui/material";
 import React, {useState} from "react";
 import Patient from "../types/Patient";
-import axios, {AxiosError} from "axios";
+import axios from "axios";
 import PatientGallery from "../components/patient/PatientGallery";
 import PatientForm from "../components/patient/PatientForm";
 import useFormActions from "../hooks/useFormActions";
@@ -47,7 +47,7 @@ export default function DashboardPage(){
 
                 toast.success("Successfully saving new patient!",
                     {toastId:"successAdd"});
-            }catch(e: any|AxiosError){
+            }catch(e: any){
                 toast.error("Error: "+
                     JSON.stringify(e.response.data, null, 2),
                     {toastId:"errorAdd"});
@@ -70,7 +70,7 @@ export default function DashboardPage(){
 
                 toast.success("Successfully updating data!",
                     {toastId:"successUpdate"});
-            }catch(e: any|AxiosError){
+            }catch(e: any){
                 toast.error("Error: " +
                     JSON.stringify(e.response.data, null, 2),
                     {toastId:"errorUpdate"});
