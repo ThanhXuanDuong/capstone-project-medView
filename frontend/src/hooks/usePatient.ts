@@ -7,7 +7,7 @@ export default function usePatient(){
     const initial ={
         firstname: "",
         lastname: "",
-        gender: "",
+        gender: "FEMALE",
         address: "",
         birthday: "",
         telephone: "",

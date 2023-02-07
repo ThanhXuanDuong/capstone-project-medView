@@ -1,7 +1,7 @@
 import {Box, Button, Container, TextField, ThemeProvider} from "@mui/material";
 import React, {useState} from "react";
 import Patient from "../types/Patient";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import PatientGallery from "../components/patient/PatientGallery";
 import PatientForm from "../components/patient/PatientForm";
 import useFormActions from "../hooks/useFormActions";
@@ -17,7 +17,7 @@ export default function DashboardPage(){
     const initial ={
         firstname: "",
         lastname: "",
-        gender: "",
+        gender: "FEMALE",
         address: "",
         birthday: "",
         telephone: "",
@@ -47,8 +47,9 @@ export default function DashboardPage(){
 
                 toast.success("Successfully saving new patient!",
                     {toastId:"successAdd"});
-            }catch(e){
-                toast.error("Error while saving new patient!",
+            }catch(e: any|AxiosError){
+                toast.error("Error: "+
+                    JSON.stringify(e.response.data, null, 2),
                     {toastId:"errorAdd"});
             }finally {
                 handleCloseForm();
@@ -69,8 +70,9 @@ export default function DashboardPage(){
 
                 toast.success("Successfully updating data!",
                     {toastId:"successUpdate"});
-            }catch(e){
-                toast.error("Error while updating data!",
+            }catch(e: any|AxiosError){
+                toast.error("Error: " +
+                    JSON.stringify(e.response.data, null, 2),
                     {toastId:"errorUpdate"});
             }finally {
                 handleCloseForm();

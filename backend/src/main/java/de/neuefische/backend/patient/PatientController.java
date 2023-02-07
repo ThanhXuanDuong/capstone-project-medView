@@ -5,6 +5,7 @@ import de.neuefische.backend.exception.PatientNotRegisteredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -13,7 +14,7 @@ import java.util.List;
 public class PatientController {
     private final PatientService patientService;
     @PostMapping
-    public Patient add(@RequestBody Patient patient){
+    public Patient add(@Valid @RequestBody Patient patient){
         return patientService.add(patient);
     }
 

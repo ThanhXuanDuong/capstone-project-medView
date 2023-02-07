@@ -5,6 +5,7 @@ import de.neuefische.backend.exception.PatientNotRegisteredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class NoteController {
     private final NoteService noteService;
 
     @PostMapping
-    public Note add(@RequestBody Note note){
+    public Note add(@Valid @RequestBody Note note){
         return noteService.add(note);
     }
 
@@ -31,7 +32,7 @@ public class NoteController {
     }
 
     @PutMapping("/{id}")
-    public Note updateById(@PathVariable String id, @RequestBody Note note)
+    public Note updateById(@PathVariable String id, @Valid @RequestBody Note note)
             throws NotFoundException {
         return noteService.updateById(id,note);
     }

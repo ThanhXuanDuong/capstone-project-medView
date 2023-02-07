@@ -19,7 +19,7 @@ export default function GenderRadioButtonsGroup({
             <FormLabel id="gender">Gender</FormLabel>
             <RadioGroup
                 row
-                defaultValue={patient.gender? patient.gender: null}
+                defaultValue={patient.gender}
                 aria-labelledby="gender"
                 name="gender"
                 onChange={onChange}
