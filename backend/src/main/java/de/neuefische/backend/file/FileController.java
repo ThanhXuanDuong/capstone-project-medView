@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/files")
@@ -17,15 +18,14 @@ public class FileController {
     private final FileService fileService;
 
     @PostMapping
-    public String uploadFile(@RequestParam("file") MultipartFile  file
+    public List<String> uploadFile(@RequestParam("files") MultipartFile[]  files
     ) throws IOException {
-        return fileService.saveFile(file);
+        return fileService.saveFiles(files);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InputStreamResource> getFile (
-            @PathVariable String id
-    ) throws IOException {
+    public ResponseEntity<InputStreamResource> getFile (@PathVariable String id)
+            throws IOException {
         GridFsResource gridFsResource = fileService.getResource(id);
 
         return ResponseEntity.ok()

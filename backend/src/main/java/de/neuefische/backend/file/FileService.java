@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +53,15 @@ public class FileService {
         return objectId.toString();
     }
 
+    public List<String> saveFiles(MultipartFile[] files) throws IOException {
+        List<String> objectIds = new ArrayList<>();
+
+        for (MultipartFile file :files ){
+            String objectId = this.saveFile(file);
+            objectIds.add(objectId);
+        }
+        return objectIds;
+    }
 
     public GridFsResource getResource(String id) {
        return gridFsTemplate.getResource(getFile(id));
@@ -90,4 +100,5 @@ public class FileService {
             throw new PatientNotRegisteredException();
         }
     }
+
 }

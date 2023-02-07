@@ -154,7 +154,7 @@ class PatientControllerTest {
                 "2000-10-20",
                 "",
                 "",
-                List.of(),
+                List.of("1","2","3"),
                 LocalDateTime.now(),
                 "user"
         ));
