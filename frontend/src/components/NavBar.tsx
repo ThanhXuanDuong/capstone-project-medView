@@ -30,13 +30,14 @@ export default function NavBar ({
                             LOGO
                         </Typography>
 
-                        <Box sx={{display:'flex', justifyContent:'center', gap:'1rem'}}>
-                            <IconButton color="inherit" onClick={() => navigate("/")}>
-                                <HomeIcon/>
-                            </IconButton>
-                            {isLoggedIn && <Logout/>}
-                        </Box>
-
+                        { isLoggedIn &&
+                            <Box sx={{display:'flex', justifyContent:'center', gap:'1rem'}}>
+                                <IconButton color="inherit" onClick={() => navigate("/")}>
+                                    <HomeIcon/>
+                                </IconButton>
+                                <Logout/>
+                            </Box>
+                        }
                     </Toolbar>
                 </AppBar>
             </Box>

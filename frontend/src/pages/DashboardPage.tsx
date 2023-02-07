@@ -13,6 +13,7 @@ import SortDropDown from "../components/SortDropDown";
 import theme from "../components/styling/theme";
 import AddBoxIcon from '@mui/icons-material/Add';
 import {useNavigate} from "react-router-dom";
+import NavBar from "../components/NavBar";
 
 export default function DashboardPage(){
     const initial ={
@@ -123,6 +124,8 @@ export default function DashboardPage(){
 
     return(
         <ThemeProvider theme={theme}>
+            <NavBar isLoggedIn={true}/>
+
             {!isReady
             ? <div>Loading data</div>
             : <Container >

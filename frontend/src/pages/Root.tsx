@@ -5,7 +5,6 @@ import Auth from "../components/login/Auth";
 import DetailPage from "./DetailPage";
 import React, {useMemo} from "react";
 import NoAuth from "../components/login/NoAuth";
-import NavBar from "../components/NavBar";
 import NotFoundPage from "./NotFoundPage";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,7 +23,6 @@ export default function Root() {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
 
-                <NavBar isLoggedIn={true}/>
                 <ToastContainer
                     position="top-center"
                     autoClose={1000}

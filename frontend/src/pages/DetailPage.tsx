@@ -1,6 +1,6 @@
 import usePatient from "../hooks/usePatient";
 import ImageCard from "../components/image/ImageCard";
-import {Box, Divider, Grid, IconButton, List, ListItem, Typography} from "@mui/material";
+import {Box, Divider, Grid, IconButton, List, ListItem, ThemeProvider, Typography} from "@mui/material";
 import ImageViewer from "../components/image/ImageViewer";
 import React, {useEffect, useState} from "react";
 import NoteCard from "../components/note/NoteCard";
@@ -14,6 +14,8 @@ import ConfirmationDialog from "../components/ConfirmationDialog";
 import usePatients from "../hooks/usePatients";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
+import NavBar from "../components/NavBar";
+import theme from "../components/styling/theme";
 
 export default function DetailPage(){
     const {patients,setPatients} = usePatients();
@@ -154,7 +156,9 @@ export default function DetailPage(){
     };
 
     return(
-        <>  {!isReady
+        <ThemeProvider theme={theme}>
+            <NavBar isLoggedIn={true}/>
+            {!isReady
             ? null
             :
             <Grid container sx={{mt: 0, mb: 0, height: "100vh"}}>
@@ -283,6 +287,6 @@ export default function DetailPage(){
                 </Grid>
             </Grid>
             }
-        </>
+        </ThemeProvider >
     );
 }
