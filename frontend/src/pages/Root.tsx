@@ -5,12 +5,12 @@ import Auth from "../components/login/Auth";
 import DetailPage from "./DetailPage";
 import React, {useMemo} from "react";
 import NoAuth from "../components/login/NoAuth";
-import NavBar from "../components/NavBar";
 import NotFoundPage from "./NotFoundPage";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import theme from "../components/styling/theme";
+import HomePage from "./HomePage";
 
 export default function Root() {
     const [searchParams] = useSearchParams();
@@ -24,7 +24,6 @@ export default function Root() {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
 
-                <NavBar isLoggedIn={true}/>
                 <ToastContainer
                     position="top-center"
                     autoClose={1000}
@@ -37,6 +36,10 @@ export default function Root() {
                     pauseOnHover
                 />
                 <Routes>
+                    <Route path={"/homepage"} element={
+                            <HomePage />
+                    }/>
+
                     <Route path={"/"} element={
                         <Auth>
                             <DashboardPage />

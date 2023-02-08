@@ -6,10 +6,10 @@ export default function ImageViewer({
     id:string
 }){
     return (
-        <Card sx={{ display: 'flex'}}>
+        <Card sx={{ display: 'flex',height:"100%"}}>
             { id &&
                 <CardMedia
-                    sx={{p: '10%', backgroundColor:"black", objectFit:'fit'}}
+                    sx={{p:"5%",backgroundColor:"black", objectFit:'contain'}}
                     component="img"
                     image={"/api/files/" + id}
                 />

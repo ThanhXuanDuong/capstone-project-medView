@@ -1,6 +1,15 @@
 import usePatient from "../hooks/usePatient";
 import ImageCard from "../components/image/ImageCard";
-import {Box, Divider, Grid, IconButton, List, ListItem, Typography} from "@mui/material";
+import {
+    Box,
+    Divider,
+    Grid,
+    IconButton,
+    List,
+    ListItem,
+    ThemeProvider,
+    Typography
+} from "@mui/material";
 import ImageViewer from "../components/image/ImageViewer";
 import React, {useEffect, useState} from "react";
 import NoteCard from "../components/note/NoteCard";
@@ -13,6 +22,9 @@ import useDialogActions from "../hooks/useDialogActions";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import usePatients from "../hooks/usePatients";
 import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
+import NavBar from "../components/NavBar";
+import theme from "../components/styling/theme";
 
 export default function DetailPage(){
     const {patients,setPatients} = usePatients();
@@ -26,6 +38,7 @@ export default function DetailPage(){
     const [editing, setEditing] = useState<boolean>(false);
     const [deletingImageId, setDeletingImageId] = useState<string|undefined>("");
     const [deletingNoteId, setDeletingNoteId] = useState<string|undefined>("");
+    const navigate = useNavigate();
 
     const onView = (id:string) => {
         setViewImageId(id);
@@ -37,27 +50,29 @@ export default function DetailPage(){
             try{
             const response = await axios.get(`/api/notes/image/${viewImageId}`);
             setNotes(response.data.reverse());
-            }catch (e){
+            }catch (e:any){
                 console.log("Error while loading data!")
+                e.response.status === "401" && navigate("/login");
             }
         })();
-    },[viewImageId]);
+    },[navigate, viewImageId]);
 
     const onAdd= (createdNote:Note) => {
         (async () => {
             try{
                 const response = await axios.post("/api/notes", createdNote);
                 setNotes([response.data,...notes]);
-                setNote({...note, text: ""});
 
                 toast.success("Successfully saving new note!",
                     {toastId:"successAdd"});
             }catch(e: any)
             {
+                e.response.status === "401" && navigate("/login");
                 toast.error("Error:"+
                     JSON.stringify(e.response.data, null, 2),
                     {toastId:"errorAdd"})
             }finally {
+                setNote({...note, text: ""});
                 handleCloseForm();
             }
         })();
@@ -83,15 +98,16 @@ export default function DetailPage(){
                    note.id === editedNote.id
                        ? editedNote
                        : note));
-               setNote({...note, text: ""});
 
                toast.success("Successfully saving edited note!",
                    {toastId:"successEdit"})
            }catch(e: any){
+               e.response.status === "401" && navigate("/login");
                toast.error("Error: " +
                    JSON.stringify(e.response.data, null, 2),
                    {toastId:"errorEdit"})
            }finally {
+               setNote({...note, text: ""});
                handleCloseForm();
            }
 
@@ -107,7 +123,8 @@ export default function DetailPage(){
 
                 toast.success("Successfully deleting note!",
                     {toastId:"successDeleteNote"});
-            }catch(e){
+            }catch(e: any){
+                e.response.status === "401" && navigate("/login");
                 toast.error("Error while deleting note!",
                     {toastId:"errorDeleteNote"})
             }finally {
@@ -137,7 +154,8 @@ export default function DetailPage(){
 
                 toast.success("Successfully deleting image!",
                     {toastId:"successDeleteImage"})
-            }catch (e){
+            }catch (e: any){
+                e.response.status === "401" && navigate("/login");
                 toast.error("Error while deleting image!",
                     {toastId:"errorDeleteImage"})
             }finally {
@@ -147,17 +165,20 @@ export default function DetailPage(){
     };
 
     return(
-        <>  {!isReady
+        <ThemeProvider theme={theme}>
+            <NavBar isLoggedIn={true}/>
+
+            {!isReady
             ? null
             :
-            <Grid container sx={{mt: 0, mb: 0, height: "100vh", overflow: 'hidden'}}>
+            <Grid container sx={{mt: 0, mb: 0, height: 'calc(100vh - 64px)',overflow:"hidden"}}>
                 <Grid item xs={12} md={9} sm={8}  sx={{height: "100%", backgroundColor: "black"}}>
                     <ImageViewer key={viewImageId} id={viewImageId}/>
                 </Grid>
 
                 <Grid item xs={12} md={3} sm={4}  sx={{height: "100%"}}>
-                    <Box sx={{height: "12%", p: 2}}>
-                        <Typography variant="h5" color="text.secondary">
+                    <Box sx={{maxHeight: "15%", p: 2}}>
+                        <Typography variant="h6" color="text.secondary">
                             {viewPatient.lastname}, {viewPatient.firstname}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
@@ -172,7 +193,7 @@ export default function DetailPage(){
                         height: '50%',
                         px: 2,
                         py:1
-                        }}
+                    }}
                          flexDirection={'column'}
                          justifyContent={'center'}
                          alignItems={'stretch'}
@@ -182,6 +203,8 @@ export default function DetailPage(){
                             position: 'relative',
                             overflow: 'auto',
                             height: '95%',
+                            py:0,
+                            my:0
                         }}>
                             {viewPatient.imageIds.map((id, index) => (
                                 <ListItem key={`image-item-${id}`}>
@@ -201,21 +224,22 @@ export default function DetailPage(){
 
                     <Divider />
 
-                    <Box sx={{display: 'flex',
-                              height: '30%',
-                              px: 2,
-                              py:1}}
+                    <Box sx={{
+                        position:'relative',
+                        display: 'flex',
+                        height: '35%',
+                        px: 2}}
                          flexDirection={'column'}
                          justifyContent={'flex-start'}
                          alignItems={'stretch'}
-                         gap='1rem'
                     >
                         <Box sx={{
                             display: 'flex',
                             justifyContent: "space-between",
-                            alignItems: "center"
+                            alignItems: "center",
+                            height: '30%'
                         }}>
-                            <Typography variant="h5" color="text.secondary">
+                            <Typography variant="h6" color="text.secondary" sx={{pb:0}}>
                                 Note
                             </Typography>
 
@@ -227,7 +251,8 @@ export default function DetailPage(){
                         <List sx={{
                             position: 'relative',
                             overflow: 'auto',
-                            height: '95%',
+                            py:0,
+                            my:0
                         }}>
                             {notes.map((note) => (
                                 <ListItem key={`note-item-${note.id}`}>
@@ -266,6 +291,6 @@ export default function DetailPage(){
                 </Grid>
             </Grid>
             }
-        </>
+        </ThemeProvider >
     );
 }

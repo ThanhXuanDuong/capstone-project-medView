@@ -3,16 +3,17 @@ import {
     AlertTitle, Avatar,
     Box,
     Button,
-    Container, CssBaseline,
+    Container,
     TextField,
     ThemeProvider,
     Typography
 } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import {ChangeEvent, FormEvent, useCallback, useMemo, useState} from "react";
+import React, {ChangeEvent, FormEvent, useCallback, useMemo, useState} from "react";
 import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import theme from "../components/styling/theme";
+import NavBar from "../components/NavBar";
 
 export default function LoginPage(){
     const [credentials,setCredentials] = useState({"username":"","password":""});
@@ -51,9 +52,10 @@ export default function LoginPage(){
     );
 
     return(
+
         <ThemeProvider theme={theme}>
+            <NavBar isLoggedIn={false}/>
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
                 <Box
                     sx={{
                         marginTop: 10,
@@ -66,7 +68,7 @@ export default function LoginPage(){
                     }}
                 >
                     <Avatar sx={{ m: 1, backgroundColor: 'primary.main'}}>
-                        <LockOutlinedIcon sx={{color: 'white'}}/>
+                        <LockOutlinedIcon sx={{color: '#000000'}}/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Log in
