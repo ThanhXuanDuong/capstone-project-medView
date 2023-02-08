@@ -11,7 +11,7 @@ import {
     Typography
 } from "@mui/material";
 import ImageViewer from "../components/image/ImageViewer";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import NoteCard from "../components/note/NoteCard";
 import Note from "../types/Note";
 import axios from "axios";
@@ -163,13 +163,11 @@ export default function DetailPage(){
             }
         })();
     };
-    const ref = useRef();
 
     return(
         <ThemeProvider theme={theme}>
-            <Box ref={ref}>
-                <NavBar isLoggedIn={true}/>
-            </Box>
+            <NavBar isLoggedIn={true}/>
+
             {!isReady
             ? null
             :
