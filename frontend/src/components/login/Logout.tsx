@@ -13,7 +13,7 @@ export default function Logout() {
         }catch(e:any){
             console.log(e.response.message);
         }finally {
-            navigate("/login");
+            navigate("/homepage");
             window.document.cookie = "";
             window.localStorage.clear();
         }

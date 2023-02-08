@@ -3,7 +3,7 @@ import {
     AlertTitle, Avatar,
     Box,
     Button,
-    Container, CssBaseline,
+    Container,
     TextField,
     ThemeProvider,
     Typography
@@ -55,10 +55,7 @@ export default function LoginPage(){
 
         <ThemeProvider theme={theme}>
             <NavBar isLoggedIn={false}/>
-
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
-
                 <Box
                     sx={{
                         marginTop: 10,
@@ -71,7 +68,7 @@ export default function LoginPage(){
                     }}
                 >
                     <Avatar sx={{ m: 1, backgroundColor: 'primary.main'}}>
-                        <LockOutlinedIcon sx={{color: 'white'}}/>
+                        <LockOutlinedIcon sx={{color: '#000000'}}/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Log in

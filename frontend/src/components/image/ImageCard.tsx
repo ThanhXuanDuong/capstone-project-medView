@@ -24,10 +24,9 @@ export default function ImageCard({
             width: '100%'
         }}
         >
-
             <CardActionArea onClick={handleClick}>
-                <Box sx={{ display: 'flex'}}
-                     justifyContent={"space-evenly"}
+                <Box sx={{ display: 'flex', pl:'1rem'}}
+                     justifyContent={"flex-start"}
                      alignItems={"center"}
                      gap= "1rem"
                 >
@@ -36,7 +35,7 @@ export default function ImageCard({
                     </Typography>
 
                     <CardMedia
-                        sx={{ maxWidth:100}}
+                        sx={{ maxHeight:'70px', p:2, objectFit:'contain'}}
                         component="img"
                         style={{padding: "5%" }}
                         image ={"/api/files/"+id}
