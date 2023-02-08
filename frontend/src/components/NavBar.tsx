@@ -23,7 +23,7 @@ export default function NavBar ({
                             color= "inherit"
                             aria-label="menu"
                             sx={{ mr: 2 }}
-                            onClick={() => navigate("/homepage")}
+                            onClick={() => navigate("/patients")}
                         >
                             <CardMedia
                                 sx={{width:"60px", objectFit:'scale-down'}}
@@ -36,7 +36,7 @@ export default function NavBar ({
 
                         { isLoggedIn &&
                             <Box sx={{display:'flex', justifyContent:'flex-end', gap:'1rem'}}>
-                                <IconButton color="inherit" onClick={() => navigate("/")}>
+                                <IconButton color="inherit" onClick={() => navigate("/patients")}>
                                     <HomeIcon/>
                                 </IconButton>
                                 <Logout/>

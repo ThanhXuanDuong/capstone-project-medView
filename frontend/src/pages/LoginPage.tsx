@@ -26,7 +26,7 @@ export default function LoginPage(){
 
     const [searchParams] = useSearchParams();
     const redirect = useMemo(
-        () => searchParams.get("redirect") || "/",
+        () => searchParams.get("redirect") || "/patients",
         [searchParams]
     );
     const navigate = useNavigate();
