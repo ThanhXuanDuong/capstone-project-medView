@@ -18,11 +18,11 @@ export default function NavBar ({
                 <AppBar position="static">
                     <Toolbar>
                         <IconButton
+                            sx={{py:0}}
                             size="large"
                             edge="start"
                             color= "inherit"
                             aria-label="menu"
-                            sx={{ mr: 2 }}
                             onClick={() => navigate("/patients")}
                         >
                             <CardMedia
