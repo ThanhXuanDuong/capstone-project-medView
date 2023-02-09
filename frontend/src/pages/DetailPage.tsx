@@ -25,10 +25,11 @@ import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import NavBar from "../components/NavBar";
 import theme from "../components/styling/theme";
+import PopOver from "../components/PopOver";
 
 export default function DetailPage(){
     const {patients,setPatients} = usePatients();
-    const {isReady,viewPatient,setViewPatient,viewImageId, setViewImageId} = usePatient();
+    const {isReady,viewPatient,setViewPatient} = usePatient();
 
     const [notes, setNotes] = useState<Note[]>([]);
     const [note, setNote] = useState<Note>({imageId:"", text:""});
@@ -38,24 +39,39 @@ export default function DetailPage(){
     const [editing, setEditing] = useState<boolean>(false);
     const [deletingImageId, setDeletingImageId] = useState<string|undefined>("");
     const [deletingNoteId, setDeletingNoteId] = useState<string|undefined>("");
+
+
+    const [viewImageIds, setViewImageIds] = useState <string[]> ([]);
+    const [grids, setGrids] = useState<number>(1);
     const navigate = useNavigate();
 
     const onView = (id:string) => {
-        setViewImageId(id);
+        if (grids===1){
+            setViewImageIds([id]);
+        }else if (viewImageIds.length >= grids){
+            viewImageIds.push(id);
+            viewImageIds.shift();
+        }else{
+            setViewImageIds([...viewImageIds,id]);
+        }
         setNote({...note, imageId: id});
     }
+    console.log(viewImageIds);
 
     useEffect(() => {
         (async () =>{
             try{
-            const response = await axios.get(`/api/notes/image/${viewImageId}`);
-            setNotes(response.data.reverse());
+                for (let viewImageId of viewImageIds){
+                    const response = await axios.get(`/api/notes/image/${viewImageId}`);
+                    setNotes(response.data.reverse());
+                }
             }catch (e:any){
                 console.log("Error while loading data!")
                 e.response.status === "401" && navigate("/login");
             }
         })();
-    },[navigate, viewImageId]);
+    },[navigate, viewImageIds]);
+    console.log(notes);
 
     const onAdd= (createdNote:Note) => {
         (async () => {
@@ -172,8 +188,18 @@ export default function DetailPage(){
             ? null
             :
             <Grid container sx={{mt: 0, mb: 0, height: 'calc(100vh - 64px)',overflow:"hidden"}}>
-                <Grid item xs={12} md={9} sm={8}  sx={{height: "100%", backgroundColor: "black"}}>
-                    <ImageViewer key={viewImageId} id={viewImageId}/>
+                <Grid container item xs={12} md={9} sm={8}
+                      sx={{position:"relative",
+                          justifyContent:"center",
+                          height: "100%",
+                          backgroundColor: "black"}}>
+                    <ImageViewer ids={viewImageIds}/>
+                    <Box sx={{position:"absolute",
+                        m:1,
+                        backgroundColor:"#343A40",
+                        borderRadius:"6px"}}>
+                        <PopOver setGrids={setGrids}/>
+                    </Box>
                 </Grid>
 
                 <Grid item xs={12} md={3} sm={4}  sx={{height: "100%"}}>

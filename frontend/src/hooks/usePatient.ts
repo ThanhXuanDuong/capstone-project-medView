@@ -17,7 +17,6 @@ export default function usePatient(){
 
     const {id} = useParams<{id:string}>();
     const [patient, setPatient] = useState<Patient>(initial);
-    const [viewImageId, setViewImageId] = useState <string> (patient.imageIds[0]);
     const [isReady, setIsReady] = useState<boolean>(false);
     const navigate =useNavigate();
 
@@ -36,5 +35,5 @@ export default function usePatient(){
 
     },[id, navigate]);
 
-    return {isReady,viewPatient: patient,setViewPatient: setPatient,viewImageId, setViewImageId};
+    return {isReady,viewPatient: patient,setViewPatient: setPatient};
 }

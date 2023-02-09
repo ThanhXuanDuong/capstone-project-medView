@@ -13,7 +13,7 @@ export default function HomePage(){
             <NavBar isLoggedIn={false}/>
 
             <Box sx={{display:"flex",
-                justifyContent:"center" ,
+                justifyContent:"center",
                 alignItems:"center",
                 width: "100%",
                 height: "calc(100vh - 64px)",
@@ -39,18 +39,37 @@ export default function HomePage(){
                     gap: "1rem",
                     overflow:"hidden"
                 }}>
-                    <Box sx={{display:"flex"}}>
-                        <Typography variant="h1" color="white" >
-                            med
+                    <Box sx={{display:"flex",
+                        flexDirection:"column",
+                        alignItems:"center",
+                        width:"42%",
+                        gap:"1.5rem"}}>
+                        <Box sx={{display:"flex"}}>
+                            <Typography variant="h1" color="white" >
+                                med
+                            </Typography>
+                            <Typography variant="h1" color="primary.main">
+                                View
+                            </Typography>
+                        </Box>
+                        <Typography variant="h3" color="white" >
+                            Management. Viewer. Tools.
                         </Typography>
-                        <Typography variant="h1" color="primary.main">
-                            View
+                        <Typography variant="body1" color="white" textAlign={"justify"} >
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Sed sagittis nunc nec tincidunt faucibus.
+                            Morbi placerat, nisi at consequat pharetra,
+                            felis dolor elementum enim,
+                            sed pretium mauris enim elementum metus.
                         </Typography>
+
+                            <Button variant={"contained"}
+                                    sx={{width: "15%"}}
+                                    onClick={() => navigate("/login")}
+                            >Login</Button>
+
                     </Box>
-                    <Typography variant="h3" color="white" >
-                        Management. Viewer. Tools.
-                    </Typography>
-                    <Button variant={"contained"} onClick={() => navigate("/login")}>Login</Button>
+
                 </Box>
             </Box>
         </ThemeProvider>

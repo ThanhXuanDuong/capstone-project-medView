@@ -24,7 +24,7 @@ export default function NotFoundPage() {
 
             {(user && isReady)
                 ? <Button variant="contained"
-                          onClick={() => navigate("/")}
+                          onClick={() => navigate("/patients")}
                 >Back Home</Button>
 
                 : <Button variant="contained"
