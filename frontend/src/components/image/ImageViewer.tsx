@@ -16,14 +16,9 @@ export default function ImageViewer({
             break;
         case 2:
             gridHeight = "100%";
-            gridWidth= "49.9%";
-            break;
-        case 3:
-            gridHeight = "49.8%";
             gridWidth= "49.8%";
-            fWrap = "wrap";
             break;
-        case 4:
+        default:
             gridHeight = "49.8%";
             gridWidth= "49.8%";
             fWrap = "wrap";
@@ -46,7 +41,7 @@ export default function ImageViewer({
                                  component="img"
                                  image={"/api/files/" + id}
                              />
-                             { !(ids.length ===1) &&
+                             {ids.length !==1 &&
                                  <Divider orientation="vertical" flexItem />
                              }
                          </>
