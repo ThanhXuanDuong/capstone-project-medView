@@ -109,7 +109,7 @@ class PatientControllerTest {
                 "2000-10-20",
                 "",
                 "",
-                List.of(),
+                List.of("1","2","3"),
                 LocalDateTime.now(),
                 "user"
         ));
@@ -123,7 +123,7 @@ class PatientControllerTest {
                        "birthday":"2000-10-20",
                        "address":"",
                        "telephone":"",
-                       "imageIds":[],
+                       "imageIds":["1","2","3"],
                        "createdBy": "user"
                    }]
                    """;
@@ -212,7 +212,7 @@ class PatientControllerTest {
                 "2000-10-20",
                 "",
                 "",
-                List.of(),
+                List.of("1","2","3"),
                 LocalDateTime.now(),
                 "user"
         ));

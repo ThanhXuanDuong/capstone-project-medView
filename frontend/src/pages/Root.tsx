@@ -36,11 +36,11 @@ export default function Root() {
                     pauseOnHover
                 />
                 <Routes>
-                    <Route path={"/homepage"} element={
+                    <Route path={"/"} element={
                             <HomePage />
                     }/>
 
-                    <Route path={"/"} element={
+                    <Route path={"/patients"} element={
                         <Auth>
                             <DashboardPage />
                         </Auth>
