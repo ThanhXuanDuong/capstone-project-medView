@@ -56,7 +56,6 @@ export default function DetailPage(){
         }
         setNote({...note, imageId: id});
     }
-    console.log(viewImageIds);
 
     useEffect(() => {
         (async () =>{
@@ -71,7 +70,6 @@ export default function DetailPage(){
             }
         })();
     },[navigate, viewImageIds]);
-    console.log(notes);
 
     const onAdd= (createdNote:Note) => {
         (async () => {
