@@ -25,15 +25,16 @@ export default function Root() {
                 <CssBaseline />
 
                 <ToastContainer
-                    position="top-center"
+                    position="bottom-left"
                     autoClose={1000}
                     hideProgressBar={false}
-                    newestOnTop={false}
+                    newestOnTop={true}
                     closeOnClick
                     rtl={false}
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover
+                    theme="colored"
                 />
                 <Routes>
                     <Route path={"/"} element={

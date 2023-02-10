@@ -30,14 +30,14 @@ export default function ImageCard({
                      alignItems={"center"}
                      gap= "1rem"
                 >
-                    <Typography variant="body1" color="text.secondary">
+                    <Typography variant="h6" color="text.primary">
                         {index+1}
                     </Typography>
 
                     <CardMedia
-                        sx={{ maxHeight:'70px', p:2, objectFit:'contain'}}
+                        sx={{ maxHeight:'120px', objectFit:'contain'}}
                         component="img"
-                        style={{padding: "5%" }}
+                        style={{padding: "8%" }}
                         image ={"/api/files/"+id}
                     />
                 </Box>
@@ -45,7 +45,7 @@ export default function ImageCard({
             <CardActions disableSpacing>
                 <IconButton aria-label="delete"
                             onClick={() => onDelete(id)}>
-                    <DeleteIcon />
+                    <DeleteIcon/>
                 </IconButton>
             </CardActions>
 

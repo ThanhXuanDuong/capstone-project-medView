@@ -1,4 +1,4 @@
-import {Box, Button, Container, TextField, ThemeProvider} from "@mui/material";
+import {Box, Button, Container, CssBaseline, TextField, ThemeProvider, Typography} from "@mui/material";
 import React, {useState} from "react";
 import Patient from "../types/Patient";
 import axios from "axios";
@@ -124,44 +124,56 @@ export default function DashboardPage(){
 
     return(
         <ThemeProvider theme={theme}>
-            <NavBar isLoggedIn={true}/>
+            <CssBaseline/>
+            <NavBar showIcons={true}/>
 
             {!isReady
             ? <div>Loading data</div>
-            : <Container >
-                <Box sx={{display:'flex',
-                    mt: 10,
-                    mb: 5,
-                    mx: 10,
-                    gap:2,
-                    flexDirection:'row-reverse'
+            : <Container>
+                <Box sx={{display:"flex",
+                    flexDirection:"row",
+                    alignItems:"center",
+                    mt: "4rem",
+                    mb: "2rem"
                 }}>
-                    <Button variant="contained"
-                            sx={{pl:3}}
-                            startIcon={<AddBoxIcon fontSize={"large"}/>}
-                            onClick={handleOpenForm}>
-                    </Button>
+                    <Box sx={{display:"flex"}}>
+                        <Typography variant="h1" color="white" >
+                            med
+                        </Typography>
+                        <Typography variant="h1" color="primary.main">
+                            View
+                        </Typography>
+                    </Box>
+                    <Box sx={{display:'flex',
+                        width:"100%",
+                        mt: 10,
+                        mb: 5,
+                        gap:2,
+                        flexDirection:'row-reverse'
+                    }}>
+                        <Button variant="contained"
+                                sx={{pl:3}}
+                                startIcon={<AddBoxIcon fontSize={"large"}/>}
+                                onClick={handleOpenForm}>
+                        </Button>
 
-                    <SortDropDown patients={patients} setPatients={setPatients}/>
+                        <SortDropDown patients={patients} setPatients={setPatients}/>
 
-                    <TextField
-                        hiddenLabel
-                        id="Search"
-                        placeholder="Search..."
-                        size="small"
-                        onChange={(e)=> setSearchName(e.target.value)}
-                    />
+                        <TextField
+                            hiddenLabel
+                            id="Search"
+                            placeholder="Search..."
+                            size="small"
+                            onChange={(e)=> setSearchName(e.target.value)}
+                        />
 
+                    </Box>
                 </Box>
 
-                <Box sx={{display:'flex',
-                        mx: 10,
-                        gap:2}}>
-                    <PatientGallery patients={searchPatients}
-                                    onDelete={handleClickDelete}
-                                    onEdit={handleClickEdit}
-                    />
-                </Box>
+                <PatientGallery patients={searchPatients}
+                                onDelete={handleClickDelete}
+                                onEdit={handleClickEdit}
+                />
 
                 <PatientForm patient={patient}
                             setPatient={setPatient}

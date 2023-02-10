@@ -37,19 +37,19 @@ export default function PatientCard({
                         onClick={() => navigate(`/patients/${patient.id}`)}>
                 <CardMedia
                     component="img"
-                    style={{ maxWidth: "6rem", maxHeight:"6rem", padding: "1rem" }}
+                    style={{ maxWidth: "8rem", maxHeight:"8rem", padding: "1.5rem" }}
                     image= {IMAGES_PATH + "profile-placeholder.png"}
                     alt="Profile"
                 />
 
                 <CardContent sx={{width:'40%'}}>
-                    <Typography variant="h5" color="text.secondary">
+                    <Typography variant="h4" color="text.secondary">
                         {patient.firstname} {patient.lastname}
                     </Typography>
                 </CardContent>
 
                 <CardContent>
-                    <Typography variant="body1" color="text.secondary">
+                    <Typography variant="h6" color="text.secondary">
                         Patient-ID: {patient.id}
                     </Typography>
                 </CardContent>

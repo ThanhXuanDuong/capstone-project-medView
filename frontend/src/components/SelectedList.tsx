@@ -38,26 +38,26 @@ export default function SelectedList({
 
     return (
         <Box sx={{ width: '100%', maxWidth: 100, bgcolor: 'background.paper' }}>
-            <List component="nav" aria-label="options">
+            <List component="nav" aria-label="options" sx={{backgroundColor:"action.disabled"}}>
                 <ListItemButton
                     selected={selectedIndex === 0}
                     onClick={(event) => handleListItemClick(event, 0)}
                 >
-                    <SquareIcon/>
+                    <SquareIcon fontSize={"small"}/>
                 </ListItemButton>
 
                 <ListItemButton
                     selected={selectedIndex === 1}
                     onClick={(event) => handleListItemClick(event, 1)}
                 >
-                    <ViewAgendaIcon/>
+                    <ViewAgendaIcon fontSize={"small"}/>
                 </ListItemButton>
 
                 <ListItemButton
                     selected={selectedIndex === 2}
                     onClick={(event) => handleListItemClick(event, 2)}
                 >
-                    <WindowIcon/>
+                    <WindowIcon fontSize={"small"}/>
                 </ListItemButton>
             </List>
 
