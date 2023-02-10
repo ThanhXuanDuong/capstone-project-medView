@@ -1,7 +1,7 @@
 import usePatient from "../hooks/usePatient";
 import ImageCard from "../components/image/ImageCard";
 import {
-    Box,
+    Box, Container,
     Divider,
     Grid,
     IconButton,
@@ -26,6 +26,8 @@ import {useNavigate} from "react-router-dom";
 import NavBar from "../components/NavBar";
 import theme from "../components/styling/theme";
 import PopOver from "../components/PopOver";
+import CommentIcon from '@mui/icons-material/Comment';
+import MousePosition from "../components/MousePosition";
 
 export default function DetailPage(){
     const {patients,setPatients} = usePatients();
@@ -39,7 +41,6 @@ export default function DetailPage(){
     const [editing, setEditing] = useState<boolean>(false);
     const [deletingImageId, setDeletingImageId] = useState<string|undefined>("");
     const [deletingNoteId, setDeletingNoteId] = useState<string|undefined>("");
-
 
     const [viewImageIds, setViewImageIds] = useState <string[]> ([]);
     const [grids, setGrids] = useState<number>(1);
@@ -178,6 +179,13 @@ export default function DetailPage(){
         })();
     };
 
+    const [markup, setMarkup] = useState<boolean>(false)
+
+    const {x,y} =MousePosition(markup);
+
+    console.log(x,y);
+    console.log(markup);
+
     return(
         <ThemeProvider theme={theme}>
             <NavBar isLoggedIn={true}/>
@@ -193,10 +201,17 @@ export default function DetailPage(){
                           backgroundColor: "black"}}>
                     <ImageViewer ids={viewImageIds}/>
                     <Box sx={{position:"absolute",
+                        display:"flex",
                         m:1,
                         backgroundColor:"#343A40",
                         borderRadius:"6px"}}>
                         <PopOver setGrids={setGrids}/>
+                        <Divider/>
+                        <Container>
+                            <IconButton onClick={() => setMarkup(!markup)}>
+                                <CommentIcon fontSize={"small"}/>
+                            </IconButton>
+                        </Container>
                     </Box>
                 </Grid>
 
@@ -313,8 +328,20 @@ export default function DetailPage(){
                         />
                     }
                 </Grid>
+                { markup && (x!==0 && y!==0) &&
+                    <IconButton sx={{
+                        position:"absolute",
+                        zIndex:"2",
+                        top:y,
+                        left:x}}
+                                onClick={handleOpenForm}
+                    >
+                        <CommentIcon sx={{color:"primary.dark"}}/>
+                    </IconButton>
+                }
             </Grid>
             }
+
         </ThemeProvider >
     );
 }

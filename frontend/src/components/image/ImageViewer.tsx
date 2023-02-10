@@ -27,7 +27,7 @@ export default function ImageViewer({
 
     return (
         <>
-            <Card sx={{ display: 'flex',height:"100%",alignItems:"center",flexWrap: fWrap}}>
+            <Card id={"image-viewer"} sx={{ display: 'flex',height:"100%",alignItems:"center",flexWrap: fWrap}}>
                 { ids.length >0 &&
                      ids.map(id =>
                          <>

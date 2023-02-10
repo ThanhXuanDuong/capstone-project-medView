@@ -35,7 +35,7 @@ export default function ImageCard({
                     </Typography>
 
                     <CardMedia
-                        sx={{ maxHeight:'70px', p:2, objectFit:'contain'}}
+                        sx={{ maxHeight:'120px', p:2, objectFit:'contain'}}
                         component="img"
                         style={{padding: "5%" }}
                         image ={"/api/files/"+id}

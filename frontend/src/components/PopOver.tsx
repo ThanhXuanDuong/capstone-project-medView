@@ -23,9 +23,9 @@ export default function PopOver({
     const id = open ? 'simple-popover' : undefined;
 
     return (
-        <Container>
+        <Container >
             <IconButton onClick={handleClick}>
-                <GridViewIcon sx={{color:'white'}}/>
+                <GridViewIcon sx={{color:'white'}} fontSize={"small"}/>
             </IconButton>
             <Popover
                 id={id}
