@@ -10,7 +10,7 @@ export default function HomePage(){
 
     return (
         <ThemeProvider theme={theme}>
-            <NavBar isLoggedIn={false}/>
+            <NavBar showIcons={true}/>
 
             <Box sx={{display:"flex",
                 justifyContent:"center",
@@ -42,7 +42,7 @@ export default function HomePage(){
                     <Box sx={{display:"flex",
                         flexDirection:"column",
                         alignItems:"center",
-                        width:"42%",
+                        width:"45%",
                         gap:"1.5rem"}}>
                         <Box sx={{display:"flex"}}>
                             <Typography variant="h1" color="white" >
@@ -53,14 +53,14 @@ export default function HomePage(){
                             </Typography>
                         </Box>
                         <Typography variant="h3" color="white" >
-                            Management. Viewer. Tools.
+                            Image Viewer. Management. Tools.
                         </Typography>
-                        <Typography variant="body1" color="white" textAlign={"justify"} >
+                        <Typography variant="h6" color="white" textAlign={"justify"} >
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                             Sed sagittis nunc nec tincidunt faucibus.
                             Morbi placerat, nisi at consequat pharetra,
                             felis dolor elementum enim,
-                            sed pretium mauris enim elementum metus.
+                            sed pretium mauris enim elementum.
                         </Typography>
 
                             <Button variant={"contained"}

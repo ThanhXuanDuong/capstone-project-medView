@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate} from "react-router-dom";
 import {IconButton} from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
+import {toast} from "react-toastify";
 
 export default function Logout() {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function Logout() {
             console.log(e.response.message);
         }finally {
             navigate("/");
+            toast.success("You're logged out.");
             window.document.cookie = "";
             window.localStorage.clear();
         }
@@ -21,7 +23,7 @@ export default function Logout() {
 
     return (
         <IconButton color="inherit" onClick={logout}>
-            <LogoutIcon/>
+            <LogoutIcon fontSize={"large"}/>
         </IconButton>
     )
 }

@@ -180,7 +180,7 @@ export default function DetailPage(){
 
     return(
         <ThemeProvider theme={theme}>
-            <NavBar isLoggedIn={true}/>
+            <NavBar showIcons={true}/>
 
             {!isReady
             ? null
@@ -194,18 +194,20 @@ export default function DetailPage(){
                     <ImageViewer ids={viewImageIds}/>
                     <Box sx={{position:"absolute",
                         m:1,
-                        backgroundColor:"#343A40",
-                        borderRadius:"6px"}}>
+                        top: 5,
+                        right:5,
+                        backgroundColor:"action.selected",
+                        borderRadius:"4px"}}>
                         <PopOver setGrids={setGrids}/>
                     </Box>
                 </Grid>
 
                 <Grid item xs={12} md={3} sm={4}  sx={{height: "100%"}}>
                     <Box sx={{maxHeight: "15%", p: 2}}>
-                        <Typography variant="h6" color="text.secondary">
+                        <Typography variant="h5" color="text.secondary">
                             {viewPatient.lastname}, {viewPatient.firstname}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body1" color="text.secondary">
                             Patient-ID: {viewPatient.id}
                         </Typography>
                     </Box>
@@ -214,7 +216,7 @@ export default function DetailPage(){
 
                     <Box sx={{
                         display: 'flex',
-                        height: '50%',
+                        height: '55%',
                         px: 2,
                         py:1
                     }}
@@ -251,7 +253,7 @@ export default function DetailPage(){
                     <Box sx={{
                         position:'relative',
                         display: 'flex',
-                        height: '35%',
+                        height: '30%',
                         px: 2}}
                          flexDirection={'column'}
                          justifyContent={'flex-start'}
@@ -263,12 +265,12 @@ export default function DetailPage(){
                             alignItems: "center",
                             height: '30%'
                         }}>
-                            <Typography variant="h6" color="text.secondary" sx={{pb:0}}>
+                            <Typography variant="h5" color="text.secondary" sx={{pb:0}}>
                                 Note
                             </Typography>
 
                             <IconButton aria-label="add" onClick={handleOpenForm}>
-                                <AddBoxIcon/>
+                                <AddBoxIcon fontSize={"large"}/>
                             </IconButton>
                         </Box>
 

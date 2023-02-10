@@ -16,7 +16,8 @@ export default function PatientGallery({
                  flexDirection={"column"}
                  justifyContent={"space-between"}
                  alignItems={"center"}
-                 gap= "1rem">
+                 gap= "1.5rem"
+            >
 
                 {patients.map(patient => <PatientCard
                     key={patient.id}
