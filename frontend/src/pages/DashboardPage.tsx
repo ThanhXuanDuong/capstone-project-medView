@@ -136,6 +136,14 @@ export default function DashboardPage(){
                     gap:2,
                     flexDirection:'row-reverse'
                 }}>
+                    <Button variant="contained"
+                            sx={{pl:3}}
+                            startIcon={<AddBoxIcon fontSize={"large"}/>}
+                            onClick={handleOpenForm}>
+                    </Button>
+
+                    <SortDropDown patients={patients} setPatients={setPatients}/>
+
                     <TextField
                         hiddenLabel
                         id="Search"
@@ -143,15 +151,6 @@ export default function DashboardPage(){
                         size="small"
                         onChange={(e)=> setSearchName(e.target.value)}
                     />
-
-                    <SortDropDown patients={patients} setPatients={setPatients}/>
-
-
-                    <Button variant="outlined"
-                            sx={{pl:3}}
-                            startIcon={<AddBoxIcon />}
-                            onClick={handleOpenForm}>
-                    </Button>
 
                 </Box>
 
