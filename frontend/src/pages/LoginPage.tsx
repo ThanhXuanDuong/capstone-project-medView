@@ -54,11 +54,11 @@ export default function LoginPage(){
     return(
 
         <ThemeProvider theme={theme}>
-            <NavBar isLoggedIn={false}/>
-            <Container component="main" maxWidth="xs">
+            <NavBar showIcons={false}/>
+            <Container component="main" maxWidth="sm">
                 <Box
                     sx={{
-                        marginTop: 10,
+                        marginTop: 25,
                         padding:5,
                         display: 'flex',
                         flexDirection: 'column',

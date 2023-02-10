@@ -5,9 +5,9 @@ import {useNavigate} from "react-router-dom";
 import logo from "../logo.png";
 
 export default function NavBar ({
-    isLoggedIn
+    showIcons
  }:{
-    isLoggedIn: boolean
+    showIcons: boolean
 }
     ){
 
@@ -23,7 +23,7 @@ export default function NavBar ({
                             edge="start"
                             color= "inherit"
                             aria-label="menu"
-                            onClick={() => navigate("/patients")}
+                            onClick={() => navigate("/")}
                         >
                             <CardMedia
                                 sx={{width:"60px", objectFit:'scale-down'}}
@@ -34,10 +34,10 @@ export default function NavBar ({
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         </Typography>
 
-                        { isLoggedIn &&
+                        { showIcons &&
                             <Box sx={{display:'flex', justifyContent:'flex-end', gap:'1rem'}}>
                                 <IconButton color="inherit" onClick={() => navigate("/patients")}>
-                                    <HomeIcon/>
+                                    <HomeIcon fontSize={"large"}/>
                                 </IconButton>
                                 <Logout/>
                             </Box>

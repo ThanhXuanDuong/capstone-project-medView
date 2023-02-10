@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Popover from '@mui/material/Popover';
 import SelectedList from "./SelectedList";
-import {Container, IconButton} from "@mui/material";
-import GridViewIcon from '@mui/icons-material/GridView';
+import {Box, IconButton} from "@mui/material";
+import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
 
-export default function PopOver({
+export default function PopoverToolbar({
     setGrids
 }:{
     setGrids: (gridNumbers: number) => void
@@ -23,9 +23,9 @@ export default function PopOver({
     const id = open ? 'simple-popover' : undefined;
 
     return (
-        <Container >
+        <Box>
             <IconButton onClick={handleClick}>
-                <GridViewIcon sx={{color:'white'}} fontSize={"small"}/>
+                <AutoAwesomeMosaicIcon style={{ fill: 'text.secondary' }}/>
             </IconButton>
             <Popover
                 id={id}
@@ -36,9 +36,13 @@ export default function PopOver({
                     vertical: 'bottom',
                     horizontal: 'left',
                 }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}
             >
                 <SelectedList setGrids={setGrids} handleClose={handleClose}/>
             </Popover>
-        </Container>
+        </Box>
     );
 }
