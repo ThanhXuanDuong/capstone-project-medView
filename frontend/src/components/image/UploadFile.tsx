@@ -15,7 +15,8 @@ export default function UploadFile({
 }){
 
     const [files, setFiles] = useState<File[]>([]);
-    const [open, setOpen] = React.useState(false);
+    const [openAlert, setOpenAlert] = React.useState(false);
+    const [openSuccess, setOpenSuccess] = React.useState(false);
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) =>{
         if (event.target.files && event.target.files.length >0) {
@@ -33,8 +34,9 @@ export default function UploadFile({
             const res = await axios.post("/api/files", formData);
             setPatient({...patient,imageIds: [...patient.imageIds].concat(res.data)});
             setFiles([]);
+            setOpenSuccess(true);
         }else{
-            setOpen(true);
+            setOpenAlert(true);
         }
     }
 
@@ -59,7 +61,7 @@ export default function UploadFile({
                 <Button type={"submit"}>Upload</Button>
             </form>
 
-            <Collapse in={open}>
+            <Collapse in={openAlert}>
                 <Alert severity="error"
                     action={
                         <IconButton
@@ -67,7 +69,7 @@ export default function UploadFile({
                             color="inherit"
                             size="small"
                             onClick={() => {
-                                setOpen(false);
+                                setOpenAlert(false);
                             }}
                         >
                             <CloseIcon fontSize="inherit" />
@@ -75,6 +77,25 @@ export default function UploadFile({
                     }
                 >
                     No file was chosen!
+                </Alert>
+            </Collapse>
+
+            <Collapse in={openSuccess}>
+                <Alert severity="success"
+                       action={
+                           <IconButton
+                               aria-label="close"
+                               color="inherit"
+                               size="small"
+                               onClick={() => {
+                                   setOpenSuccess(false);
+                               }}
+                           >
+                               <CloseIcon fontSize="inherit" />
+                           </IconButton>
+                       }
+                >
+                    Files uploaded!
                 </Alert>
             </Collapse>
         </Box>

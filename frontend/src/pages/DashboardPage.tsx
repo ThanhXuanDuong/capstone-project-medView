@@ -177,6 +177,7 @@ export default function DashboardPage(){
 
                 <PatientForm patient={patient}
                             setPatient={setPatient}
+                            editing={editing}
                             setEditing={setEditing}
                             open={openForm}
                             handleClose={handleCloseForm}

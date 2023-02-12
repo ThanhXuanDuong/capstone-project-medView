@@ -15,7 +15,6 @@ import React, {useEffect, useState} from "react";
 import NoteCard from "../components/note/NoteCard";
 import Note from "../types/Note";
 import axios from "axios";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 import useFormActions from "../hooks/useFormActions";
 import NoteForm from "../components/note/NoteForm";
 import useDialogActions from "../hooks/useDialogActions";
@@ -29,6 +28,7 @@ import PopoverToolbar from "../components/PopoverToolbar";
 import CommentIcon from '@mui/icons-material/Comment';
 import MousePosition from "../components/MousePosition";
 import NotePopover from "../components/NotePopover";
+import useNotesByPatId from "../hooks/useNotesByPatId";
 
 export default function DetailPage(){
     const [markup, setMarkup] = useState<boolean>(false)
@@ -51,6 +51,7 @@ export default function DetailPage(){
 
     const [viewImageIds, setViewImageIds] = useState <string[]> ([]);
     const [grids, setGrids] = useState<number>(1);
+    const {notesByPatId, setNotesByPatId} =useNotesByPatId();
     const navigate = useNavigate();
 
     const onView = (id:string) => {
@@ -244,12 +245,11 @@ export default function DetailPage(){
                         display: 'flex',
                         height: '55%',
                         px: 2,
-                        py:1
+                        py:2
                     }}
                          flexDirection={'column'}
                          justifyContent={'center'}
                          alignItems={'stretch'}
-                         gap='1rem'
                     >
                         <List sx={{
                             position: 'relative',
@@ -262,6 +262,7 @@ export default function DetailPage(){
                                 <ListItem key={`image-item-${id}`}>
                                     <ImageCard key={id}
                                                id={id}
+                                               notesByPatId={notesByPatId}
                                                index={index}
                                                onView={onView}
                                                onDelete={() => {
@@ -279,25 +280,18 @@ export default function DetailPage(){
                     <Box sx={{
                         position:'relative',
                         display: 'flex',
-                        height: '30%',
+                        maxHeight: '32%',
                         px: 2}}
                          flexDirection={'column'}
                          justifyContent={'flex-start'}
                          alignItems={'stretch'}
                     >
                         <Box sx={{
-                            display: 'flex',
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            height: '30%'
+                            py:1
                         }}>
                             <Typography variant="h5" color="text.primary" sx={{pb:0}}>
                                 Note
                             </Typography>
-
-                            <IconButton aria-label="add" onClick={handleOpenForm}>
-                                <AddBoxIcon fontSize={"large"}/>
-                            </IconButton>
                         </Box>
 
                         <List sx={{

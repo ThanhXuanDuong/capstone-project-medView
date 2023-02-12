@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-import {IconButton, ThemeProvider} from "@mui/material";
+import {Box, IconButton, ThemeProvider} from "@mui/material";
 import CommentIcon from "@mui/icons-material/Comment";
 import NotePopoverOptions from "./NotePopoverOptions";
 import Note from "../types/Note";
@@ -71,19 +71,21 @@ export default function NotePopover({
                 anchorEl={anchorEl}
                 anchorOrigin={{
                     vertical: 'bottom',
-                    horizontal: 'left',
+                    horizontal: 'center',
                 }}
                 transformOrigin={{
                     vertical: 'top',
-                    horizontal: 'left',
+                    horizontal: 'center',
                 }}
                 onClose={handlePopoverClose}
                 disableRestoreFocus
             >
-                <Typography sx={{ p: 1,
-                                color:"secondary.contrastText",
-                                backgroundColor:"secondary.main"}}
-                >{note.text}</Typography>
+                <Box sx={{maxWidth: "300px"}}>
+                    <Typography sx={{ p: 1,
+                        color:"secondary.contrastText",
+                        backgroundColor:"secondary.main"}}
+                    >{note.text}</Typography>
+                </Box>
             </Popover>
         </ThemeProvider>
     );

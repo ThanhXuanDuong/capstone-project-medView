@@ -2,38 +2,35 @@ import {Box, Card, CardActionArea, CardActions, CardMedia, IconButton, Typograph
 import DeleteIcon from "@mui/icons-material/Delete";
 import CommentIcon from "@mui/icons-material/Comment";
 import React, {useEffect, useState} from "react";
-import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import Note from "../../types/Note";
 
 export default function ImageCard({
     id,
     index,
+    notesByPatId,
     onView,
     onDelete
 }:{
     id: string,
     index: number,
+    notesByPatId: Map<string,Note[]>,
     onView: (id:string) => void,
     onDelete: (id:string) => void
 }){
     const [hasNote, setHasNote]= useState<boolean>(false);
-    const navigate =useNavigate();
-
-    useEffect(() => {
-        (async () =>{
-            try{
-                const response = await axios.get(`/api/notes/image/${id}`);
-                setHasNote(response.data.length>0);
-            }catch (e:any){
-                console.log("Error while loading data!")
-                e.response.status === "401" && navigate("/login");
-            }
-        })();
-    },[id,navigate]);
 
     const handleClick = () => {
         onView(id);
     }
+
+    useEffect(() => {
+        try{
+            const notes = notesByPatId.get(id);
+            notes && setHasNote(notes.length>0);
+        }catch(e){
+            console.log("Error");
+        }
+    },[id, notesByPatId]);
 
     return (
         <Card sx={{
