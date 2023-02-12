@@ -17,14 +17,14 @@ import {DesktopDatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import dayjs, {Dayjs} from "dayjs";
 
 export default function PatientForm({
-                                        patient,
-                                        setPatient,
-                                        editing,
-                                        setEditing,
-                                        open,
-                                        handleClose,
-                                        onSave
-                                    }: {
+    patient,
+    setPatient,
+    editing,
+    setEditing,
+    open,
+    handleClose,
+    onSave
+}: {
     patient: Patient,
     setPatient: (patient: Patient) => void,
     editing: boolean,
@@ -49,14 +49,14 @@ export default function PatientForm({
             lastname: "",
             gender: "FEMALE",
             address: "",
-            birthday: "",
+            birthday: '2000-01-01',
             telephone: "",
             imageIds: [],
             timeStamp: ""
         })
     }
 
-    const [value, setValue] = React.useState<Dayjs>(dayjs('2002-02-18'));
+    const [value, setValue] = React.useState<Dayjs>(dayjs('2000-01-01'));
 
     const handleChangeDatePicker = (newValue: Dayjs) => {
         setValue(newValue);
@@ -133,7 +133,8 @@ export default function PatientForm({
                                     inputFormat="MM/DD/YYYY"
                                     value={value}
                                     onChange={handleChangeDatePicker}
-                                    renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} />}
+                                    renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) =>
+                                        <TextField {...params} />}
                                 />
                             </Stack>
                         </LocalizationProvider>
