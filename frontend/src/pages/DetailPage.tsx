@@ -216,7 +216,9 @@ export default function DetailPage(){
                         right:5,
                         backgroundColor:"action.selected",
                         borderRadius:"4px"}}>
-                        <PopoverToolbar setGrids={setGrids}/>
+                        <PopoverToolbar setGrids={setGrids}
+                                        viewImageIds={viewImageIds}
+                                        setViewImageIds={setViewImageIds}/>
                         <Divider orientation="vertical" flexItem />
                         <Box alignSelf={"center"}>
                             <IconButton onClick={() => setMarkup(true)}>
@@ -342,10 +344,12 @@ export default function DetailPage(){
                     }
                 </Grid>
 
-                {notes.map(note => {
+                {viewImageIds.length===1 && notes.map(note => {
                     const x= note.relativeX * bodyWidth;
                     const y= note.relativeY * bodyHeight;
-                    return <NotePopover position={{x,y}}
+                    return <NotePopover key={note.id}
+                                        position={{x,y}}
+                                        editing={true}
                                         handleOpenForm={handleOpenForm}
                                         handleEditClick={handleEditClick}
                                         handleDeleteClick={handleDeleteClick}
@@ -355,6 +359,7 @@ export default function DetailPage(){
 
                 { markup && (mousePos.x!==0 && mousePos.y!==0) &&
                     <NotePopover position={mousePos}
+                                 editing={false}
                                  handleOpenForm={handleOpenForm}
                                  handleEditClick={handleEditClick}
                                  handleDeleteClick={handleDeleteClick}

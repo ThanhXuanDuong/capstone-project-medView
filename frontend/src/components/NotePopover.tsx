@@ -1,19 +1,22 @@
 import * as React from 'react';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-import {IconButton} from "@mui/material";
+import {IconButton, ThemeProvider} from "@mui/material";
 import CommentIcon from "@mui/icons-material/Comment";
 import NotePopoverOptions from "./NotePopoverOptions";
 import Note from "../types/Note";
+import theme from "./styling/theme";
 
 export default function NotePopover({
     position,
+    editing,
     handleOpenForm,
     handleEditClick,
     handleDeleteClick,
     note
 }:{
     position: {x:number, y:number},
+    editing: boolean,
     handleOpenForm:()=> void,
     handleEditClick: (note: Note)=> void,
     handleDeleteClick: (id: string|undefined)=> void,
@@ -35,7 +38,7 @@ export default function NotePopover({
 
 
     return (
-        <div>
+        <ThemeProvider theme={theme}>
             <IconButton
                 sx={{position:"absolute",
                 zIndex:"2",
@@ -51,6 +54,7 @@ export default function NotePopover({
             </IconButton>
 
             <NotePopoverOptions note={note}
+                                editing={editing}
                                 anchorEl={anchorElNoteOptions}
                                 setAnchorEl={setAnchorElNoteOptions}
                                 onAdd = {handleOpenForm}
@@ -61,7 +65,7 @@ export default function NotePopover({
             <Popover
                 id="mouse-over-popover"
                 sx={{
-                    pointerEvents: 'none',
+                    pointerEvents: 'none'
                 }}
                 open={open}
                 anchorEl={anchorEl}
@@ -76,8 +80,11 @@ export default function NotePopover({
                 onClose={handlePopoverClose}
                 disableRestoreFocus
             >
-                <Typography sx={{ p: 1 }}>{note.text}</Typography>
+                <Typography sx={{ p: 1,
+                                color:"secondary.contrastText",
+                                backgroundColor:"secondary.main"}}
+                >{note.text}</Typography>
             </Popover>
-        </div>
+        </ThemeProvider>
     );
 }
