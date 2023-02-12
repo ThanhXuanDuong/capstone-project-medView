@@ -230,10 +230,10 @@ export default function DetailPage(){
 
                 <Grid item xs={12} md={3} sm={4}  sx={{height: "100%"}}>
                     <Box sx={{maxHeight: "15%", p: 2}}>
-                        <Typography variant="h5" color="text.secondary">
+                        <Typography variant="h5" color="text.primary">
                             {viewPatient.lastname}, {viewPatient.firstname}
                         </Typography>
-                        <Typography variant="body1" color="text.secondary">
+                        <Typography variant="body1" color="text.primary">
                             Patient-ID: {viewPatient.id}
                         </Typography>
                     </Box>
@@ -291,7 +291,7 @@ export default function DetailPage(){
                             alignItems: "center",
                             height: '30%'
                         }}>
-                            <Typography variant="h5" color="text.secondary" sx={{pb:0}}>
+                            <Typography variant="h5" color="text.primary" sx={{pb:0}}>
                                 Note
                             </Typography>
 
