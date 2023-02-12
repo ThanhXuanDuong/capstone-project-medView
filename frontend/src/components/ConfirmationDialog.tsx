@@ -22,7 +22,7 @@ export default function ConfirmationDialog({
             >
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Are you sure to delete this?
+                        Are you sure you want to delete this?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

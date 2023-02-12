@@ -185,8 +185,8 @@ export default function DashboardPage(){
 
                 {deletingId &&
                     <ConfirmationDialog open={openDialog}
-                    handleClose={handleCloseDialog}
-                    onDelete={() => onDelete(deletingId)}
+                                        handleClose={handleCloseDialog}
+                                        onDelete={() => onDelete(deletingId)}
                     />
                 }
             </Container>}

@@ -129,7 +129,7 @@ export default function PatientForm({
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <Stack spacing={3}>
                                 <DesktopDatePicker
-                                    label="Date desktop"
+                                    label="Birthdate"
                                     inputFormat="MM/DD/YYYY"
                                     value={value}
                                     onChange={handleChangeDatePicker}

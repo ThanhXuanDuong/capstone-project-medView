@@ -42,7 +42,7 @@ export default function HomePage(){
                     <Box sx={{display:"flex",
                         flexDirection:"column",
                         alignItems:"center",
-                        width:"45%",
+                        maxWidth:"45%",
                         gap:"1.5rem"}}>
                         <Box sx={{display:"flex"}}>
                             <Typography variant="h1" color="white" >
@@ -63,10 +63,10 @@ export default function HomePage(){
                             sed pretium mauris enim elementum.
                         </Typography>
 
-                            <Button variant={"contained"}
-                                    sx={{width: "15%"}}
-                                    onClick={() => navigate("/login")}
-                            >Login</Button>
+                        <Button variant={"contained"}
+                                sx={{width: "15%"}}
+                                onClick={() => navigate("/login")}
+                        >Login</Button>
 
                     </Box>
 
