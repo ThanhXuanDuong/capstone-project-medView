@@ -32,7 +32,7 @@ import useNotesByPatId from "../hooks/useNotesByPatId";
 
 export default function DetailPage(){
     const [markup, setMarkup] = useState<boolean>(false)
-    const {mousePos,mouseRelativePos,bodyHeight,bodyWidth} =MousePosition(markup);
+    const {mousePos,mouseRelativePos} =MousePosition(markup);
 
     const {patients,setPatients} = usePatients();
     const {isReady,viewPatient,setViewPatient} = usePatient();
@@ -54,6 +54,11 @@ export default function DetailPage(){
     const notesByPatId =useNotesByPatId();
     const navigate = useNavigate();
 
+    const [dimensions, setDimensions] = React.useState({
+        height: document.body.clientHeight,
+        width: document.body.clientWidth
+    })
+
     const onView = (id:string) => {
         if (grids===1){
             setViewImageIds([id]);
@@ -73,6 +78,14 @@ export default function DetailPage(){
                     const response = await axios.get(`/api/notes/image/${viewImageId}`);
                     setNotes(response.data.reverse());
                 }
+
+                window.addEventListener(
+                    'resize',
+                    () => setDimensions({
+                        height: document.body.clientHeight,
+                        width: document.body.clientWidth
+                    }))
+
             }catch (e:any){
                 console.log("Error while loading data!")
                 e.response.status === "401" && navigate("/login");
@@ -203,9 +216,9 @@ export default function DetailPage(){
             {!isReady
             ? null
             :
-            <Grid container sx={{mt: "64px",
+            <Grid container sx={{mt: "48px",
                                 mb: 0,
-                                height: 'calc(100vh - 64px)',
+                                height: 'calc(100vh - 48px)',
                                 overflow:"hidden"}}>
                 <Grid container item xs={12} md={9} sm={8}
                       sx={{position:"relative",
@@ -215,9 +228,8 @@ export default function DetailPage(){
                     <ImageViewer ids={viewImageIds}/>
                     <Box sx={{position:"absolute",
                         display:"flex",
-                        m:1,
-                        top: 5,
-                        right:5,
+                        top: 30,
+                        right: 15,
                         backgroundColor:"action.selected",
                         borderRadius:"4px"}}>
                         <PopoverToolbar setGrids={setGrids}
@@ -233,7 +245,7 @@ export default function DetailPage(){
                 </Grid>
 
                 <Grid item xs={12} md={3} sm={4}  sx={{height: "100%"}}>
-                    <Box sx={{maxHeight: "15%", p: 2}}>
+                    <Box sx={{maxHeight: "15%", mt:'16px', p: 2}}>
                         <Typography variant="h5" color="text.primary">
                             {viewPatient.lastname}, {viewPatient.firstname}
                         </Typography>
@@ -342,8 +354,8 @@ export default function DetailPage(){
                 </Grid>
 
                 {viewImageIds.length===1 && notes.map(note => {
-                    const x= note.relativeX * bodyWidth;
-                    const y= note.relativeY * bodyHeight;
+                    const x= note.relativeX * dimensions.width;
+                    const y= note.relativeY * dimensions.height;
                     return <NotePopover key={note.id}
                                         position={{x,y}}
                                         editing={true}

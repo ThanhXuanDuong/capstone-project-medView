@@ -17,5 +17,5 @@ export default function MousePosition(markup:boolean) {
         imgViewer.addEventListener('click', handleMouseClick, {once:true});
     }
 
-  return {mousePos,mouseRelativePos,bodyHeight,bodyWidth};
+  return {mousePos,mouseRelativePos};
 }

@@ -26,7 +26,11 @@ export default function ImageViewer({
 
     return (
         <>
-            <Card id={"image-viewer"} sx={{ display: 'flex',height:"100%",alignItems:"center",flexWrap: fWrap}}>
+            <Card id={"image-viewer"}
+                  sx={{ display: 'flex',
+                      height:"100%",
+                      alignItems:"center",
+                      flexWrap: fWrap}}>
                 { ids.length >0 &&
                      ids.map(id =>
                          <>
@@ -34,7 +38,9 @@ export default function ImageViewer({
                                  key={id}
                                  sx={{width: gridWidth,
                                      height: gridHeight,
-                                     p:"5%",
+                                     pt: "calc(5% + 16px)",
+                                     pb:"5%",
+                                     px:"5%",
                                      backgroundColor:"black",
                                      objectFit:'contain'}}
                                  component="img"
