@@ -16,7 +16,7 @@ export default function HomePage(){
                 justifyContent:"center",
                 alignItems:"center",
                 width: "100%",
-                height: "calc(100vh - 64px)",
+                height: "100vh",
                 overflow:"hidden"
             }}>
                 <CardMedia
@@ -31,7 +31,7 @@ export default function HomePage(){
                     image={"https://post.healthline.com/wp-content/uploads/2022/01/CT-scan-of-the-abdomen-and-pelvis-body4.jpg"}
                 />
                 <Box sx={{position:"absolute",
-                    height:"calc(100vh - 64px)",
+                    height:"100vh",
                     display:"flex",
                     flexDirection:"column",
                     justifyContent:"center",

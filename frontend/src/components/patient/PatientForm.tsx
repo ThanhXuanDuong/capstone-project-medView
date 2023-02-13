@@ -58,7 +58,7 @@ export default function PatientForm({
 
     const [value, setValue] = React.useState<Dayjs>(dayjs('2000-01-01'));
 
-    const handleChangeDatePicker = (newValue: Dayjs) => {
+    const handleChangeDatePicker = (newValue:  Dayjs) => {
         setValue(newValue);
         setPatient({
             ...patient,
@@ -132,7 +132,7 @@ export default function PatientForm({
                                     label="Birthdate"
                                     inputFormat="MM/DD/YYYY"
                                     value={value}
-                                    onChange={handleChangeDatePicker}
+                                    onChange={() => handleChangeDatePicker}
                                     renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) =>
                                         <TextField {...params} />}
                                 />

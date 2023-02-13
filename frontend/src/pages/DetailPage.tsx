@@ -51,7 +51,7 @@ export default function DetailPage(){
 
     const [viewImageIds, setViewImageIds] = useState <string[]> ([]);
     const [grids, setGrids] = useState<number>(1);
-    const {notesByPatId, setNotesByPatId} =useNotesByPatId();
+    const notesByPatId =useNotesByPatId();
     const navigate = useNavigate();
 
     const onView = (id:string) => {
@@ -203,7 +203,10 @@ export default function DetailPage(){
             {!isReady
             ? null
             :
-            <Grid container sx={{mt: 0, mb: 0, height: 'calc(100vh - 64px)',overflow:"hidden"}}>
+            <Grid container sx={{mt: "64px",
+                                mb: 0,
+                                height: 'calc(100vh - 64px)',
+                                overflow:"hidden"}}>
                 <Grid container item xs={12} md={9} sm={8}
                       sx={{position:"relative",
                           justifyContent:"center",
@@ -362,7 +365,6 @@ export default function DetailPage(){
                 }
             </Grid>
             }
-
         </ThemeProvider >
     );
 }
