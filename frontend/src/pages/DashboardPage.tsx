@@ -177,6 +177,7 @@ export default function DashboardPage(){
 
                 <PatientForm patient={patient}
                             setPatient={setPatient}
+                            editing={editing}
                             setEditing={setEditing}
                             open={openForm}
                             handleClose={handleCloseForm}
@@ -184,8 +185,8 @@ export default function DashboardPage(){
 
                 {deletingId &&
                     <ConfirmationDialog open={openDialog}
-                    handleClose={handleCloseDialog}
-                    onDelete={() => onDelete(deletingId)}
+                                        handleClose={handleCloseDialog}
+                                        onDelete={() => onDelete(deletingId)}
                     />
                 }
             </Container>}

@@ -6,19 +6,24 @@ import Note from "../../types/Note";
 
 export default function NoteForm({
     note,
+    mouseRelativePos,
     setNote,
+    editing,
     setEditing,
     open,
     handleClose,
     onSave
 }:{
     note: Note,
+    mouseRelativePos: {x:number,y:number},
     setNote: (note:Note) => void,
+    editing:boolean,
     setEditing: (edit: boolean) => void
     open: boolean,
     handleClose: () => void,
     onSave: (note:Note) => void
 }){
+
     const onCancel= () =>{
         setNote({...note, text:""});
         handleClose();
@@ -27,7 +32,7 @@ export default function NoteForm({
     return (
         <Box>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add Note</DialogTitle>
+                <DialogTitle>Note</DialogTitle>
                 <DialogContent>
                     <TextField
                         required
@@ -40,7 +45,13 @@ export default function NoteForm({
                         label="Note"
                         value={note.text}
                         variant="outlined"
-                        onChange={(e) => setNote({...note, text: e.target.value})}
+                        onChange={(e) => {editing
+                            ? setNote({...note, text: e.target.value})
+                            : setNote({...note, text: e.target.value,
+                                relativeX:mouseRelativePos.x,
+                                relativeY:mouseRelativePos.y
+                                })
+                            }}
                     />
                 </DialogContent>
                 <DialogActions>

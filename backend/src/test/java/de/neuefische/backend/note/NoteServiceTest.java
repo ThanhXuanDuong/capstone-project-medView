@@ -34,7 +34,7 @@ class NoteServiceTest {
     @Test
     void add_addNoteToRepoAndReturnAddedNote() {
         //given
-        Note note = new Note("testId","testImageId","testText");
+        Note note = new Note("testId","testImageId","testText",0.5,0.5);
         NoteRepository noteRepository = mock(NoteRepository.class);
         when(noteRepository.save(note)).thenReturn(note);
 
@@ -52,8 +52,8 @@ class NoteServiceTest {
     @Test
     void getAllByImageId_getAllNotesOfAnImage() {
         //given
-        Note note1 = new Note("testId 1","imageId 1","testText");
-        Note note2 = new Note("testId 2","imageId 1","testText2");
+        Note note1 = new Note("testId 1","imageId 1","testText", 0.5,0.5);
+        Note note2 = new Note("testId 2","imageId 1","testText2",0.5,0.5);
 
         NoteRepository noteRepository = mock(NoteRepository.class);
         when(noteRepository.findAllByImageId("imageId 1")).thenReturn(List.of(note1,note2));
@@ -86,8 +86,8 @@ class NoteServiceTest {
     @Test
     void getAllByPatientId_getAllNotesOfAPatient() throws PatientNotRegisteredException {
         //given
-        Note note1 = new Note("testId 1","testImageId","testText1");
-        Note note2 = new Note("testId 2","testImageId","testText2");
+        Note note1 = new Note("testId 1","testImageId","testText1",0.5,0.5);
+        Note note2 = new Note("testId 2","testImageId","testText2",0.5,0.5);
 
         NoteRepository noteRepository = mock(NoteRepository.class);
         when(noteRepository.findAllByImageId("testImageId")).thenReturn(List.of(note1, note2));
@@ -125,7 +125,7 @@ class NoteServiceTest {
     @Test
     void updateById_updateNote_whenNoteExists() throws NotFoundException {
         //given
-        Note note = new Note("testId","testImageId","testText");
+        Note note = new Note("testId","testImageId","testText",0.5,0.5);
 
         NoteRepository noteRepository = mock(NoteRepository.class);
         when(noteRepository.existsById("testId")).thenReturn(true);

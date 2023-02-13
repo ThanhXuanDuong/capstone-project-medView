@@ -17,4 +17,6 @@ public class Note {
     private String imageId;
     @NotBlank
     private String text;
+    private Double relativeX;
+    private Double relativeY;
 }

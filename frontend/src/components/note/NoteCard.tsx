@@ -21,7 +21,7 @@ export default function NoteCard({
         }}>
 
             <CardContent>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text.primary">
                     {note.text}
                 </Typography>
             </CardContent>

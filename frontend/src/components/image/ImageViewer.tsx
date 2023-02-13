@@ -22,12 +22,11 @@ export default function ImageViewer({
             gridHeight = "49.8%";
             gridWidth= "49.8%";
             fWrap = "wrap";
-            break;
     }
 
     return (
         <>
-            <Card sx={{ display: 'flex',height:"100%",alignItems:"center",flexWrap: fWrap}}>
+            <Card id={"image-viewer"} sx={{ display: 'flex',height:"100%",alignItems:"center",flexWrap: fWrap}}>
                 { ids.length >0 &&
                      ids.map(id =>
                          <>

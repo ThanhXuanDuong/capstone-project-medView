@@ -16,7 +16,7 @@ export default function HomePage(){
                 justifyContent:"center",
                 alignItems:"center",
                 width: "100%",
-                height: "calc(100vh - 64px)",
+                height: "100vh",
                 overflow:"hidden"
             }}>
                 <CardMedia
@@ -31,7 +31,7 @@ export default function HomePage(){
                     image={"https://post.healthline.com/wp-content/uploads/2022/01/CT-scan-of-the-abdomen-and-pelvis-body4.jpg"}
                 />
                 <Box sx={{position:"absolute",
-                    height:"calc(100vh - 64px)",
+                    height:"100vh",
                     display:"flex",
                     flexDirection:"column",
                     justifyContent:"center",
@@ -42,7 +42,7 @@ export default function HomePage(){
                     <Box sx={{display:"flex",
                         flexDirection:"column",
                         alignItems:"center",
-                        width:"45%",
+                        maxWidth:"50%",
                         gap:"1.5rem"}}>
                         <Box sx={{display:"flex"}}>
                             <Typography variant="h1" color="white" >
@@ -63,10 +63,10 @@ export default function HomePage(){
                             sed pretium mauris enim elementum.
                         </Typography>
 
-                            <Button variant={"contained"}
-                                    sx={{width: "15%"}}
-                                    onClick={() => navigate("/login")}
-                            >Login</Button>
+                        <Button variant={"contained"}
+                                sx={{width: "15%"}}
+                                onClick={() => navigate("/login")}
+                        >Login</Button>
 
                     </Box>
 

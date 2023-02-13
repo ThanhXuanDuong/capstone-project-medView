@@ -15,7 +15,6 @@ import React, {useEffect, useState} from "react";
 import NoteCard from "../components/note/NoteCard";
 import Note from "../types/Note";
 import axios from "axios";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 import useFormActions from "../hooks/useFormActions";
 import NoteForm from "../components/note/NoteForm";
 import useDialogActions from "../hooks/useDialogActions";
@@ -25,14 +24,24 @@ import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import NavBar from "../components/NavBar";
 import theme from "../components/styling/theme";
-import PopOver from "../components/PopOver";
+import PopoverToolbar from "../components/PopoverToolbar";
+import CommentIcon from '@mui/icons-material/Comment';
+import MousePosition from "../components/MousePosition";
+import NotePopover from "../components/NotePopover";
+import useNotesByPatId from "../hooks/useNotesByPatId";
 
 export default function DetailPage(){
+    const [markup, setMarkup] = useState<boolean>(false)
+    const {mousePos,mouseRelativePos,bodyHeight,bodyWidth} =MousePosition(markup);
+
     const {patients,setPatients} = usePatients();
     const {isReady,viewPatient,setViewPatient} = usePatient();
 
     const [notes, setNotes] = useState<Note[]>([]);
-    const [note, setNote] = useState<Note>({imageId:"", text:""});
+    const [note, setNote] = useState<Note>(
+        { imageId:"", text:"",
+                    relativeX: 0,
+                    relativeY: 0});
 
     const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
     const {openDialog,handleOpenDialog, handleCloseDialog} = useDialogActions();
@@ -40,9 +49,9 @@ export default function DetailPage(){
     const [deletingImageId, setDeletingImageId] = useState<string|undefined>("");
     const [deletingNoteId, setDeletingNoteId] = useState<string|undefined>("");
 
-
     const [viewImageIds, setViewImageIds] = useState <string[]> ([]);
     const [grids, setGrids] = useState<number>(1);
+    const notesByPatId =useNotesByPatId();
     const navigate = useNavigate();
 
     const onView = (id:string) => {
@@ -87,6 +96,7 @@ export default function DetailPage(){
                     {toastId:"errorAdd"})
             }finally {
                 setNote({...note, text: ""});
+                setMarkup(false);
                 handleCloseForm();
             }
         })();
@@ -100,7 +110,15 @@ export default function DetailPage(){
         }else{
             toast.error("Note doesn't exist!",{toastId:"errorEditClick"})
         }
+    };
 
+    const handleDeleteClick = async(id: string|undefined) =>{
+        if(id){
+            handleOpenDialog();
+            setDeletingNoteId(id)
+        }else{
+            toast.error("Note doesn't exist!",{toastId:"errorDeleteClick"})
+        }
     };
 
     const onEdit =(note:Note) =>{
@@ -185,7 +203,10 @@ export default function DetailPage(){
             {!isReady
             ? null
             :
-            <Grid container sx={{mt: 0, mb: 0, height: 'calc(100vh - 64px)',overflow:"hidden"}}>
+            <Grid container sx={{mt: "64px",
+                                mb: 0,
+                                height: 'calc(100vh - 64px)',
+                                overflow:"hidden"}}>
                 <Grid container item xs={12} md={9} sm={8}
                       sx={{position:"relative",
                           justifyContent:"center",
@@ -193,21 +214,30 @@ export default function DetailPage(){
                           backgroundColor: "black"}}>
                     <ImageViewer ids={viewImageIds}/>
                     <Box sx={{position:"absolute",
+                        display:"flex",
                         m:1,
                         top: 5,
                         right:5,
                         backgroundColor:"action.selected",
                         borderRadius:"4px"}}>
-                        <PopOver setGrids={setGrids}/>
+                        <PopoverToolbar setGrids={setGrids}
+                                        viewImageIds={viewImageIds}
+                                        setViewImageIds={setViewImageIds}/>
+                        <Divider orientation="vertical" flexItem />
+                        <Box alignSelf={"center"}>
+                            <IconButton onClick={() => setMarkup(true)}>
+                                <CommentIcon/>
+                            </IconButton>
+                        </Box>
                     </Box>
                 </Grid>
 
                 <Grid item xs={12} md={3} sm={4}  sx={{height: "100%"}}>
                     <Box sx={{maxHeight: "15%", p: 2}}>
-                        <Typography variant="h5" color="text.secondary">
+                        <Typography variant="h5" color="text.primary">
                             {viewPatient.lastname}, {viewPatient.firstname}
                         </Typography>
-                        <Typography variant="body1" color="text.secondary">
+                        <Typography variant="body1" color="text.primary">
                             Patient-ID: {viewPatient.id}
                         </Typography>
                     </Box>
@@ -218,12 +248,11 @@ export default function DetailPage(){
                         display: 'flex',
                         height: '55%',
                         px: 2,
-                        py:1
+                        py:2
                     }}
                          flexDirection={'column'}
                          justifyContent={'center'}
                          alignItems={'stretch'}
-                         gap='1rem'
                     >
                         <List sx={{
                             position: 'relative',
@@ -236,6 +265,7 @@ export default function DetailPage(){
                                 <ListItem key={`image-item-${id}`}>
                                     <ImageCard key={id}
                                                id={id}
+                                               notesByPatId={notesByPatId}
                                                index={index}
                                                onView={onView}
                                                onDelete={() => {
@@ -253,25 +283,18 @@ export default function DetailPage(){
                     <Box sx={{
                         position:'relative',
                         display: 'flex',
-                        height: '30%',
+                        maxHeight: '32%',
                         px: 2}}
                          flexDirection={'column'}
                          justifyContent={'flex-start'}
                          alignItems={'stretch'}
                     >
                         <Box sx={{
-                            display: 'flex',
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            height: '30%'
+                            py:1
                         }}>
-                            <Typography variant="h5" color="text.secondary" sx={{pb:0}}>
+                            <Typography variant="h5" color="text.primary" sx={{pb:0}}>
                                 Note
                             </Typography>
-
-                            <IconButton aria-label="add" onClick={handleOpenForm}>
-                                <AddBoxIcon fontSize={"large"}/>
-                            </IconButton>
                         </Box>
 
                         <List sx={{
@@ -295,7 +318,9 @@ export default function DetailPage(){
                         </List>
 
                         <NoteForm note={note}
+                                  mouseRelativePos={mouseRelativePos}
                                   setNote={setNote}
+                                  editing={editing}
                                   setEditing={setEditing}
                                   open={openForm}
                                   handleClose={handleCloseForm}
@@ -315,6 +340,29 @@ export default function DetailPage(){
                         />
                     }
                 </Grid>
+
+                {viewImageIds.length===1 && notes.map(note => {
+                    const x= note.relativeX * bodyWidth;
+                    const y= note.relativeY * bodyHeight;
+                    return <NotePopover key={note.id}
+                                        position={{x,y}}
+                                        editing={true}
+                                        handleOpenForm={handleOpenForm}
+                                        handleEditClick={handleEditClick}
+                                        handleDeleteClick={handleDeleteClick}
+                                        note={note}
+                    />}
+                )}
+
+                { markup && (mousePos.x!==0 && mousePos.y!==0) &&
+                    <NotePopover position={mousePos}
+                                 editing={false}
+                                 handleOpenForm={handleOpenForm}
+                                 handleEditClick={handleEditClick}
+                                 handleDeleteClick={handleDeleteClick}
+                                 note={{...note}}
+                    />
+                }
             </Grid>
             }
         </ThemeProvider >

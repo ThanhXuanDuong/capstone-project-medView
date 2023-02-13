@@ -53,14 +53,18 @@ class NoteControllerTest {
                 {
                     "id": "1",
                     "imageId":"1",
-                    "text":"note 1"
+                    "text":"note 1",
+                    "relativeX":0.5,
+                    "relativeY":0.5
                 }
                 """;
         String expected = """
                 {
                     "id": "1",
                     "imageId":"1",
-                    "text":"note 1"
+                    "text":"note 1",
+                    "relativeX":0.5,
+                    "relativeY":0.5
                 }
                 """;
 
@@ -96,20 +100,24 @@ class NoteControllerTest {
     void getAllByImageId_returnAllNotesOfAnImage_whenLoggedIn () throws Exception {
         appUserRepository.save(new AppUser("1", "user", "pw"));
 
-        noteRepository.save(new Note("id1", "imageId", "note1"));
-        noteRepository.save(new Note("id2", "imageId", "note2"));
+        noteRepository.save(new Note("id1", "imageId", "note1",0.5,0.5));
+        noteRepository.save(new Note("id2", "imageId", "note2",0.5,0.5));
 
         String expected = """
                 [
                     {
                     "id": "id1",
                     "imageId":"imageId",
-                    "text":"note1"
+                    "text":"note1",
+                    "relativeX":0.5,
+                    "relativeY":0.5
                     },
                     {
                     "id": "id2",
                     "imageId":"imageId",
-                    "text":"note2"
+                    "text":"note2",
+                    "relativeX":0.5,
+                    "relativeY":0.5
                     }
                 ]
                 """;
@@ -163,14 +171,14 @@ class NoteControllerTest {
                 "2000-10-20",
                 "",
                 "",
-                List.of("imageId1", "imageId2"),
+                List.of("imageId1","imageId2"),
                 LocalDateTime.now(),
                 "user"
         ));
 
-        noteRepository.save(new Note("1","imageId1","note1"));
-        noteRepository.save(new Note("2","imageId1","note2"));
-        noteRepository.save(new Note("3","imageId3","note3"));
+        noteRepository.save(new Note("1","imageId1","note1",0.5,0.5));
+        noteRepository.save(new Note("2","imageId1","note2",0.5,0.5));
+        noteRepository.save(new Note("3","imageId3","note3",0.5,0.5));
 
         String expected = """
                 {
@@ -178,12 +186,16 @@ class NoteControllerTest {
                          {
                              "id": "1",
                              "imageId": "imageId1",
-                             "text": "note1"
+                             "text": "note1",
+                             "relativeX":0.5,
+                             "relativeY":0.5
                          },
                          {
                              "id": "2",
                              "imageId": "imageId1",
-                             "text": "note2"
+                             "text": "note2",
+                             "relativeX":0.5,
+                             "relativeY":0.5
                          }
                      ],
                     "imageId2": []
@@ -212,21 +224,27 @@ class NoteControllerTest {
                 {
                     "id": "1",
                     "imageId":"1",
-                    "text":"note 1"
+                    "text":"note 1",
+                    "relativeX":0.5,
+                    "relativeY":0.5
                 }
                 """;
         String updated = """
                 {
                     "id": "1",
                     "imageId":"1",
-                    "text":"modified note"
+                    "text":"modified note",
+                    "relativeX":0.5,
+                    "relativeY":0.5
                 }
                 """;
         String expected = """
                 {
                     "id": "1",
                     "imageId":"1",
-                    "text":"modified note"
+                    "text":"modified note",
+                    "relativeX":0.5,
+                    "relativeY":0.5
                 }
                 """;
 
@@ -258,7 +276,7 @@ class NoteControllerTest {
     void deleteById_return200_whenLoggedInAndDeleteNote() throws Exception {
         appUserRepository.save(new AppUser("1","user","pw"));
 
-        noteRepository.save(new Note("1","imageId1","note1"));
+        noteRepository.save(new Note("1","imageId1","note1",0.5,0.5));
 
         mvc.perform(delete("/api/notes/1"))
                 .andExpect(status().isOk());

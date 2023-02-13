@@ -4,10 +4,14 @@ import SelectedList from "./SelectedList";
 import {Box, IconButton} from "@mui/material";
 import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
 
-export default function PopOver({
-    setGrids
+export default function PopoverToolbar({
+    setGrids,
+    viewImageIds,
+    setViewImageIds
 }:{
-    setGrids: (gridNumbers: number) => void
+    setGrids: (gridNumbers: number) => void,
+    viewImageIds: string[],
+    setViewImageIds:(ids: string[]) => void,
 }) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
@@ -41,7 +45,10 @@ export default function PopOver({
                     horizontal: 'center',
                 }}
             >
-                <SelectedList setGrids={setGrids} handleClose={handleClose}/>
+                <SelectedList setGrids={setGrids}
+                              viewImageIds={viewImageIds}
+                              setViewImageIds={setViewImageIds}
+                              handleClose={handleClose}/>
             </Popover>
         </Box>
     );

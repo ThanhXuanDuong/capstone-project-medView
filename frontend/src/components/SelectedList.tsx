@@ -8,9 +8,13 @@ import SquareIcon from '@mui/icons-material/Square';
 
 export default function SelectedList({
     setGrids,
+    viewImageIds,
+    setViewImageIds,
     handleClose
 }:{
-    setGrids: (gridNumbers: number) => void
+    setGrids: (gridNumbers: number) => void,
+    viewImageIds: string[],
+    setViewImageIds:(ids: string[]) => void,
     handleClose:() => void
 }) {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -26,6 +30,7 @@ export default function SelectedList({
                 break;
             case 1:
                 setGrids(2);
+                setViewImageIds([...viewImageIds].slice(-2));
                 break;
             case 2:
                 setGrids(4);
