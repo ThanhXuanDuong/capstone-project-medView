@@ -42,7 +42,7 @@ export default function HomePage(){
                     <Box sx={{display:"flex",
                         flexDirection:"column",
                         alignItems:"center",
-                        maxWidth:"45%",
+                        maxWidth:"50%",
                         gap:"1.5rem"}}>
                         <Box sx={{display:"flex"}}>
                             <Typography variant="h1" color="white" >
