@@ -1,9 +1,13 @@
-import {Card, CardMedia, Divider} from "@mui/material";
+import {Box, Card, Divider} from "@mui/material";
+import "./ImageViewer.css"
+import React, {useEffect, useRef} from "react";
 
 export default function ImageViewer({
-    ids
+    ids,
+    onImgDisplay
 }:{
-    ids:string[]
+    ids:string[],
+    onImgDisplay:(rect:DOMRect) => void
 }){
 
     let gridHeight: string;
@@ -23,29 +27,52 @@ export default function ImageViewer({
             gridWidth= "49.8%";
             fWrap = "wrap";
     }
+    let imgRef = useRef<HTMLImageElement>(null);
+
+    useEffect(() => {
+        const getSizeImg = () => {
+            if (imgRef.current?.complete) {
+                const rect = imgRef.current.getBoundingClientRect();
+                console.log(rect)
+                onImgDisplay(rect)
+            }
+        };
+        getSizeImg();
+
+        window.addEventListener('resize', getSizeImg, false);
+        return () => {
+            window.removeEventListener('resize', getSizeImg)
+        }
+
+    },[ids,imgRef.current?.complete, onImgDisplay]);
 
     return (
         <>
             <Card id={"image-viewer"}
                   sx={{ display: 'flex',
-                      height:"100%",
-                      alignItems:"center",
-                      flexWrap: fWrap}}>
+                        height:"100%",
+                        width:"100%",
+                        alignItems:"center",
+                        flexWrap: fWrap}}>
                 { ids.length >0 &&
                      ids.map(id =>
                          <>
-                             <CardMedia
-                                 key={id}
-                                 sx={{width: gridWidth,
-                                     height: gridHeight,
-                                     pt: "calc(5% + 16px)",
-                                     pb:"5%",
-                                     px:"5%",
-                                     backgroundColor:"black",
-                                     objectFit:'contain'}}
-                                 component="img"
-                                 image={"/api/files/" + id}
-                             />
+                             <Box
+                                 sx={{
+                                 display: 'flex',
+                                 alignItems:"center",
+                                 width: gridWidth,
+                                 height: gridHeight,
+                                 p:"5%",
+                                 backgroundColor:"black",
+                                 alignSelf:"center"
+                             }}>
+                                 <img ref={ids.length===1 ? imgRef : null}
+                                      key= {id}
+                                      id={"image-in-viewer"}
+                                      src={"/api/files/" + id}
+                                      alt={"img"}/>
+                             </Box>
                              {ids.length !==1 &&
                                  <Divider orientation="vertical" flexItem />
                              }

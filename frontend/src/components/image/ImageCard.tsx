@@ -18,7 +18,7 @@ export default function ImageCard({
     onDelete: (id:string) => void
 }){
     const [hasNote, setHasNote]= useState<boolean>(false);
-
+    //console.log(notesByPatId)
     const handleClick = () => {
         onView(id);
     }

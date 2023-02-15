@@ -30,6 +30,7 @@ import MousePosition from "../components/MousePosition";
 import NotePopover from "../components/NotePopover";
 import useNotesByPatId from "../hooks/useNotesByPatId";
 
+
 export default function DetailPage(){
     const [markup, setMarkup] = useState<boolean>(false)
     const {mousePos,mouseRelativePos} =MousePosition(markup);
@@ -51,20 +52,15 @@ export default function DetailPage(){
 
     const [viewImageIds, setViewImageIds] = useState <string[]> ([]);
     const [grids, setGrids] = useState<number>(1);
-    const notesByPatId =useNotesByPatId();
+    const {notesByPatId, setNotesByPatId} =useNotesByPatId();
     const navigate = useNavigate();
-
-    const [dimensions, setDimensions] = React.useState({
-        height: document.body.clientHeight,
-        width: document.body.clientWidth
-    })
+    const [imgPosition,setImgPosition]= useState<DOMRect|undefined>(undefined);
 
     const onView = (id:string) => {
         if (grids===1){
             setViewImageIds([id]);
         }else if (viewImageIds.length >= grids){
-            viewImageIds.push(id);
-            viewImageIds.shift();
+            setViewImageIds([...viewImageIds.slice(1),id]);
         }else{
             setViewImageIds([...viewImageIds,id]);
         }
@@ -78,14 +74,6 @@ export default function DetailPage(){
                     const response = await axios.get(`/api/notes/image/${viewImageId}`);
                     setNotes(response.data.reverse());
                 }
-
-                window.addEventListener(
-                    'resize',
-                    () => setDimensions({
-                        height: document.body.clientHeight,
-                        width: document.body.clientWidth
-                    }))
-
             }catch (e:any){
                 console.log("Error while loading data!")
                 e.response.status === "401" && navigate("/login");
@@ -98,6 +86,8 @@ export default function DetailPage(){
             try{
                 const response = await axios.post("/api/notes", createdNote);
                 setNotes([response.data,...notes]);
+                setNotesByPatId(notesByPatId.set(
+                    createdNote.imageId,[response.data,...notes]));
 
                 toast.success("Successfully saving new note!",
                     {toastId:"successAdd"});
@@ -225,7 +215,7 @@ export default function DetailPage(){
                           justifyContent:"center",
                           height: "100%",
                           backgroundColor: "black"}}>
-                    <ImageViewer ids={viewImageIds}/>
+                    <ImageViewer ids={viewImageIds} onImgDisplay={setImgPosition}/>
                     <Box sx={{position:"absolute",
                         display:"flex",
                         top: 30,
@@ -353,9 +343,9 @@ export default function DetailPage(){
                     }
                 </Grid>
 
-                {viewImageIds.length===1 && notes.map(note => {
-                    const x= note.relativeX * dimensions.width;
-                    const y= note.relativeY * dimensions.height;
+                {viewImageIds.length===1 && imgPosition && notes.map(note => {
+                    const x= (note.relativeX * imgPosition.width + imgPosition.left)  ;
+                    const y=  (note.relativeY * imgPosition.height + imgPosition.top);
                     return <NotePopover key={note.id}
                                         position={{x,y}}
                                         editing={true}
