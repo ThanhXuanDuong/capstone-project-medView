@@ -26,7 +26,7 @@ import NavBar from "../components/NavBar";
 import theme from "../components/styling/theme";
 import PopoverToolbar from "../components/PopoverToolbar";
 import CommentIcon from '@mui/icons-material/Comment';
-import MousePosition from "../components/MousePosition";
+import MousePosition from "../components/image/MousePosition";
 import NotePopover from "../components/NotePopover";
 import useNotesByPatId from "../hooks/useNotesByPatId";
 

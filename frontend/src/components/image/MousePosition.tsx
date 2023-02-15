@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import Position from "../types/Position";
+import Position from "../../types/Position";
 
 export default function MousePosition(markup:boolean) {
     const [mousePos, setMousePos] = useState<Position>({x: 0.,y: 0.});

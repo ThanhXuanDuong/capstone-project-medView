@@ -27,6 +27,7 @@ export default function ImageViewer({
             gridWidth= "49.8%";
             fWrap = "wrap";
     }
+
     let imgRef = useRef<HTMLImageElement>(null);
 
     useEffect(() => {
