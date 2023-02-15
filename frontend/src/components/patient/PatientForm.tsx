@@ -144,7 +144,7 @@ export default function PatientForm({
                     <TextField
                         sx={{ width: 500, mb: 2 }}
                         id="address"
-                        label={"Address"}
+                        label={"Address (optional)"}
                         name="address"
                         value={patient.address}
                         variant="outlined"
@@ -155,7 +155,7 @@ export default function PatientForm({
                     <TextField
                         sx={{ width: 500, mb: 2 }}
                         id="telephone"
-                        label={"Telephone"}
+                        label={"Telephone (optional)"}
                         name="telephone"
                         value={patient.telephone}
                         variant="outlined"
