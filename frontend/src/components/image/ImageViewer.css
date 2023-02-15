@@ -1,5 +1,5 @@
 #image-in-viewer{
     object-fit: contain;
-    width: 100%;
+    width: 100vmin;
     max-height: 100%;
 }

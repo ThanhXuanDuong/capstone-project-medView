@@ -53,6 +53,7 @@ export default function ImageViewer({
                         height:"100%",
                         width:"100%",
                         alignItems:"center",
+                        backgroundColor:"black",
                         flexWrap: fWrap}}>
                 { ids.length >0 &&
                      ids.map(id =>
@@ -60,11 +61,11 @@ export default function ImageViewer({
                              <Box
                                  sx={{
                                  display: 'flex',
+                                 justifyContent:"center",
                                  alignItems:"center",
                                  width: gridWidth,
                                  height: gridHeight,
                                  p:"5%",
-                                 backgroundColor:"black",
                                  alignSelf:"center"
                              }}>
                                  <img ref={ids.length===1 ? imgRef : null}
