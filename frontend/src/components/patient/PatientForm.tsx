@@ -58,14 +58,17 @@ export default function PatientForm({
 
     const [value, setValue] = React.useState<Dayjs>(dayjs('2000-01-01'));
 
-    const handleChangeDatePicker = (newValue:  Dayjs) => {
-        setValue(newValue);
-        setPatient({
-            ...patient,
-            birthday: newValue?.toISOString()
-        });
+    const handleChangeDatePicker = (newValue:  Dayjs|null) => {
+        if(newValue){
+            setValue(newValue);
+            setPatient({
+                ...patient,
+                birthday: newValue.toISOString()
+            });
+        }else{
+            console.log("Date is null!")
+        }
     };
-
 
     return (
         <Dialog maxWidth={"md"} open={open} onClose={handleClose}>
@@ -132,7 +135,7 @@ export default function PatientForm({
                                     label="Birthdate"
                                     inputFormat="MM/DD/YYYY"
                                     value={value}
-                                    onChange={() => handleChangeDatePicker}
+                                    onChange={handleChangeDatePicker}
                                     renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) =>
                                         <TextField {...params} />}
                                 />
