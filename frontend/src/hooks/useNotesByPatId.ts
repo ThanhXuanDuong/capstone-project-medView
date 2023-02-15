@@ -20,5 +20,5 @@ export default function useNotesByPatId(){
         })();
     },[id,navigate]);
 
-    return notesByPatId;
+    return {notesByPatId, setNotesByPatId};
 }

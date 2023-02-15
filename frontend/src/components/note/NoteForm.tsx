@@ -36,13 +36,15 @@ export default function NoteForm({
                 <DialogContent>
                     <TextField
                         required
+                        multiline
+                        rows={4}
                         type="text"
                         helperText={ "Text is required"}
                         autoFocus
                         sx={{ width: 500, mb: 2 }}
                         margin="dense"
                         id="note"
-                        label="Note"
+                        label="Text"
                         value={note.text}
                         variant="outlined"
                         onChange={(e) => {editing

@@ -26,13 +26,14 @@ import NavBar from "../components/NavBar";
 import theme from "../components/styling/theme";
 import PopoverToolbar from "../components/PopoverToolbar";
 import CommentIcon from '@mui/icons-material/Comment';
-import MousePosition from "../components/MousePosition";
+import MousePosition from "../components/image/MousePosition";
 import NotePopover from "../components/NotePopover";
 import useNotesByPatId from "../hooks/useNotesByPatId";
 
+
 export default function DetailPage(){
     const [markup, setMarkup] = useState<boolean>(false)
-    const {mousePos,mouseRelativePos,bodyHeight,bodyWidth} =MousePosition(markup);
+    const {mousePos,mouseRelativePos} =MousePosition(markup);
 
     const {patients,setPatients} = usePatients();
     const {isReady,viewPatient,setViewPatient} = usePatient();
@@ -51,15 +52,15 @@ export default function DetailPage(){
 
     const [viewImageIds, setViewImageIds] = useState <string[]> ([]);
     const [grids, setGrids] = useState<number>(1);
-    const notesByPatId =useNotesByPatId();
+    const {notesByPatId, setNotesByPatId} =useNotesByPatId();
     const navigate = useNavigate();
+    const [imgPosition,setImgPosition]= useState<DOMRect|undefined>(undefined);
 
     const onView = (id:string) => {
         if (grids===1){
             setViewImageIds([id]);
         }else if (viewImageIds.length >= grids){
-            viewImageIds.push(id);
-            viewImageIds.shift();
+            setViewImageIds([...viewImageIds.slice(1),id]);
         }else{
             setViewImageIds([...viewImageIds,id]);
         }
@@ -85,6 +86,8 @@ export default function DetailPage(){
             try{
                 const response = await axios.post("/api/notes", createdNote);
                 setNotes([response.data,...notes]);
+                setNotesByPatId(notesByPatId.set(
+                    createdNote.imageId,[response.data,...notes]));
 
                 toast.success("Successfully saving new note!",
                     {toastId:"successAdd"});
@@ -203,21 +206,20 @@ export default function DetailPage(){
             {!isReady
             ? null
             :
-            <Grid container sx={{mt: "64px",
+            <Grid container sx={{mt: "48px",
                                 mb: 0,
-                                height: 'calc(100vh - 64px)',
+                                height: 'calc(100vh - 48px)',
                                 overflow:"hidden"}}>
                 <Grid container item xs={12} md={9} sm={8}
                       sx={{position:"relative",
                           justifyContent:"center",
                           height: "100%",
                           backgroundColor: "black"}}>
-                    <ImageViewer ids={viewImageIds}/>
+                    <ImageViewer ids={viewImageIds} onImgDisplay={setImgPosition}/>
                     <Box sx={{position:"absolute",
                         display:"flex",
-                        m:1,
-                        top: 5,
-                        right:5,
+                        top: 30,
+                        right: 15,
                         backgroundColor:"action.selected",
                         borderRadius:"4px"}}>
                         <PopoverToolbar setGrids={setGrids}
@@ -233,7 +235,7 @@ export default function DetailPage(){
                 </Grid>
 
                 <Grid item xs={12} md={3} sm={4}  sx={{height: "100%"}}>
-                    <Box sx={{maxHeight: "15%", p: 2}}>
+                    <Box sx={{maxHeight: "15%", mt:'16px', p: 2}}>
                         <Typography variant="h5" color="text.primary">
                             {viewPatient.lastname}, {viewPatient.firstname}
                         </Typography>
@@ -341,9 +343,9 @@ export default function DetailPage(){
                     }
                 </Grid>
 
-                {viewImageIds.length===1 && notes.map(note => {
-                    const x= note.relativeX * bodyWidth;
-                    const y= note.relativeY * bodyHeight;
+                {viewImageIds.length===1 && imgPosition && notes.map(note => {
+                    const x= (note.relativeX * imgPosition.width + imgPosition.left)  ;
+                    const y=  (note.relativeY * imgPosition.height + imgPosition.top);
                     return <NotePopover key={note.id}
                                         position={{x,y}}
                                         editing={true}
