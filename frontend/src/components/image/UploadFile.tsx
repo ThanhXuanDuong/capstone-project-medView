@@ -26,7 +26,7 @@ export default function UploadFile({
 
     const onUpload = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (files) {
+        if (files.length>0) {
             const formData = new FormData();
             for (const file of files) {
                 formData.append("files", file);
@@ -95,7 +95,7 @@ export default function UploadFile({
                            </IconButton>
                        }
                 >
-                    Files uploaded!
+                    File uploaded!
                 </Alert>
             </Collapse>
         </Box>
