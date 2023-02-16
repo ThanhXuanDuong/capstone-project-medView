@@ -50,10 +50,11 @@ export default function ImageCard({
                         style={{padding: "8%" }}
                         image ={"/api/files/"+id}
                     />
-                    {notes.current?.length &&
+                    {notes.current?.length ?
                         <Box  sx={{position:"absolute", top:5,left:5}}>
                             <CommentIcon sx={{color:"primary.main"}} fontSize={"small"} />
                         </Box>
+                        : null
                     }
 
                 </Box>
