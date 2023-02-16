@@ -32,9 +32,6 @@ import useNotesByPatId from "../hooks/useNotesByPatId";
 
 
 export default function DetailPage(){
-    const [markup, setMarkup] = useState<boolean>(false)
-    const {mousePos,mouseRelativePos} =MousePosition(markup);
-
     const {patients,setPatients} = usePatients();
     const {isReady,viewPatient,setViewPatient} = usePatient();
 
@@ -44,11 +41,15 @@ export default function DetailPage(){
                     relativeX: 0,
                     relativeY: 0});
 
+    const [markup, setMarkup] = useState<boolean>(false)
+    const {mousePos,mouseRelativePos} =MousePosition(markup);
+
     const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
     const {openDialog,handleOpenDialog, handleCloseDialog} = useDialogActions();
     const [editing, setEditing] = useState<boolean>(false);
     const [deletingImageId, setDeletingImageId] = useState<string|undefined>("");
-    const [deletingNoteId, setDeletingNoteId] = useState<string|undefined>("");
+    const [deletingNote, setDeletingNote] = useState<Note>(
+        {imageId:"",text:"",relativeX:0,relativeY:0});
 
     const [viewImageIds, setViewImageIds] = useState <string[]> ([]);
     const [grids, setGrids] = useState<number>(1);
@@ -115,10 +116,10 @@ export default function DetailPage(){
         }
     };
 
-    const handleDeleteClick = async(id: string|undefined) =>{
-        if(id){
+    const handleDeleteClick = async(note: Note|undefined) =>{
+        if(note?.id){
             handleOpenDialog();
-            setDeletingNoteId(id)
+            setDeletingNote(note)
         }else{
             toast.error("Note doesn't exist!",{toastId:"errorDeleteClick"})
         }
@@ -149,12 +150,15 @@ export default function DetailPage(){
        })();
     };
 
-    const onDeleteNote =(noteId: string|undefined) =>{
+    const onDeleteNote =(note: Note) =>{
         (async () => {
             try{
-                await axios.delete("/api/notes/" +noteId);
-                setNotes(notes.filter(note => note.id !==noteId));
-                setDeletingNoteId("");
+                await axios.delete("/api/notes/" +note.id);
+                setNotes(notes.filter(n => n.id !==note.id));
+                setDeletingNote({imageId:"",text:"",relativeX:0,relativeY:0});
+
+                notesByPatId.forEach((notes, imageId, map)=>
+                    imageId=== note.imageId && map.set(imageId,notes.filter(n => n.id !==note.id)));
 
                 toast.success("Successfully deleting note!",
                     {toastId:"successDeleteNote"});
@@ -311,7 +315,7 @@ export default function DetailPage(){
                                               note={note}
                                               onDelete={() => {
                                                   handleOpenDialog();
-                                                  setDeletingNoteId(note.id);
+                                                  setDeletingNote(note);
                                               }}
                                               onEdit={handleEditClick}
                                     />
@@ -335,10 +339,10 @@ export default function DetailPage(){
                                             onDelete={() => onDeleteImage(deletingImageId)}
                         />
                     }
-                    {deletingNoteId &&
+                    {deletingNote &&
                         <ConfirmationDialog open={openDialog}
                                             handleClose={handleCloseDialog}
-                                            onDelete={() => onDeleteNote(deletingNoteId)}
+                                            onDelete={() => onDeleteNote(deletingNote)}
                         />
                     }
                 </Grid>

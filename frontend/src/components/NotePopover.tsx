@@ -19,7 +19,7 @@ export default function NotePopover({
     editing: boolean,
     handleOpenForm:()=> void,
     handleEditClick: (note: Note)=> void,
-    handleDeleteClick: (id: string|undefined)=> void,
+    handleDeleteClick: (note: Note)=> void,
     note:Note
 }) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
