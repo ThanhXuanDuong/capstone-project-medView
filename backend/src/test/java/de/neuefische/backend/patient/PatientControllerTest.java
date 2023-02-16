@@ -134,6 +134,50 @@ class PatientControllerTest {
                         content().json(expected)
                 );
     }
+    @Test
+    void getById_return401_whenNotLoggedIn () throws Exception {
+        mvc.perform(get("/api/patients/1"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pw")
+    void getById_returnPatient_whenLoggedIn () throws Exception {
+        appUserRepository.save(new AppUser("1","user","pw"));
+
+        patientRepository.save(new Patient(
+                "1",
+                "Miller",
+                "Helen",
+                Gender.FEMALE,
+                "2000-10-20",
+                "",
+                "",
+                List.of("1","2","3"),
+                LocalDateTime.now(),
+                "user"
+        ));
+
+        String expected = """
+                   {
+                        "id": "1",
+                       "lastname":"Miller",
+                       "firstname":"Helen",
+                       "gender":"FEMALE",
+                       "birthday":"2000-10-20",
+                       "address":"",
+                       "telephone":"",
+                       "imageIds":["1","2","3"],
+                       "createdBy": "user"
+                   }
+                   """;
+
+        mvc.perform(get("/api/patients/1"))
+                .andExpectAll(
+                        status().isOk(),
+                        content().json(expected));
+    }
+
 
     @Test
     void updateById_return401_whenNotLoggedIn () throws Exception {
