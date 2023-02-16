@@ -10,7 +10,7 @@ import {IMAGES_PATH} from "../../application";
 import GenderRadioButtonsGroup from "./GenderRadioGroup";
 import UploadFile from "../image/UploadFile";
 import Patient from "../../types/Patient";
-import {ChangeEvent} from "react";
+import {ChangeEvent, useEffect} from "react";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Stack from "@mui/material/Stack";
 import {DesktopDatePicker, LocalizationProvider} from "@mui/x-date-pickers";
@@ -33,6 +33,26 @@ export default function PatientForm({
     handleClose: () => void,
     onSave: (patient: Patient) => void
 }) {
+    const [value, setValue] = React.useState<Dayjs>(dayjs('01-01-2000'));
+
+    useEffect(() =>{
+        if(patient && editing){
+            setValue(dayjs(patient.birthday));
+        }
+    },[patient,editing]);
+
+    console.log(value)
+    const handleChangeDatePicker = (newValue:  Dayjs|null) => {
+        if(newValue){
+            setValue(newValue);
+            setPatient({
+                ...patient,
+                birthday: newValue.format("MM-DD-YYYY")
+            });
+        }else{
+            console.log("Date is null!")
+        }
+    };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setPatient({
@@ -44,34 +64,21 @@ export default function PatientForm({
     const onCancel = () => {
         handleClose();
         setEditing(false);
+        setValue(dayjs('01-01-2000'));
         setPatient({
             firstname: "",
             lastname: "",
             gender: "FEMALE",
             address: "",
-            birthday: '2000-01-01',
+            birthday: "01-01-2000",
             telephone: "",
             imageIds: [],
             timeStamp: ""
         })
     }
 
-    const [value, setValue] = React.useState<Dayjs>(dayjs('2000-01-01'));
-
-    const handleChangeDatePicker = (newValue:  Dayjs|null) => {
-        if(newValue){
-            setValue(newValue);
-            setPatient({
-                ...patient,
-                birthday: newValue.toISOString()
-            });
-        }else{
-            console.log("Date is null!")
-        }
-    };
-
     return (
-        <Dialog maxWidth={"md"} open={open} onClose={handleClose}>
+        <Dialog keepMounted={false} maxWidth={"md"} open={open} onClose={handleClose}>
             <DialogTitle>Formula</DialogTitle>
 
             <DialogContent>
@@ -133,7 +140,7 @@ export default function PatientForm({
                             <Stack spacing={3}>
                                 <DesktopDatePicker
                                     label="Birthdate"
-                                    inputFormat="MM/DD/YYYY"
+                                    inputFormat="MM-DD-YYYY"
                                     value={value}
                                     onChange={handleChangeDatePicker}
                                     renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) =>
