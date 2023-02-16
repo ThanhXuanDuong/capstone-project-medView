@@ -1,7 +1,7 @@
 import {Box, Card, CardActionArea, CardActions, CardMedia, IconButton, Typography} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CommentIcon from "@mui/icons-material/Comment";
-import React, {useEffect, useState} from "react";
+import React, {useRef} from "react";
 import Note from "../../types/Note";
 
 export default function ImageCard({
@@ -17,20 +17,14 @@ export default function ImageCard({
     onView: (id:string) => void,
     onDelete: (id:string) => void
 }){
-    const [hasNote, setHasNote]= useState<boolean>(false);
-    //console.log(notesByPatId)
     const handleClick = () => {
         onView(id);
     }
 
-    useEffect(() => {
-        try{
-            const notes = notesByPatId.get(id);
-            notes && setHasNote(notes.length>0);
-        }catch(e){
-            console.log("Error");
-        }
-    },[id, notesByPatId]);
+    let notes = useRef<Note[]| undefined>([]);
+    if(notesByPatId.get(id)){
+         notes.current = notesByPatId.get(id);
+    }
 
     return (
         <Card sx={{
@@ -56,7 +50,7 @@ export default function ImageCard({
                         style={{padding: "8%" }}
                         image ={"/api/files/"+id}
                     />
-                    {hasNote &&
+                    {notes.current?.length &&
                         <Box  sx={{position:"absolute", top:5,left:5}}>
                             <CommentIcon sx={{color:"primary.main"}} fontSize={"small"} />
                         </Box>

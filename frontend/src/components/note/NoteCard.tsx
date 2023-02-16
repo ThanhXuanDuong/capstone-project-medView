@@ -9,7 +9,7 @@ export default function NoteCard({
     onEdit
 }:{
     note: Note,
-    onDelete: (id: string|undefined) => void,
+    onDelete: (note: Note|undefined) => void,
     onEdit: (note: Note|undefined) => void
 }){
     return (
@@ -32,7 +32,7 @@ export default function NoteCard({
                     <EditIcon />
                 </IconButton>
                 <IconButton aria-label="delete"
-                            onClick={() => onDelete(note.id)}>
+                            onClick={() => onDelete(note)}>
                     <DeleteIcon />
                 </IconButton>
             </CardActions>

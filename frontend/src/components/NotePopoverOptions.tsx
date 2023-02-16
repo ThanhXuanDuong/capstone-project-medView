@@ -22,7 +22,7 @@ export default function NotePopoverOptions({
     setAnchorEl: (element: HTMLButtonElement | null) => void,
     onAdd: (note:Note) => void,
     onEdit: (note:Note) => void,
-    onDelete: (id:string|undefined) => void
+    onDelete: (note: Note) => void
 }) {
     const handleClose = () => {
         setAnchorEl(null);
@@ -64,7 +64,7 @@ export default function NotePopoverOptions({
                         </Box>
                     }
                     <Box alignSelf={"center"}>
-                        <IconButton aria-label="delete-note" onClick={() => onDelete(note.id)}>
+                        <IconButton aria-label="delete-note" onClick={() => onDelete(note)}>
                             <DeleteIcon sx={{color: "secondary.contrastText"}} fontSize={"small"}/>
                         </IconButton>
                     </Box>
