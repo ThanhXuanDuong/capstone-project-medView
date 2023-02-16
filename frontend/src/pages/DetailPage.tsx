@@ -48,8 +48,7 @@ export default function DetailPage(){
     const {openDialog,handleOpenDialog, handleCloseDialog} = useDialogActions();
     const [editing, setEditing] = useState<boolean>(false);
     const [deletingImageId, setDeletingImageId] = useState<string|undefined>("");
-    const [deletingNote, setDeletingNote] = useState<Note>(
-        {imageId:"",text:"",relativeX:0,relativeY:0});
+    const [deletingNote, setDeletingNote] = useState<Note|null>(null);
 
     const [viewImageIds, setViewImageIds] = useState <string[]> ([]);
     const [grids, setGrids] = useState<number>(1);
@@ -150,9 +149,11 @@ export default function DetailPage(){
        })();
     };
 
+    console.log(deletingNote);
     const onDeleteNote =(note: Note) =>{
         (async () => {
             try{
+                console.log("delete note")
                 await axios.delete("/api/notes/" +note.id);
                 setNotes(notes.filter(n => n.id !==note.id));
                 setDeletingNote({imageId:"",text:"",relativeX:0,relativeY:0});
@@ -173,9 +174,10 @@ export default function DetailPage(){
 
     };
 
-    const onDeleteImage =(id: string|undefined) =>{
+    const onDeleteImage =(id: string) =>{
         (async () => {
             try{
+                console.log("delete image");
                 await axios.delete("/api/files/" +id);
                 const p = {...viewPatient,
                     imageIds: viewPatient.imageIds.filter(imageId => imageId!==id)};
@@ -274,7 +276,7 @@ export default function DetailPage(){
                                                notesByPatId={notesByPatId}
                                                index={index}
                                                onView={onView}
-                                               onDelete={() => {
+                                               onDelete={(id) => {
                                                    handleOpenDialog();
                                                    setDeletingImageId(id);
                                                }}
