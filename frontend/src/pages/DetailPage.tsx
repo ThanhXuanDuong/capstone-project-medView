@@ -149,11 +149,9 @@ export default function DetailPage(){
        })();
     };
 
-    console.log(deletingNote);
     const onDeleteNote =(note: Note) =>{
         (async () => {
             try{
-                console.log("delete note")
                 await axios.delete("/api/notes/" +note.id);
                 setNotes(notes.filter(n => n.id !==note.id));
                 setDeletingNote({imageId:"",text:"",relativeX:0,relativeY:0});
@@ -177,7 +175,6 @@ export default function DetailPage(){
     const onDeleteImage =(id: string) =>{
         (async () => {
             try{
-                console.log("delete image");
                 await axios.delete("/api/files/" +id);
                 const p = {...viewPatient,
                     imageIds: viewPatient.imageIds.filter(imageId => imageId!==id)};
