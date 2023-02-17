@@ -41,7 +41,6 @@ export default function PatientForm({
         }
     },[patient,editing]);
 
-    console.log(value)
     const handleChangeDatePicker = (newValue:  Dayjs|null) => {
         if(newValue){
             setValue(newValue);
