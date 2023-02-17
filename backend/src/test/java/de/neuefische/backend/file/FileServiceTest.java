@@ -1,5 +1,6 @@
 package de.neuefische.backend.file;
 
+import de.neuefische.backend.exception.PatientNotRegisteredException;
 import de.neuefische.backend.note.NoteRepository;
 import de.neuefische.backend.patient.PatientRepository;
 import de.neuefische.backend.user.AppUserService;
@@ -11,9 +12,11 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class FileServiceTest {
 
@@ -47,5 +50,17 @@ class FileServiceTest {
         }
 
         assertTrue(mockMultipartFile.isEmpty());
+    }
+
+    @Test
+    void deleteAllByPatientId_throwException_whenPatientNotExists(){
+        //given
+        PatientRepository patientRepository = mock(PatientRepository.class);
+        when(patientRepository.findById("not existing id")).thenReturn(Optional.empty());
+
+        // when & given
+        Assertions.assertThrows(PatientNotRegisteredException.class,
+                () -> fileService.deleteAllByPatientId("not existing id"));
+
     }
 }
