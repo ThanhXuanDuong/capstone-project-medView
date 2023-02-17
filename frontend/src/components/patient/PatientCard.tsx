@@ -55,7 +55,7 @@ export default function PatientCard({
                 </CardContent>
             </ButtonBase>
 
-            <Divider orientation="vertical" flexItem />
+            <Divider orientation="vertical" flexItem variant="middle" sx={{bgcolor: "darkgrey"}} />
 
             <Box sx={{ display: 'flex',
                 flexDirection:'column',

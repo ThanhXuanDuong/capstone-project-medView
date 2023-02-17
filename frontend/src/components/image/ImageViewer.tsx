@@ -20,11 +20,11 @@ export default function ImageViewer({
             break;
         case 2:
             gridHeight = "100%";
-            gridWidth= "49.8%";
+            gridWidth= "49.9%";
             break;
         default:
-            gridHeight = "49.8%";
-            gridWidth= "49.8%";
+            gridHeight = "49.9%";
+            gridWidth= "49.9%";
             fWrap = "wrap";
     }
 
@@ -65,6 +65,7 @@ export default function ImageViewer({
                                  alignItems:"center",
                                  width: gridWidth,
                                  height: gridHeight,
+                                 borderBottom: "1px solid darkgrey",
                                  p:"5%",
                                  alignSelf:"center"
                              }}>
@@ -75,7 +76,7 @@ export default function ImageViewer({
                                       alt={"img"}/>
                              </Box>
                              {ids.length !==1 &&
-                                 <Divider orientation="vertical" flexItem />
+                                 <Divider orientation="vertical" flexItem sx={{bgcolor: "darkgrey"}}/>
                              }
                          </>
                      )

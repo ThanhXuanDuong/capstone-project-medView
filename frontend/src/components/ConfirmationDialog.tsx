@@ -21,13 +21,13 @@ export default function ConfirmationDialog({
                 aria-describedby="alert-dialog-description"
             >
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                    <DialogContentText id="alert-dialog-description" variant={"h6"}>
                         Are you sure you want to delete this?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={onDelete} autoFocus>
+                    <Button variant={"outlined"} onClick={handleClose}>Cancel</Button>
+                    <Button variant={"contained"} onClick={onDelete} autoFocus>
                         Delete
                     </Button>
                 </DialogActions>

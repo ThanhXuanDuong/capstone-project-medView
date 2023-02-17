@@ -77,11 +77,10 @@ export default function PatientForm({
     }
 
     return (
-        <Dialog keepMounted={false} maxWidth={"md"} open={open} onClose={handleClose}>
+        <Dialog maxWidth={"md"} open={open} onClose={handleClose}>
             <DialogTitle>Formula</DialogTitle>
 
             <DialogContent>
-
                 <FormControl>
                     <Box sx={{
                         display: 'flex',
@@ -177,8 +176,8 @@ export default function PatientForm({
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={onCancel}>Cancel</Button>
-                <Button onClick={() => onSave(patient)}>Save</Button>
+                <Button variant={"outlined"} onClick={onCancel}>Cancel</Button>
+                <Button variant={"contained"} onClick={() => onSave(patient)}>Save</Button>
             </DialogActions>
         </Dialog>
 
