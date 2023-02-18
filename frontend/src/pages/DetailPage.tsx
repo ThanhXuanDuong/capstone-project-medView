@@ -26,10 +26,10 @@ import NavBar from "../components/NavBar";
 import theme from "../components/styling/theme";
 import PopoverToolbar from "../components/PopoverToolbar";
 import CommentIcon from '@mui/icons-material/Comment';
-import MousePosition from "../components/image/MousePosition";
+import PolylineOutlinedIcon from '@mui/icons-material/PolylineOutlined';
+import MouseClickPosition from "../components/image/MouseClickPosition";
 import NotePopover from "../components/NotePopover";
 import useNotesByPatId from "../hooks/useNotesByPatId";
-
 
 export default function DetailPage(){
     const {patients,setPatients} = usePatients();
@@ -41,8 +41,9 @@ export default function DetailPage(){
                     relativeX: 0,
                     relativeY: 0});
 
-    const [markup, setMarkup] = useState<boolean>(false)
-    const {mousePos,mouseRelativePos} =MousePosition(markup);
+    const [markup, setMarkup] = useState<boolean>(false);
+    const {mousePos,mouseRelativePos} =MouseClickPosition(markup);
+    const [draw, setDraw] = useState<boolean>(false);
 
     const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
     const {openDialog,handleOpenDialog, handleCloseDialog} = useDialogActions();
@@ -208,8 +209,7 @@ export default function DetailPage(){
 
             {!isReady
             ? null
-            :
-            <Grid container sx={{mt: "48px",
+            : <Grid container sx={{mt: "48px",
                                 mb: 0,
                                 height: 'calc(100vh - 48px)',
                                 overflow:"hidden"}}>
@@ -218,7 +218,7 @@ export default function DetailPage(){
                           justifyContent:"center",
                           height: "100%",
                           backgroundColor: "black"}}>
-                    <ImageViewer ids={viewImageIds} onImgDisplay={setImgPosition}/>
+                    <ImageViewer ids={viewImageIds} onImgDisplay={setImgPosition} draw={draw}/>
                     <Box sx={{position:"absolute",
                         display:"flex",
                         top: 30,
@@ -232,6 +232,12 @@ export default function DetailPage(){
                         <Box alignSelf={"center"}>
                             <IconButton onClick={() => setMarkup(true)}>
                                 <CommentIcon/>
+                            </IconButton>
+                        </Box>
+                        <Divider orientation="vertical" flexItem />
+                        <Box alignSelf={"center"}>
+                            <IconButton onClick={() =>{setDraw(!draw)}}>
+                                <PolylineOutlinedIcon/>
                             </IconButton>
                         </Box>
                     </Box>
@@ -321,15 +327,16 @@ export default function DetailPage(){
                                 </ListItem>
                             ))}
                         </List>
-
-                        <NoteForm note={note}
-                                  mouseRelativePos={mouseRelativePos}
-                                  setNote={setNote}
-                                  editing={editing}
-                                  setEditing={setEditing}
-                                  open={openForm}
-                                  handleClose={handleCloseForm}
-                                  onSave={editing ? onEdit : onAdd}/>
+                        {openForm &&
+                            < NoteForm note={note}
+                            mouseRelativePos={mouseRelativePos}
+                            setNote={setNote}
+                            editing={editing}
+                            setEditing={setEditing}
+                            open={openForm}
+                            handleClose={handleCloseForm}
+                            onSave={editing ? onEdit : onAdd}/>
+                        }
                     </Box>
 
                     {deletingImageId &&
@@ -346,16 +353,17 @@ export default function DetailPage(){
                     }
                 </Grid>
 
-                {viewImageIds.length===1 && imgPosition && notes.map(note => {
-                    const x= (note.relativeX * imgPosition.width + imgPosition.left)  ;
-                    const y=  (note.relativeY * imgPosition.height + imgPosition.top);
-                    return <NotePopover key={note.id}
-                                        position={{x,y}}
-                                        editing={true}
-                                        handleOpenForm={handleOpenForm}
-                                        handleEditClick={handleEditClick}
-                                        handleDeleteClick={handleDeleteClick}
-                                        note={note}
+                {viewImageIds.length===1 && imgPosition &&
+                    notes.map(note => {
+                        const x= (note.relativeX * imgPosition.width + imgPosition.left)  ;
+                        const y=  (note.relativeY * imgPosition.height + imgPosition.top);
+                        return <NotePopover key={note.id}
+                                            position={{x,y}}
+                                            editing={true}
+                                            handleOpenForm={handleOpenForm}
+                                            handleEditClick={handleEditClick}
+                                            handleDeleteClick={handleDeleteClick}
+                                            note={note}
                     />}
                 )}
 
