@@ -3,6 +3,7 @@ import Logout from "./login/Logout";
 import HomeIcon from '@mui/icons-material/Home';
 import {useNavigate} from "react-router-dom";
 import logo from "../logo.png";
+import React from "react";
 
 export default function NavBar ({
     showIcons

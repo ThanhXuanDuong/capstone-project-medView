@@ -175,13 +175,15 @@ export default function DashboardPage(){
                                 onEdit={handleClickEdit}
                 />
 
-                <PatientForm patient={patient}
-                            setPatient={setPatient}
-                            editing={editing}
-                            setEditing={setEditing}
-                            open={openForm}
-                            handleClose={handleCloseForm}
-                            onSave={editing? onUpdate: onAdd}/>
+                {openForm &&
+                    < PatientForm patient={patient}
+                    setPatient={setPatient}
+                    editing={editing}
+                    setEditing={setEditing}
+                    open={openForm}
+                    handleClose={handleCloseForm}
+                    onSave={editing? onUpdate: onAdd}/>
+                }
 
                 {deletingId &&
                     <ConfirmationDialog open={openDialog}

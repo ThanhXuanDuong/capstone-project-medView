@@ -247,7 +247,7 @@ export default function DetailPage(){
                         </Typography>
                     </Box>
 
-                    <Divider/>
+                    <Divider variant="middle" sx={{bgcolor: "darkgrey"}}/>
 
                     <Box sx={{
                         display: 'flex',
@@ -283,7 +283,7 @@ export default function DetailPage(){
                         </List>
                     </Box>
 
-                    <Divider />
+                    <Divider variant="middle" sx={{bgcolor: "darkgrey"}}/>
 
                     <Box sx={{
                         position:'relative',
