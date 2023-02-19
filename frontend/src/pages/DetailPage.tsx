@@ -24,13 +24,14 @@ import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import NavBar from "../components/styling/NavBar";
 import theme from "../components/styling/theme";
-import PopoverToolbar from "../components/note/PopoverToolbar";
+import PopoverSelectGrids from "../components/note/PopoverSelectGrids";
 import CommentIcon from '@mui/icons-material/Comment';
-import PolylineOutlinedIcon from '@mui/icons-material/PolylineOutlined';
 import MouseClickPosition from "../components/note/MouseClickPosition";
 import NotePopover from "../components/note/NotePopover";
 import useNotesByPatId from "../hooks/useNotesByPatId";
 import Shape from "../types/Shape";
+import MouseUpDownPosition from "../components/shape/MouseUpDownPosition";
+import PopoverSelectShape from "../components/shape/PopoverSelectShape";
 
 export default function DetailPage(){
     const {patients,setPatients} = usePatients();
@@ -45,6 +46,14 @@ export default function DetailPage(){
     const [markup, setMarkup] = useState<boolean>(false);
     const {mousePos,mouseRelativePos} =MouseClickPosition(markup);
     const [draw, setDraw] = useState<boolean>(false);
+    const [newShape, setNewShape] =useState<Shape>(
+        { id:"0",
+                   type:"circle",
+                   point1:[0,0],
+                   point2: [0,0],
+                   imageId:""});
+
+    const {mouseUpRelativePos,mouseDownRelativePos} =MouseUpDownPosition({draw,newShape,setNewShape});
     const [shapes, setShapes] = useState<Shape[]>([]);
 
     const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
@@ -62,6 +71,7 @@ export default function DetailPage(){
     const onView = (id:string) => {
         if (grids===1){
             setViewImageIds([id]);
+            setNewShape({...newShape,imageId:id});
         }else if (viewImageIds.length >= grids){
             setViewImageIds([...viewImageIds.slice(1),id]);
         }else{
@@ -77,7 +87,6 @@ export default function DetailPage(){
                     const response = await axios.get(`/api/notes/image/${viewImageId}`);
                     setNotes(response.data.reverse());
                     const res = await axios.get(`/api/shapes/image/${viewImageId}`);
-                    console.log(res)
                     setShapes(res.data);
                 }
             }catch (e:any){
@@ -227,6 +236,7 @@ export default function DetailPage(){
                                  onImgDisplay={setImgPosition}
                                  imgPosition={imgPosition}
                                  draw={draw}
+                                 newShape={newShape}
                                  shapes={shapes}
                     />
                     <Box sx={{position:"absolute",
@@ -235,21 +245,25 @@ export default function DetailPage(){
                         right: 15,
                         backgroundColor:"action.selected",
                         borderRadius:"4px"}}>
-                        <PopoverToolbar setGrids={setGrids}
-                                        viewImageIds={viewImageIds}
-                                        setViewImageIds={setViewImageIds}/>
+                        <PopoverSelectGrids setGrids={setGrids}
+                                            viewImageIds={viewImageIds}
+                                            setViewImageIds={setViewImageIds}/>
+
                         <Divider orientation="vertical" flexItem />
+
                         <Box alignSelf={"center"}>
                             <IconButton onClick={() => setMarkup(true)}>
                                 <CommentIcon/>
                             </IconButton>
                         </Box>
+
                         <Divider orientation="vertical" flexItem />
-                        <Box alignSelf={"center"}>
-                            <IconButton onClick={() =>{setDraw(!draw)}}>
-                                <PolylineOutlinedIcon/>
-                            </IconButton>
-                        </Box>
+
+                        <PopoverSelectShape draw = {draw}
+                                            setDraw = {setDraw}
+                                            newShape={newShape}
+                                            setNewShape = {setNewShape}
+                        />
                     </Box>
                 </Grid>
 

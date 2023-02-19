@@ -9,17 +9,19 @@ export default function ImageViewer({
     onImgDisplay,
     imgPosition,
     draw,
+    newShape,
     shapes
 }:{
     ids: string[],
     onImgDisplay: (rect:DOMRect) => void,
     imgPosition:DOMRect|undefined
     draw: boolean,
+    newShape:Shape,
     shapes: Shape[]
 }){
     let imgRef = useRef<HTMLImageElement>(null);
-    //const {mouseUpPos,mouseDownPos,mouseUpRelativePos,mouseDownRelativePos} =MouseUpDownPosition(draw);
 
+    console.log(newShape);
     let gridHeight: string;
     let gridWidth :string;
     let fWrap : string = "nowrap";
@@ -54,8 +56,6 @@ export default function ImageViewer({
 
     },[ids,imgRef.current?.complete, onImgDisplay]);
 
-    //console.log("downX"+ mouseDownPos.x+"downY"+ mouseDownPos.y);
-    //console.log("upX"+ mouseUpPos.x+"upY"+ mouseUpPos.y);
     return (
         <>
             <Card id={"image-viewer"}
@@ -87,7 +87,13 @@ export default function ImageViewer({
                                       draggable="false"
                                  />
 
-                                 {ids.length===1 && <DrawShapes shapes={shapes} imgPosition={imgPosition}/>}
+                                 {ids.length===1 &&
+                                     <DrawShapes shapes={shapes}
+                                                 imgPosition={imgPosition}
+                                                 draw={draw}
+                                                 newShape={newShape}
+                                     />}
+
                              </Box>
                              {ids.length !==1 &&
                                  <Divider orientation="vertical" flexItem sx={{bgcolor: "darkgrey"}}/>

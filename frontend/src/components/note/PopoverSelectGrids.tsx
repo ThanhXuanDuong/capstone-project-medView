@@ -2,9 +2,9 @@ import * as React from 'react';
 import Popover from '@mui/material/Popover';
 import {Box, IconButton} from "@mui/material";
 import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
-import SelectedList from "./SelectedList";
+import SelectGrids from "./SelectGrids";
 
-export default function PopoverToolbar({
+export default function PopoverSelectGrids({
     setGrids,
     viewImageIds,
     setViewImageIds
@@ -45,7 +45,7 @@ export default function PopoverToolbar({
                     horizontal: 'center',
                 }}
             >
-                <SelectedList setGrids={setGrids}
+                <SelectGrids setGrids={setGrids}
                               viewImageIds={viewImageIds}
                               setViewImageIds={setViewImageIds}
                               handleClose={handleClose}/>

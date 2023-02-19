@@ -1,10 +1,16 @@
 import {useEffect, useState} from "react";
 import Position from "../../types/Position";
+import Shape from "../../types/Shape";
 
-export default function MouseUpDownPosition(draw:boolean) {
-    const [mouseUpPos, setMouseUpPos] = useState<Position>({x: 0.,y: 0.});
-    const [mouseDownPos, setMouseDownPos] = useState<Position>({x: 0.,y: 0.});
-
+export default function MouseUpDownPosition({
+    draw,
+    newShape,
+    setNewShape
+}:{
+    draw:boolean,
+    newShape:Shape
+    setNewShape: (shape:Shape)=>void
+}) {
     const [mouseUpRelativePos, setMouseUpRelativePos] = useState<Position>({x: 0.,y: 0.});
     const [mouseDownRelativePos, setMouseDownRelativePos] = useState<Position>({x: 0.,y: 0.});
 
@@ -12,36 +18,33 @@ export default function MouseUpDownPosition(draw:boolean) {
     const img = document.getElementById("image-in-viewer");
 
     useEffect(() => {
-        setMouseDownPos({x: 0.,y: 0.});
-        setMouseUpPos({x: 0.,y: 0.});
-
         if (draw && imgViewer && img) {
             let rect = img.getBoundingClientRect();
 
             const handleMouseDown = (event: MouseEvent) => {
-                setMouseDownPos({x: event.clientX, y: event.clientY});
                 setMouseDownRelativePos({
                     x: (event.clientX - rect.x) / rect.width,
                     y: (event.clientY - rect.y) / rect.height
                 });
+                setNewShape({...newShape, point1:[event.clientX,event.clientY]})
             };
 
             const handleMouseUp = (event: MouseEvent) => {
-                setMouseUpPos({x: event.clientX, y: event.clientY});
                 setMouseUpRelativePos({
                     x: (event.clientX - rect.x) / rect.width,
                     y: (event.clientY - rect.y) / rect.height
                 });
+                setNewShape({...newShape, point2:[event.clientX,event.clientY]})
             };
 
-            imgViewer.addEventListener('mousedown', handleMouseDown, {once: true});
-            imgViewer.addEventListener('mouseup', handleMouseUp, {once: true});
+            imgViewer.addEventListener('mousedown', handleMouseDown, {once:true});
+            imgViewer.addEventListener('mouseup', handleMouseUp, {once:true});
             return () => {
                 window.removeEventListener('mousedown', handleMouseDown);
                 window.removeEventListener('mouseup', handleMouseUp);
             }
         }
-    },[img, imgViewer, draw]);
+    },[img, imgViewer, draw, setNewShape, newShape]);
 
-    return {mouseUpPos,mouseDownPos,mouseUpRelativePos,mouseDownRelativePos};
+    return {mouseUpRelativePos,mouseDownRelativePos};
 }
