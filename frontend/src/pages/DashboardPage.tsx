@@ -5,15 +5,15 @@ import axios from "axios";
 import PatientGallery from "../components/patient/PatientGallery";
 import PatientForm from "../components/patient/PatientForm";
 import useFormActions from "../hooks/useFormActions";
-import ConfirmationDialog from "../components/ConfirmationDialog";
+import ConfirmationDialog from "../components/styling/ConfirmationDialog";
 import useDialogActions from "../hooks/useDialogActions";
 import usePatients from "../hooks/usePatients";
 import {toast} from "react-toastify";
-import SortDropDown from "../components/SortDropDown";
+import SortDropDown from "../components/patient/SortDropDown";
 import theme from "../components/styling/theme";
 import AddBoxIcon from '@mui/icons-material/Add';
 import {useNavigate} from "react-router-dom";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/styling/NavBar";
 
 export default function DashboardPage(){
     const initial ={

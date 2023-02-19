@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Popover from '@mui/material/Popover';
-import SelectedList from "./SelectedList";
 import {Box, IconButton} from "@mui/material";
 import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
+import SelectedList from "./SelectedList";
 
 export default function PopoverToolbar({
     setGrids,

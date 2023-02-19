@@ -1,8 +1,8 @@
 import {AppBar, Box, CardMedia, IconButton, Toolbar, Typography} from "@mui/material";
-import Logout from "./login/Logout";
+import Logout from "../login/Logout";
 import HomeIcon from '@mui/icons-material/Home';
 import {useNavigate} from "react-router-dom";
-import logo from "../logo.png";
+import logo from "../../logo.png";
 import React from "react";
 
 export default function NavBar ({

@@ -1,6 +1,7 @@
 type Shape = {
     type: string,
-    point1:[X:number,Y:number],
-    point2: [X:number,Y:number]
+    point1:[relativeX:number,relativeY:number],
+    point2: [relativeX:number,relativeY:number],
+    imageId:string
 }
 export default Shape;

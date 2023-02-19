@@ -18,18 +18,19 @@ import axios from "axios";
 import useFormActions from "../hooks/useFormActions";
 import NoteForm from "../components/note/NoteForm";
 import useDialogActions from "../hooks/useDialogActions";
-import ConfirmationDialog from "../components/ConfirmationDialog";
+import ConfirmationDialog from "../components/styling/ConfirmationDialog";
 import usePatients from "../hooks/usePatients";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/styling/NavBar";
 import theme from "../components/styling/theme";
-import PopoverToolbar from "../components/PopoverToolbar";
+import PopoverToolbar from "../components/note/PopoverToolbar";
 import CommentIcon from '@mui/icons-material/Comment';
 import PolylineOutlinedIcon from '@mui/icons-material/PolylineOutlined';
-import MouseClickPosition from "../components/image/MouseClickPosition";
-import NotePopover from "../components/NotePopover";
+import MouseClickPosition from "../components/note/MouseClickPosition";
+import NotePopover from "../components/note/NotePopover";
 import useNotesByPatId from "../hooks/useNotesByPatId";
+import Shape from "../types/Shape";
 
 export default function DetailPage(){
     const {patients,setPatients} = usePatients();
@@ -44,6 +45,7 @@ export default function DetailPage(){
     const [markup, setMarkup] = useState<boolean>(false);
     const {mousePos,mouseRelativePos} =MouseClickPosition(markup);
     const [draw, setDraw] = useState<boolean>(false);
+    const [shapes, setShapes] = useState<Shape[]>([]);
 
     const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
     const {openDialog,handleOpenDialog, handleCloseDialog} = useDialogActions();
@@ -74,6 +76,9 @@ export default function DetailPage(){
                 for (let viewImageId of viewImageIds){
                     const response = await axios.get(`/api/notes/image/${viewImageId}`);
                     setNotes(response.data.reverse());
+                    const res = await axios.get(`/api/shapes/image/${viewImageId}`);
+                    console.log(res)
+                    setShapes(res.data);
                 }
             }catch (e:any){
                 console.log("Error while loading data!")
@@ -218,7 +223,12 @@ export default function DetailPage(){
                           justifyContent:"center",
                           height: "100%",
                           backgroundColor: "black"}}>
-                    <ImageViewer ids={viewImageIds} onImgDisplay={setImgPosition} draw={draw}/>
+                    <ImageViewer ids={viewImageIds}
+                                 onImgDisplay={setImgPosition}
+                                 imgPosition={imgPosition}
+                                 draw={draw}
+                                 shapes={shapes}
+                    />
                     <Box sx={{position:"absolute",
                         display:"flex",
                         top: 30,
@@ -353,7 +363,7 @@ export default function DetailPage(){
                     }
                 </Grid>
 
-                {viewImageIds.length===1 && imgPosition &&
+                { viewImageIds.length===1 && imgPosition &&
                     notes.map(note => {
                         const x= (note.relativeX * imgPosition.width + imgPosition.left)  ;
                         const y=  (note.relativeY * imgPosition.height + imgPosition.top);

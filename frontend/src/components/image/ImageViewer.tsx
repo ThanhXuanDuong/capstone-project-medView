@@ -1,20 +1,24 @@
 import {Box, Card, Divider} from "@mui/material";
 import "./ImageViewer.css"
 import React, {useEffect, useRef} from "react";
-import {DrawShapes} from "../DrawShapes";
-import MouseUpDownPosition from "./MouseUpDownPosition";
+import {DrawShapes} from "../shape/DrawShapes";
+import Shape from "../../types/Shape";
 
 export default function ImageViewer({
     ids,
     onImgDisplay,
-    draw
+    imgPosition,
+    draw,
+    shapes
 }:{
-    ids:string[],
-    onImgDisplay:(rect:DOMRect) => void,
-    draw:boolean
+    ids: string[],
+    onImgDisplay: (rect:DOMRect) => void,
+    imgPosition:DOMRect|undefined
+    draw: boolean,
+    shapes: Shape[]
 }){
     let imgRef = useRef<HTMLImageElement>(null);
-    const {mouseUpPos,mouseDownPos,mouseUpRelativePos,mouseDownRelativePos} =MouseUpDownPosition(draw);
+    //const {mouseUpPos,mouseDownPos,mouseUpRelativePos,mouseDownRelativePos} =MouseUpDownPosition(draw);
 
     let gridHeight: string;
     let gridWidth :string;
@@ -50,8 +54,8 @@ export default function ImageViewer({
 
     },[ids,imgRef.current?.complete, onImgDisplay]);
 
-    console.log("downX"+ mouseDownPos.x+"downY"+ mouseDownPos.y);
-    console.log("upX"+ mouseUpPos.x+"upY"+ mouseUpPos.y);
+    //console.log("downX"+ mouseDownPos.x+"downY"+ mouseDownPos.y);
+    //console.log("upX"+ mouseUpPos.x+"upY"+ mouseUpPos.y);
     return (
         <>
             <Card id={"image-viewer"}
@@ -83,18 +87,7 @@ export default function ImageViewer({
                                       draggable="false"
                                  />
 
-                                 {draw && (mouseDownPos.x !==0 &&
-                                         mouseDownPos.y !==0 &&
-                                         mouseUpPos.x !==0 &&
-                                         mouseUpPos.y !==0) &&
-                                     <DrawShapes shapes={[
-                                         {type:"circle",
-                                         point1:[mouseDownPos.x,mouseDownPos.y],
-                                         point2:[mouseUpPos.x,mouseUpPos.y]}
-                                     ]}/>
-
-                                 }
-
+                                 {ids.length===1 && <DrawShapes shapes={shapes} imgPosition={imgPosition}/>}
                              </Box>
                              {ids.length !==1 &&
                                  <Divider orientation="vertical" flexItem sx={{bgcolor: "darkgrey"}}/>

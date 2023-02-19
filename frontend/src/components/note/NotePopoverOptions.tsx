@@ -4,8 +4,8 @@ import {Box, IconButton, ThemeProvider} from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Note from "../types/Note";
-import theme from "./styling/theme";
+import Note from "../../types/Note";
+import theme from "../styling/theme";
 
 export default function NotePopoverOptions({
     note,

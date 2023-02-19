@@ -3,9 +3,9 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import {Box, IconButton, ThemeProvider} from "@mui/material";
 import CommentIcon from "@mui/icons-material/Comment";
+import Note from "../../types/Note";
+import theme from "../styling/theme";
 import NotePopoverOptions from "./NotePopoverOptions";
-import Note from "../types/Note";
-import theme from "./styling/theme";
 
 export default function NotePopover({
     position,
