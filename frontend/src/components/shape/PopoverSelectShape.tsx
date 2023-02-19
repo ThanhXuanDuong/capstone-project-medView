@@ -6,12 +6,10 @@ import PolylineOutlinedIcon from "@mui/icons-material/PolylineOutlined";
 import Shape from "../../types/Shape";
 
 export default function PopoverSelectShape({
-    draw,
     setDraw,
     newShape,
     setNewShape
 }:{
-    draw: boolean,
     setDraw: (draw: boolean) => void,
     newShape: Shape,
     setNewShape: (shape:Shape) => void
@@ -21,7 +19,7 @@ export default function PopoverSelectShape({
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
-        setDraw(!draw);
+        setDraw(true);
     };
 
     const handleClose = () => {

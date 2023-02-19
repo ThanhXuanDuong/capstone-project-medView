@@ -47,13 +47,11 @@ export default function DetailPage(){
     const {mousePos,mouseRelativePos} =MouseClickPosition(markup);
     const [draw, setDraw] = useState<boolean>(false);
     const [newShape, setNewShape] =useState<Shape>(
-        { id:"0",
-                   type:"circle",
+                {type:"circle",
                    point1:[0,0],
                    point2: [0,0],
                    imageId:""});
-
-    const {mouseUpRelativePos,mouseDownRelativePos} =MouseUpDownPosition({draw,newShape,setNewShape});
+    const [saveShape, setSaveShape] =useState<boolean>(false);
     const [shapes, setShapes] = useState<Shape[]>([]);
 
     const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
@@ -66,7 +64,9 @@ export default function DetailPage(){
     const [grids, setGrids] = useState<number>(1);
     const {notesByPatId, setNotesByPatId} =useNotesByPatId();
     const navigate = useNavigate();
-    const [imgPosition,setImgPosition]= useState<DOMRect|undefined>(undefined);
+    const [imgRect,setImgRect]= useState<DOMRect|undefined>(undefined);
+    const {mouseUpPos,mouseDownPos,mouseUpRelativePos,mouseDownRelativePos} =MouseUpDownPosition(
+        {draw,setSaveShape,imgRect});
 
     const onView = (id:string) => {
         if (grids===1){
@@ -94,7 +94,26 @@ export default function DetailPage(){
                 e.response.status === "401" && navigate("/login");
             }
         })();
-    },[navigate, viewImageIds]);
+    },[navigate, viewImageIds,setShapes,saveShape]);
+
+    useEffect(() =>{
+        saveShape &&
+        (async () =>{
+            try{
+                await axios.post("/api/shapes",
+                    {...newShape,
+                        point1: [mouseDownRelativePos.x,mouseDownRelativePos.y],
+                        point2: [mouseUpRelativePos.x,mouseUpRelativePos.y]});
+
+            }catch (e:any){
+                console.log("Error while saving data!")
+                e.response.status === "401" && navigate("/login");
+            }finally {
+                setSaveShape(false);
+                setDraw(false);
+            }
+        })();
+        },[mouseDownRelativePos, mouseUpRelativePos, navigate, newShape, saveShape]);
 
     const onAdd= (createdNote:Note) => {
         (async () => {
@@ -233,10 +252,11 @@ export default function DetailPage(){
                           height: "100%",
                           backgroundColor: "black"}}>
                     <ImageViewer ids={viewImageIds}
-                                 onImgDisplay={setImgPosition}
-                                 imgPosition={imgPosition}
+                                 onImgDisplay={setImgRect}
                                  draw={draw}
                                  newShape={newShape}
+                                 mouseDownPos ={mouseDownPos}
+                                 mouseUpPos ={mouseUpPos}
                                  shapes={shapes}
                     />
                     <Box sx={{position:"absolute",
@@ -259,8 +279,7 @@ export default function DetailPage(){
 
                         <Divider orientation="vertical" flexItem />
 
-                        <PopoverSelectShape draw = {draw}
-                                            setDraw = {setDraw}
+                        <PopoverSelectShape setDraw = {setDraw}
                                             newShape={newShape}
                                             setNewShape = {setNewShape}
                         />
@@ -377,10 +396,10 @@ export default function DetailPage(){
                     }
                 </Grid>
 
-                { viewImageIds.length===1 && imgPosition &&
+                { viewImageIds.length===1 && imgRect &&
                     notes.map(note => {
-                        const x= (note.relativeX * imgPosition.width + imgPosition.left)  ;
-                        const y=  (note.relativeY * imgPosition.height + imgPosition.top);
+                        const x= (note.relativeX * imgRect.width + imgRect.left)  ;
+                        const y=  (note.relativeY * imgRect.height + imgRect.top);
                         return <NotePopover key={note.id}
                                             position={{x,y}}
                                             editing={true}

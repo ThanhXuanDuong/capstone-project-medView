@@ -3,25 +3,27 @@ import "./ImageViewer.css"
 import React, {useEffect, useRef} from "react";
 import {DrawShapes} from "../shape/DrawShapes";
 import Shape from "../../types/Shape";
+import Position from "../../types/Position";
 
 export default function ImageViewer({
     ids,
     onImgDisplay,
-    imgPosition,
     draw,
     newShape,
+    mouseDownPos,
+    mouseUpPos,
     shapes
 }:{
     ids: string[],
     onImgDisplay: (rect:DOMRect) => void,
-    imgPosition:DOMRect|undefined
     draw: boolean,
-    newShape:Shape,
+    newShape: Shape,
+    mouseDownPos: Position,
+    mouseUpPos:Position,
     shapes: Shape[]
 }){
     let imgRef = useRef<HTMLImageElement>(null);
 
-    console.log(newShape);
     let gridHeight: string;
     let gridWidth :string;
     let fWrap : string = "nowrap";
@@ -89,9 +91,11 @@ export default function ImageViewer({
 
                                  {ids.length===1 &&
                                      <DrawShapes shapes={shapes}
-                                                 imgPosition={imgPosition}
+                                                 imgRect={imgRef.current?.getBoundingClientRect()}
                                                  draw={draw}
                                                  newShape={newShape}
+                                                 mouseDownPos ={mouseDownPos}
+                                                 mouseUpPos ={mouseUpPos}
                                      />}
 
                              </Box>

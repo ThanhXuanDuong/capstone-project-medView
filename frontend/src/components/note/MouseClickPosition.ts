@@ -20,7 +20,7 @@ export default function MouseClickPosition(markup:boolean) {
             imgViewer.addEventListener('click', handleMouseClick, {once: true});
 
             return () => {
-                window.removeEventListener('click', handleMouseClick)
+                imgViewer.removeEventListener('click', handleMouseClick)
             }
         }
     },[img, imgViewer, markup]);

@@ -1,50 +1,53 @@
 import {useEffect, useState} from "react";
 import Position from "../../types/Position";
-import Shape from "../../types/Shape";
 
 export default function MouseUpDownPosition({
     draw,
-    newShape,
-    setNewShape
+    setSaveShape,
+    imgRect
 }:{
     draw:boolean,
-    newShape:Shape
-    setNewShape: (shape:Shape)=>void
+    setSaveShape:(save:boolean) => void,
+    imgRect:DOMRect|undefined
 }) {
+    const [mouseUpPos, setMouseUpPos] = useState<Position>({x: 0.,y: 0.});
+    const [mouseDownPos, setMouseDownPos] = useState<Position>({x: 0.,y: 0.});
+
     const [mouseUpRelativePos, setMouseUpRelativePos] = useState<Position>({x: 0.,y: 0.});
     const [mouseDownRelativePos, setMouseDownRelativePos] = useState<Position>({x: 0.,y: 0.});
 
     const imgViewer = document.getElementById("image-viewer");
-    const img = document.getElementById("image-in-viewer");
 
     useEffect(() => {
-        if (draw && imgViewer && img) {
-            let rect = img.getBoundingClientRect();
+        if (draw && imgViewer && imgRect) {
+            setMouseDownPos({x: 0.,y: 0.});
+            setMouseUpPos({x: 0.,y: 0.});
 
             const handleMouseDown = (event: MouseEvent) => {
+                setMouseDownPos({x: event.clientX, y: event.clientY});
                 setMouseDownRelativePos({
-                    x: (event.clientX - rect.x) / rect.width,
-                    y: (event.clientY - rect.y) / rect.height
+                    x: (event.clientX - imgRect.x) / imgRect.width,
+                    y: (event.clientY - imgRect.y) / imgRect.height
                 });
-                setNewShape({...newShape, point1:[event.clientX,event.clientY]})
             };
 
             const handleMouseUp = (event: MouseEvent) => {
+                setMouseUpPos({x: event.clientX, y: event.clientY});
                 setMouseUpRelativePos({
-                    x: (event.clientX - rect.x) / rect.width,
-                    y: (event.clientY - rect.y) / rect.height
+                    x: (event.clientX - imgRect.x) / imgRect.width,
+                    y: (event.clientY - imgRect.y) / imgRect.height
                 });
-                setNewShape({...newShape, point2:[event.clientX,event.clientY]})
+                setSaveShape(true);
             };
 
             imgViewer.addEventListener('mousedown', handleMouseDown, {once:true});
             imgViewer.addEventListener('mouseup', handleMouseUp, {once:true});
             return () => {
-                window.removeEventListener('mousedown', handleMouseDown);
-                window.removeEventListener('mouseup', handleMouseUp);
+                imgViewer.removeEventListener('mousedown', handleMouseDown);
+                imgViewer.removeEventListener('mouseup', handleMouseUp);
             }
         }
-    },[img, imgViewer, draw, setNewShape, newShape]);
+    },[imgViewer, draw, imgRect, setSaveShape]);
 
-    return {mouseUpRelativePos,mouseDownRelativePos};
+    return {mouseUpPos,mouseDownPos,mouseUpRelativePos,mouseDownRelativePos};
 }
