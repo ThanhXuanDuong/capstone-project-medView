@@ -12,7 +12,7 @@ public class Shape {
     @Id
     private String id;
     private String type;
-    private Float[] point1;
-    private Float[] point2;
+    private float[] point1;
+    private float[] point2;
     private String imageId;
 }

@@ -125,8 +125,7 @@ export default function DetailPage(){
 
                 toast.success("Successfully saving new note!",
                     {toastId:"successAdd"});
-            }catch(e: any)
-            {
+            }catch(e: any) {
                 e.response.status === "401" && navigate("/login");
                 toast.error("Error:"+
                     JSON.stringify(e.response.data, null, 2),
