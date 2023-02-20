@@ -37,8 +37,8 @@ export default function ImageViewer({
             gridWidth= "49.9%";
             break;
         default:
-            gridHeight = "49.9%";
-            gridWidth= "49.9%";
+            gridHeight = "49.8%";
+            gridWidth= "49.8%";
             fWrap = "wrap";
     }
 

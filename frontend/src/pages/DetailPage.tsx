@@ -44,7 +44,6 @@ export default function DetailPage(){
                     relativeY: 0});
 
     const [markup, setMarkup] = useState<boolean>(false);
-    const {mousePos,mouseRelativePos} =MouseClickPosition(markup);
     const [draw, setDraw] = useState<boolean>(false);
     const [newShape, setNewShape] =useState<Shape>(
                 {type:"circle",
@@ -57,7 +56,7 @@ export default function DetailPage(){
     const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
     const {openDialog,handleOpenDialog, handleCloseDialog} = useDialogActions();
     const [editing, setEditing] = useState<boolean>(false);
-    const [deletingImageId, setDeletingImageId] = useState<string|undefined>("");
+    const [deletingImageId, setDeletingImageId] = useState<string|null>("");
     const [deletingNote, setDeletingNote] = useState<Note|null>(null);
 
     const [viewImageIds, setViewImageIds] = useState <string[]> ([]);
@@ -65,6 +64,7 @@ export default function DetailPage(){
     const {notesByPatId, setNotesByPatId} =useNotesByPatId();
     const navigate = useNavigate();
     const [imgRect,setImgRect]= useState<DOMRect|undefined>(undefined);
+    const {mousePos,mouseRelativePos} =MouseClickPosition({markup,imgRect});
     const {mouseUpPos,mouseDownPos,mouseUpRelativePos,mouseDownRelativePos} =MouseUpDownPosition(
         {draw,setSaveShape,imgRect});
 
@@ -200,6 +200,7 @@ export default function DetailPage(){
                     {toastId:"errorDeleteNote"})
             }finally {
                 handleCloseDialog();
+                setDeletingNote(null);
             }
         })();
 
