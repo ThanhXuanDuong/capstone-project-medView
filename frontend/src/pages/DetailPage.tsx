@@ -220,9 +220,11 @@ export default function DetailPage(){
         (async () => {
             try{
                 await axios.delete("/api/files/" +id);
+                await axios.delete("/api/shapes/image/" +id);
                 const p = {...viewPatient,
                     imageIds: viewPatient.imageIds.filter(imageId => imageId!==id)};
                 setViewPatient(p);
+                setViewImageIds(viewImageIds.filter(imId =>imId !== id));
 
                 const response = await axios.put("/api/patients/" +p.id,p);
                 const updatedPatient =response.data;
@@ -233,7 +235,6 @@ export default function DetailPage(){
 
                 setDeletingImageId("");
                 setNotes([]);
-
                 toast.success("Successfully deleting image!",
                     {toastId:"successDeleteImage"})
             }catch (e: any){
