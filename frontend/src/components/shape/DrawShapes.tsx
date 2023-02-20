@@ -7,14 +7,16 @@ export function DrawShapes({
     draw,
     newShape,
     mouseDownPos,
-    mouseUpPos
+    mouseUpPos,
+    onDelete
 }:{
     shapes:Shape[],
     imgRect:DOMRect|undefined,
     draw: boolean,
-    newShape:Shape
-    mouseDownPos: Position
-    mouseUpPos:Position
+    newShape:Shape,
+    mouseDownPos: Position,
+    mouseUpPos:Position,
+    onDelete: (id:string|undefined)=> void
 }) {
 
     return (
@@ -32,12 +34,12 @@ export function DrawShapes({
                                     y={point1Y}
                                     width={Math.abs(point2X- point1X)}
                                     height={Math.abs(point2Y- point1Y)}
-                                    onClick={() => alert('You have clicked the square.')}/>
+                                    onClick={() => onDelete(shape.id)}/>
                             : <circle key={shape.id}
                                       cx={point1X}
                                       cy={point1Y}
                                       r={Math.round(Math.sqrt((point2X - point1X) ** 2 + (point2Y - point1Y) ** 2))}
-                                      onClick={() => alert('You have clicked the circle.')}/>
+                                      onClick={() => onDelete(shape.id)}/>
                         })
                     }
 
@@ -50,14 +52,12 @@ export function DrawShapes({
                                        x={mouseDownPos.x}
                                        y={mouseDownPos.y}
                                        width={Math.abs(mouseUpPos.x- mouseDownPos.x)}
-                                       height={Math.abs(mouseUpPos.y- mouseDownPos.y)}
-                                       onClick={() => alert('You have clicked the square.')}/>
+                                       height={Math.abs(mouseUpPos.y- mouseDownPos.y)}/>
                             : <circle
                                       cx={mouseDownPos.x}
                                       cy={mouseDownPos.y}
                                       r={Math.sqrt((mouseUpPos.x- mouseDownPos.x) ** 2
-                                          + (mouseUpPos.y- mouseDownPos.y) ** 2)}
-                                      onClick={() => alert('You have clicked the circle.')}/>)
+                                          + (mouseUpPos.y- mouseDownPos.y) ** 2)}/>)
 
                     }
                 </g>

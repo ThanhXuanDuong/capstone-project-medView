@@ -51,6 +51,7 @@ export default function DetailPage(){
     const [editing, setEditing] = useState<boolean>(false);
     const [deletingImageId, setDeletingImageId] = useState<string|null>("");
     const [deletingNote, setDeletingNote] = useState<Note|null>(null);
+    const [deletingShapeId, setDeletingShapeId] = useState<string|undefined>("");
 
     const [viewImageIds, setViewImageIds] = useState <string[]> ([]);
     const [grids, setGrids] = useState<number>(1);
@@ -245,6 +246,26 @@ export default function DetailPage(){
         })();
     };
 
+    const onDeleteShape =(id:string|undefined)=>{
+        (async () => {
+            try{
+                await axios.delete("/api/shapes/" +id);
+                setShapes(shapes.filter(shape => shape.id !==id));
+                setDeletingShapeId("");
+
+                toast.success("Successfully deleting shape!",
+                    {toastId:"successDeleteShape"})
+            }catch (e: any){
+                e.response.status === "401" && navigate("/login");
+                toast.error("Error while deleting shape!",
+                    {toastId:"errorDeleteShape"})
+            }finally {
+                handleCloseDialog();
+            }
+        })();
+    }
+
+
     return(
         <ThemeProvider theme={theme}>
             <NavBar showIcons={true}/>
@@ -267,6 +288,10 @@ export default function DetailPage(){
                                  mouseDownPos ={mouseDownPos}
                                  mouseUpPos ={mouseUpPos}
                                  shapes={shapes}
+                                 onDelete={(id) => {
+                                     handleOpenDialog();
+                                     setDeletingShapeId(id);
+                                 }}
                     />
                     <Box sx={{position:"absolute",
                         display:"flex",
@@ -401,6 +426,12 @@ export default function DetailPage(){
                         <ConfirmationDialog open={openDialog}
                                             handleClose={handleCloseDialog}
                                             onDelete={() => onDeleteNote(deletingNote)}
+                        />
+                    }
+                    {deletingShapeId &&
+                        <ConfirmationDialog open={openDialog}
+                                            handleClose={handleCloseDialog}
+                                            onDelete={() => onDeleteShape(deletingShapeId)}
                         />
                     }
                 </Grid>

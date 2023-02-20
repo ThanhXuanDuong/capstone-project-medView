@@ -12,7 +12,8 @@ export default function ImageViewer({
     newShape,
     mouseDownPos,
     mouseUpPos,
-    shapes
+    shapes,
+    onDelete
 }:{
     ids: string[],
     onImgDisplay: (rect:DOMRect) => void,
@@ -20,7 +21,8 @@ export default function ImageViewer({
     newShape: Shape,
     mouseDownPos: Position,
     mouseUpPos:Position,
-    shapes: Shape[]
+    shapes: Shape[],
+    onDelete: (id:string|undefined)=> void
 }){
     let imgRef = useRef<HTMLImageElement>(null);
 
@@ -96,6 +98,7 @@ export default function ImageViewer({
                                                  newShape={newShape}
                                                  mouseDownPos ={mouseDownPos}
                                                  mouseUpPos ={mouseUpPos}
+                                                 onDelete={onDelete}
                                      />}
 
                              </Box>
