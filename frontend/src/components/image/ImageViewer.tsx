@@ -1,14 +1,30 @@
 import {Box, Card, Divider} from "@mui/material";
 import "./ImageViewer.css"
 import React, {useEffect, useRef} from "react";
+import {DrawShapes} from "../shape/DrawShapes";
+import Shape from "../../types/Shape";
+import Position from "../../types/Position";
 
 export default function ImageViewer({
     ids,
-    onImgDisplay
+    onImgDisplay,
+    draw,
+    newShape,
+    mouseDownPos,
+    mouseUpPos,
+    shapes,
+    onDelete
 }:{
-    ids:string[],
-    onImgDisplay:(rect:DOMRect) => void
+    ids: string[],
+    onImgDisplay: (rect:DOMRect) => void,
+    draw: boolean,
+    newShape: Shape,
+    mouseDownPos: Position,
+    mouseUpPos:Position,
+    shapes: Shape[],
+    onDelete: (id:string|undefined)=> void
 }){
+    let imgRef = useRef<HTMLImageElement>(null);
 
     let gridHeight: string;
     let gridWidth :string;
@@ -23,18 +39,16 @@ export default function ImageViewer({
             gridWidth= "49.9%";
             break;
         default:
-            gridHeight = "49.9%";
-            gridWidth= "49.9%";
+            gridHeight = "49.8%";
+            gridWidth= "49.8%";
             fWrap = "wrap";
     }
-
-    let imgRef = useRef<HTMLImageElement>(null);
 
     useEffect(() => {
         const getSizeImg = () => {
             if (imgRef.current?.complete) {
                 const rect = imgRef.current.getBoundingClientRect();
-                onImgDisplay(rect)
+                onImgDisplay(rect);
             }
         };
         getSizeImg();
@@ -59,7 +73,7 @@ export default function ImageViewer({
                      ids.map(id =>
                          <>
                              <Box
-                                 sx={{
+                                 sx={{position:"relative",
                                  display: 'flex',
                                  justifyContent:"center",
                                  alignItems:"center",
@@ -73,7 +87,20 @@ export default function ImageViewer({
                                       key= {id}
                                       id={"image-in-viewer"}
                                       src={"/api/files/" + id}
-                                      alt={"img"}/>
+                                      alt={"img"}
+                                      draggable="false"
+                                 />
+
+                                 {ids.length===1 &&
+                                     <DrawShapes shapes={shapes}
+                                                 imgRect={imgRef.current?.getBoundingClientRect()}
+                                                 draw={draw}
+                                                 newShape={newShape}
+                                                 mouseDownPos ={mouseDownPos}
+                                                 mouseUpPos ={mouseUpPos}
+                                                 onDelete={onDelete}
+                                     />}
+
                              </Box>
                              {ids.length !==1 &&
                                  <Divider orientation="vertical" flexItem sx={{bgcolor: "darkgrey"}}/>

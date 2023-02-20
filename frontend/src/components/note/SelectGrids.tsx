@@ -6,7 +6,7 @@ import ViewAgendaIcon from '@mui/icons-material/ViewAgenda';
 import WindowIcon from '@mui/icons-material/Window';
 import SquareIcon from '@mui/icons-material/Square';
 
-export default function SelectedList({
+export default function SelectGrids({
     setGrids,
     viewImageIds,
     setViewImageIds,

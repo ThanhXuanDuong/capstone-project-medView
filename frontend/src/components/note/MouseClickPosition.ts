@@ -1,7 +1,11 @@
 import {useEffect, useState} from "react";
 import Position from "../../types/Position";
 
-export default function MousePosition(markup:boolean) {
+export default function MouseClickPosition({
+    markup
+}: {
+    markup:boolean
+}) {
     const [mousePos, setMousePos] = useState<Position>({x: 0.,y: 0.});
     const [mouseRelativePos, setMouseRelativePos] = useState<Position>({x: 0.,y: 0.});
     const imgViewer = document.getElementById("image-viewer");
@@ -9,8 +13,9 @@ export default function MousePosition(markup:boolean) {
 
     useEffect(() => {
         if (markup && imgViewer && img) {
-            let rect = img.getBoundingClientRect();
-            const handleMouseClick = (event: any) => {
+            let rect= img.getBoundingClientRect();
+
+            const handleMouseClick = (event: MouseEvent) => {
                 setMousePos({x: event.clientX, y: event.clientY});
                 setMouseRelativePos({
                     x: (event.clientX - rect.x) / rect.width,
@@ -20,7 +25,7 @@ export default function MousePosition(markup:boolean) {
             imgViewer.addEventListener('click', handleMouseClick, {once: true});
 
             return () => {
-                window.removeEventListener('click', handleMouseClick)
+                imgViewer.removeEventListener('click', handleMouseClick)
             }
         }
     },[img, imgViewer, markup]);

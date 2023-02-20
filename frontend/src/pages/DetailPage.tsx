@@ -18,18 +18,20 @@ import axios from "axios";
 import useFormActions from "../hooks/useFormActions";
 import NoteForm from "../components/note/NoteForm";
 import useDialogActions from "../hooks/useDialogActions";
-import ConfirmationDialog from "../components/ConfirmationDialog";
+import ConfirmationDialog from "../components/styling/ConfirmationDialog";
 import usePatients from "../hooks/usePatients";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/styling/NavBar";
 import theme from "../components/styling/theme";
-import PopoverToolbar from "../components/PopoverToolbar";
+import PopoverSelectGrids from "../components/note/PopoverSelectGrids";
 import CommentIcon from '@mui/icons-material/Comment';
-import MousePosition from "../components/image/MousePosition";
-import NotePopover from "../components/NotePopover";
+import MouseClickPosition from "../components/note/MouseClickPosition";
+import NotePopover from "../components/note/NotePopover";
 import useNotesByPatId from "../hooks/useNotesByPatId";
-
+import Shape from "../types/Shape";
+import MouseUpDownPosition from "../components/shape/MouseUpDownPosition";
+import PopoverSelectShape from "../components/shape/PopoverSelectShape";
 
 export default function DetailPage(){
     const {patients,setPatients} = usePatients();
@@ -41,24 +43,41 @@ export default function DetailPage(){
                     relativeX: 0,
                     relativeY: 0});
 
-    const [markup, setMarkup] = useState<boolean>(false)
-    const {mousePos,mouseRelativePos} =MousePosition(markup);
+    const [markup, setMarkup] = useState<boolean>(false);
+    const {mousePos,mouseRelativePos} =MouseClickPosition({markup});
 
     const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
     const {openDialog,handleOpenDialog, handleCloseDialog} = useDialogActions();
     const [editing, setEditing] = useState<boolean>(false);
-    const [deletingImageId, setDeletingImageId] = useState<string|undefined>("");
+    const [deletingImageId, setDeletingImageId] = useState<string|null>("");
     const [deletingNote, setDeletingNote] = useState<Note|null>(null);
+    const [deletingShapeId, setDeletingShapeId] = useState<string|undefined>("");
 
     const [viewImageIds, setViewImageIds] = useState <string[]> ([]);
     const [grids, setGrids] = useState<number>(1);
     const {notesByPatId, setNotesByPatId} =useNotesByPatId();
     const navigate = useNavigate();
-    const [imgPosition,setImgPosition]= useState<DOMRect|undefined>(undefined);
+
+    const [draw, setDraw] = useState<boolean>(false);
+    const [newShape, setNewShape] =useState<Shape>(
+        {type:"circle",
+            point1:[0,0],
+            point2: [0,0],
+            imageId:""});
+    const [saveShape, setSaveShape] =useState<boolean>(false);
+    const [shapes, setShapes] = useState<Shape[]>([]);
+    const [imgRect,setImgRect]= useState<DOMRect|undefined>(undefined);
+    const {mouseUpPos,mouseDownPos,mouseUpRelativePos,mouseDownRelativePos} =MouseUpDownPosition(
+        {draw,setSaveShape});
 
     const onView = (id:string) => {
         if (grids===1){
             setViewImageIds([id]);
+            setNewShape({
+                type:"circle",
+                point1:[0,0],
+                point2: [0,0],
+                imageId:id});
         }else if (viewImageIds.length >= grids){
             setViewImageIds([...viewImageIds.slice(1),id]);
         }else{
@@ -73,13 +92,38 @@ export default function DetailPage(){
                 for (let viewImageId of viewImageIds){
                     const response = await axios.get(`/api/notes/image/${viewImageId}`);
                     setNotes(response.data.reverse());
+                    const res = await axios.get(`/api/shapes/image/${viewImageId}`);
+                    setShapes(res.data);
                 }
             }catch (e:any){
                 console.log("Error while loading data!")
                 e.response.status === "401" && navigate("/login");
             }
         })();
-    },[navigate, viewImageIds]);
+    },[navigate, viewImageIds,setShapes,saveShape]);
+
+    useEffect(() =>{
+        saveShape &&
+        (async () =>{
+            try{
+                await axios.post("/api/shapes",
+                    {...newShape,
+                        point1: [mouseDownRelativePos.x,mouseDownRelativePos.y],
+                        point2: [mouseUpRelativePos.x,mouseUpRelativePos.y]});
+
+            }catch (e:any){
+                console.log("Error while saving data!")
+                e.response.status === "401" && navigate("/login");
+            }finally {
+                setSaveShape(false);
+                setDraw(false);
+                setNewShape({
+                    ...newShape,
+                    point1:[0,0],
+                    point2: [0,0]});
+            }
+        })();
+        },[mouseDownRelativePos, mouseUpRelativePos, navigate, newShape, saveShape]);
 
     const onAdd= (createdNote:Note) => {
         (async () => {
@@ -91,8 +135,7 @@ export default function DetailPage(){
 
                 toast.success("Successfully saving new note!",
                     {toastId:"successAdd"});
-            }catch(e: any)
-            {
+            }catch(e: any) {
                 e.response.status === "401" && navigate("/login");
                 toast.error("Error:"+
                     JSON.stringify(e.response.data, null, 2),
@@ -167,6 +210,7 @@ export default function DetailPage(){
                     {toastId:"errorDeleteNote"})
             }finally {
                 handleCloseDialog();
+                setDeletingNote(null);
             }
         })();
 
@@ -176,9 +220,11 @@ export default function DetailPage(){
         (async () => {
             try{
                 await axios.delete("/api/files/" +id);
+                await axios.delete("/api/shapes/image/" +id);
                 const p = {...viewPatient,
                     imageIds: viewPatient.imageIds.filter(imageId => imageId!==id)};
                 setViewPatient(p);
+                setViewImageIds(viewImageIds.filter(imId =>imId !== id));
 
                 const response = await axios.put("/api/patients/" +p.id,p);
                 const updatedPatient =response.data;
@@ -189,7 +235,6 @@ export default function DetailPage(){
 
                 setDeletingImageId("");
                 setNotes([]);
-
                 toast.success("Successfully deleting image!",
                     {toastId:"successDeleteImage"})
             }catch (e: any){
@@ -202,14 +247,33 @@ export default function DetailPage(){
         })();
     };
 
+    const onDeleteShape =(id:string|undefined)=>{
+        (async () => {
+            try{
+                await axios.delete("/api/shapes/" +id);
+                setShapes(shapes.filter(shape => shape.id !==id));
+                setDeletingShapeId("");
+
+                toast.success("Successfully deleting shape!",
+                    {toastId:"successDeleteShape"})
+            }catch (e: any){
+                e.response.status === "401" && navigate("/login");
+                toast.error("Error while deleting shape!",
+                    {toastId:"errorDeleteShape"})
+            }finally {
+                handleCloseDialog();
+            }
+        })();
+    }
+
+
     return(
         <ThemeProvider theme={theme}>
             <NavBar showIcons={true}/>
 
             {!isReady
             ? null
-            :
-            <Grid container sx={{mt: "48px",
+            : <Grid container sx={{mt: "48px",
                                 mb: 0,
                                 height: 'calc(100vh - 48px)',
                                 overflow:"hidden"}}>
@@ -218,22 +282,42 @@ export default function DetailPage(){
                           justifyContent:"center",
                           height: "100%",
                           backgroundColor: "black"}}>
-                    <ImageViewer ids={viewImageIds} onImgDisplay={setImgPosition}/>
+                    <ImageViewer ids={viewImageIds}
+                                 onImgDisplay={setImgRect}
+                                 draw={draw}
+                                 newShape={newShape}
+                                 mouseDownPos ={mouseDownPos}
+                                 mouseUpPos ={mouseUpPos}
+                                 shapes={shapes}
+                                 onDelete={(id) => {
+                                     handleOpenDialog();
+                                     setDeletingShapeId(id);
+                                 }}
+                    />
                     <Box sx={{position:"absolute",
                         display:"flex",
                         top: 30,
                         right: 15,
                         backgroundColor:"action.selected",
                         borderRadius:"4px"}}>
-                        <PopoverToolbar setGrids={setGrids}
-                                        viewImageIds={viewImageIds}
-                                        setViewImageIds={setViewImageIds}/>
+                        <PopoverSelectGrids setGrids={setGrids}
+                                            viewImageIds={viewImageIds}
+                                            setViewImageIds={setViewImageIds}/>
+
                         <Divider orientation="vertical" flexItem />
+
                         <Box alignSelf={"center"}>
                             <IconButton onClick={() => setMarkup(true)}>
                                 <CommentIcon/>
                             </IconButton>
                         </Box>
+
+                        <Divider orientation="vertical" flexItem />
+
+                        <PopoverSelectShape setDraw = {setDraw}
+                                            newShape={newShape}
+                                            setNewShape = {setNewShape}
+                        />
                     </Box>
                 </Grid>
 
@@ -321,15 +405,16 @@ export default function DetailPage(){
                                 </ListItem>
                             ))}
                         </List>
-
-                        <NoteForm note={note}
-                                  mouseRelativePos={mouseRelativePos}
-                                  setNote={setNote}
-                                  editing={editing}
-                                  setEditing={setEditing}
-                                  open={openForm}
-                                  handleClose={handleCloseForm}
-                                  onSave={editing ? onEdit : onAdd}/>
+                        {openForm &&
+                            < NoteForm note={note}
+                            mouseRelativePos={mouseRelativePos}
+                            setNote={setNote}
+                            editing={editing}
+                            setEditing={setEditing}
+                            open={openForm}
+                            handleClose={handleCloseForm}
+                            onSave={editing ? onEdit : onAdd}/>
+                        }
                     </Box>
 
                     {deletingImageId &&
@@ -344,18 +429,25 @@ export default function DetailPage(){
                                             onDelete={() => onDeleteNote(deletingNote)}
                         />
                     }
+                    {deletingShapeId &&
+                        <ConfirmationDialog open={openDialog}
+                                            handleClose={handleCloseDialog}
+                                            onDelete={() => onDeleteShape(deletingShapeId)}
+                        />
+                    }
                 </Grid>
 
-                {viewImageIds.length===1 && imgPosition && notes.map(note => {
-                    const x= (note.relativeX * imgPosition.width + imgPosition.left)  ;
-                    const y=  (note.relativeY * imgPosition.height + imgPosition.top);
-                    return <NotePopover key={note.id}
-                                        position={{x,y}}
-                                        editing={true}
-                                        handleOpenForm={handleOpenForm}
-                                        handleEditClick={handleEditClick}
-                                        handleDeleteClick={handleDeleteClick}
-                                        note={note}
+                { viewImageIds.length===1 && imgRect &&
+                    notes.map(note => {
+                        const x= (note.relativeX * imgRect.width + imgRect.left)  ;
+                        const y=  (note.relativeY * imgRect.height + imgRect.top);
+                        return <NotePopover key={note.id}
+                                            position={{x,y}}
+                                            editing={true}
+                                            handleOpenForm={handleOpenForm}
+                                            handleEditClick={handleEditClick}
+                                            handleDeleteClick={handleDeleteClick}
+                                            note={note}
                     />}
                 )}
 

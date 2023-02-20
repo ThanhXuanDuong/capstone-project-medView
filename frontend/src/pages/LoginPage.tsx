@@ -13,7 +13,7 @@ import React, {ChangeEvent, FormEvent, useCallback, useMemo, useState} from "rea
 import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import theme from "../components/styling/theme";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/styling/NavBar";
 
 export default function LoginPage(){
     const [credentials,setCredentials] = useState({"username":"","password":""});
