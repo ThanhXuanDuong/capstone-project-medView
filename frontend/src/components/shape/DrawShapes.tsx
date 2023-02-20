@@ -16,6 +16,7 @@ export function DrawShapes({
     mouseDownPos: Position
     mouseUpPos:Position
 }) {
+
     return (
         <div style={{ position: "fixed",width: '100%', height: '100vh', top:0, right:0}}>
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" >
@@ -40,7 +41,7 @@ export function DrawShapes({
                         })
                     }
 
-                    {draw && mouseDownPos.x !==0
+                    {draw && imgRect && mouseDownPos.x !==0
                         && mouseDownPos.y !==0
                         && mouseUpPos.x !==0
                         && mouseUpPos.y !==0 &&

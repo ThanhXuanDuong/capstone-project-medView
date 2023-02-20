@@ -44,14 +44,7 @@ export default function DetailPage(){
                     relativeY: 0});
 
     const [markup, setMarkup] = useState<boolean>(false);
-    const [draw, setDraw] = useState<boolean>(false);
-    const [newShape, setNewShape] =useState<Shape>(
-                {type:"circle",
-                   point1:[0,0],
-                   point2: [0,0],
-                   imageId:""});
-    const [saveShape, setSaveShape] =useState<boolean>(false);
-    const [shapes, setShapes] = useState<Shape[]>([]);
+    const {mousePos,mouseRelativePos} =MouseClickPosition({markup});
 
     const {openForm, handleOpenForm, handleCloseForm} = useFormActions();
     const {openDialog,handleOpenDialog, handleCloseDialog} = useDialogActions();
@@ -63,15 +56,27 @@ export default function DetailPage(){
     const [grids, setGrids] = useState<number>(1);
     const {notesByPatId, setNotesByPatId} =useNotesByPatId();
     const navigate = useNavigate();
+
+    const [draw, setDraw] = useState<boolean>(false);
+    const [newShape, setNewShape] =useState<Shape>(
+        {type:"circle",
+            point1:[0,0],
+            point2: [0,0],
+            imageId:""});
+    const [saveShape, setSaveShape] =useState<boolean>(false);
+    const [shapes, setShapes] = useState<Shape[]>([]);
     const [imgRect,setImgRect]= useState<DOMRect|undefined>(undefined);
-    const {mousePos,mouseRelativePos} =MouseClickPosition({markup,imgRect});
     const {mouseUpPos,mouseDownPos,mouseUpRelativePos,mouseDownRelativePos} =MouseUpDownPosition(
-        {draw,setSaveShape,imgRect});
+        {draw,setSaveShape});
 
     const onView = (id:string) => {
         if (grids===1){
             setViewImageIds([id]);
-            setNewShape({...newShape,imageId:id});
+            setNewShape({
+                type:"circle",
+                point1:[0,0],
+                point2: [0,0],
+                imageId:id});
         }else if (viewImageIds.length >= grids){
             setViewImageIds([...viewImageIds.slice(1),id]);
         }else{
@@ -111,6 +116,10 @@ export default function DetailPage(){
             }finally {
                 setSaveShape(false);
                 setDraw(false);
+                setNewShape({
+                    ...newShape,
+                    point1:[0,0],
+                    point2: [0,0]});
             }
         })();
         },[mouseDownRelativePos, mouseUpRelativePos, navigate, newShape, saveShape]);

@@ -46,7 +46,7 @@ export default function ImageViewer({
         const getSizeImg = () => {
             if (imgRef.current?.complete) {
                 const rect = imgRef.current.getBoundingClientRect();
-                onImgDisplay(rect)
+                onImgDisplay(rect);
             }
         };
         getSizeImg();
