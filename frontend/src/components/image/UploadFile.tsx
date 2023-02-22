@@ -58,7 +58,7 @@ export default function UploadFile({
                     <DriveFolderUploadIcon/>
                 </IconButton>
 
-                <Button type={"submit"}>Upload</Button>
+                <Button type={"submit"} variant={"outlined"}>Upload</Button>
             </form>
 
             <Collapse in={openAlert}>
