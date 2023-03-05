@@ -7,9 +7,9 @@ Its integrated features assist physicians in documenting diagnoses with ease.
 This app was created in 4 weeks during my participation in a Java full-stack coding boot camp as a capstone project.
 
 <p align="center">
-<img width="500" alt="firstimg" src="https://user-images.githubusercontent.com/49959704/222956492-c348c938-2fcc-496b-8ebe-7049fad58ef9.png">
+<img width="300" alt="firstimg" src="https://user-images.githubusercontent.com/49959704/222956492-c348c938-2fcc-496b-8ebe-7049fad58ef9.png">
 
-<img width="500" alt="secondimg" src="https://user-images.githubusercontent.com/49959704/222956710-dd07f295-e3d9-4c9c-8d0f-53f1de2df0b0.png">
+<img width="300" alt="secondimg" src="https://user-images.githubusercontent.com/49959704/222956710-dd07f295-e3d9-4c9c-8d0f-53f1de2df0b0.png">
 
 </p>
 
