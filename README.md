@@ -16,7 +16,7 @@ This app was created in 4 weeks during my participation in a Java full-stack cod
 ## Features
 - Login with Basic Auth
 - Patient list with search and sort function
-- Create/ Edit/ Delete patient
+- Create/ Edit/ Delete patient data
 - Upload patient medical images
 - Image viewer with tools: 
   + display multiple images
